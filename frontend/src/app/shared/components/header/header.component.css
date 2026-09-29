@@ -1,0 +1,8 @@
+/* Header Specific Styles */
+:host {
+  display: block;
+}
+
+input::placeholder {
+  color: rgba(148, 163, 184, 0.5);
+}

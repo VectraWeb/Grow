@@ -1,0 +1,22 @@
+# Entornos virtuales (el de la raíz y el de adentro de backend)
+.venv/
+backend/venv/
+
+# Archivo de variables de entorno (dentro de backend)
+backend/.env
+
+# Logs y temporales de Django
+backend/error.log
+**/__pycache__/
+*.pyc
+backend/db.sqlite3
+backend/media/
+
+# Dependencias y compilación de Angular (dentro de frontend)
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+
+# Sistema y editores
+.DS_Store
+.vscode/

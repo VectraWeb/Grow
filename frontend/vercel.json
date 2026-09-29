@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npx ng build --configuration production",
+  "outputDirectory": "dist/ferre-saas-frontend",
+  "framework": null,
+  "rewrites": [
+    { "source": "/((?!assets/|favicon.ico|robots.txt|.*\\.).*)", "destination": "/index.html" }
+  ]
+}

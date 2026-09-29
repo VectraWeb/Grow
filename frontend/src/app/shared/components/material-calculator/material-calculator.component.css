@@ -1,0 +1,50 @@
+:host ::ng-deep .custom-dialog .p-dialog {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  margin-top: 5vh;
+}
+
+:host ::ng-deep .custom-dialog .p-dialog-content {
+  overflow-y: auto;
+  max-height: calc(90vh - 60px);
+}
+
+:host ::ng-deep .custom-dialog .p-dialog-header {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+}
+
+:host ::ng-deep .custom-dialog .p-dialog-content {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
+:host ::ng-deep .custom-dialog .p-dialog-header-icons .p-dialog-header-close {
+  color: #ea580c;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 1rem;
+  transition: all 0.2s;
+}
+
+:host ::ng-deep .custom-dialog .p-dialog-header-icons .p-dialog-header-close:hover {
+  background: rgba(234, 88, 12, 0.1);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

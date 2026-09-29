@@ -1,0 +1,267 @@
+<div class="space-y-4 md:space-y-6">
+  <div class="flex justify-between items-start md:items-center gap-3">
+    <div>
+      <h2 class="text-lg md:text-2xl font-extrabold text-slate-900 uppercase tracking-wider" style="font-family: Sora, sans-serif;">
+        Configuracion del Negocio
+      </h2>
+      <p class="text-slate-500 mt-0.5 text-xs md:text-sm">
+        Administra las integraciones y credenciales de tu ferreteria.
+      </p>
+    </div>
+    <button
+      [disabled]="isSaving"
+      (click)="saveSettings()"
+      class="flex items-center gap-1.5 px-3 md:px-5 py-1.5 md:py-2.5 rounded-lg btn-ferre shadow-sm disabled:opacity-50 text-xs md:text-sm shrink-0"
+    >
+      <lucide-icon [name]="Save" size="14"></lucide-icon>
+      <span class="hidden sm:inline">{{ isSaving ? "Guardando..." : "Guardar Cambios" }}</span>
+      <span class="sm:hidden">{{ isSaving ? "Guardando..." : "Guardar" }}</span>
+    </button>
+  </div>
+
+  <div
+    *ngIf="successMessage"
+    class="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-lg flex items-center gap-3 text-sm font-medium"
+  >
+    <lucide-icon [name]="Save" size="18"></lucide-icon>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg flex items-center gap-3 text-sm font-medium"
+  >
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <form [formGroup]="settingsForm" class="space-y-3 md:space-y-4">
+    <div class="card-industrial overflow-hidden">
+      <button
+        type="button"
+        (click)="toggleSection('address')"
+        class="w-full flex items-center justify-between gap-3 p-4 md:p-6 hover:bg-slate-50 transition-colors cursor-pointer"
+      >
+        <div class="flex items-center gap-2 md:gap-3">
+          <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-200">
+            <lucide-icon [name]="MapPin" size="16" class="md:hidden"></lucide-icon>
+            <lucide-icon [name]="MapPin" size="20" class="hidden md:block"></lucide-icon>
+          </div>
+          <h3 class="text-sm md:text-lg font-bold text-slate-900">Direccion del Negocio</h3>
+        </div>
+        <lucide-icon
+          [name]="expandedSections['address'] ? ChevronUp : ChevronDown"
+          size="18"
+          class="text-slate-400 flex-shrink-0 transition-transform"
+        ></lucide-icon>
+      </button>
+
+      <div
+        *ngIf="expandedSections['address']"
+        class="px-4 md:px-6 pb-4 md:pb-6 space-y-3 md:space-y-4 border-t border-slate-200"
+      >
+        <p class="text-xs text-slate-500 mt-3">
+          Direccion que se mostrara en el mapa del sitio web.
+        </p>
+        <input
+          type="text"
+          formControlName="store_address"
+          placeholder="Ej: Av. Corrientes 1234, CABA"
+          class="input-ferre"
+          (input)="capitalizeName($event)"
+        />
+      </div>
+    </div>
+
+    <div class="card-industrial overflow-hidden">
+      <button
+        type="button"
+        (click)="toggleSection('payment')"
+        class="w-full flex items-center justify-between gap-3 p-4 md:p-6 hover:bg-slate-50 transition-colors cursor-pointer"
+      >
+        <div class="flex items-center gap-2 md:gap-3">
+          <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-sky-50 flex items-center justify-center text-sky-600 border border-sky-200">
+            <lucide-icon [name]="CreditCard" size="16" class="md:hidden"></lucide-icon>
+            <lucide-icon [name]="CreditCard" size="20" class="hidden md:block"></lucide-icon>
+          </div>
+          <h3 class="text-sm md:text-lg font-bold text-slate-900">Mercado Pago y Banco</h3>
+        </div>
+        <lucide-icon
+          [name]="expandedSections['payment'] ? ChevronUp : ChevronDown"
+          size="20"
+          class="text-slate-400 flex-shrink-0"
+        ></lucide-icon>
+      </button>
+
+      <div
+        *ngIf="expandedSections['payment']"
+        class="px-6 pb-6 space-y-4 border-t border-slate-200"
+      >
+        <div class="rounded-lg p-4 flex gap-3 items-start mt-4 bg-blue-50 border border-blue-200">
+          <lucide-icon [name]="MessageCircle" size="20" class="text-blue-500 mt-0.5 flex-shrink-0"></lucide-icon>
+          <div>
+            <p class="text-sm text-blue-700 font-bold">Cobros con Tarjetas (Automatico)</p>
+            <p class="text-xs text-blue-500 mt-1 mb-2">
+              Para cobrar automaticamente con tarjetas de credito y debito,
+              debes vincular tu cuenta de Mercado Pago.
+            </p>
+            <button
+              type="button"
+              (click)="vincularMP()"
+              class="inline-flex items-center gap-2 text-sm font-bold bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all shadow-sm"
+            >
+              <lucide-icon [name]="hasMpLinked ? CheckCircle : Link" size="16"></lucide-icon>
+              {{ hasMpLinked ? "Actualizar conexion con Mercado Pago" : "Vincular cuenta de Mercado Pago" }}
+            </button>
+            <p *ngIf="hasMpLinked" class="text-xs text-emerald-600 mt-2 flex items-center gap-1 font-medium">
+              <lucide-icon [name]="CheckCircle" size="14"></lucide-icon> Cuenta de Mercado Pago vinculada.
+            </p>
+          </div>
+        </div>
+
+        <hr class="border-slate-200" />
+
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Titular de la cuenta</label>
+          <input
+            type="text"
+            formControlName="bank_titular"
+            placeholder="Nombre del titular"
+            class="input-ferre"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">CUIT del titular</label>
+          <input
+            type="text"
+            formControlName="bank_cuit"
+            placeholder="20-12345678-9"
+            class="input-ferre"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">CVU / CBU (Transferencias)</label>
+          <input
+            type="text"
+            formControlName="bank_cvu"
+            placeholder="00000031000..."
+            class="input-ferre font-mono"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Alias Bancario</label>
+          <input
+            type="text"
+            formControlName="bank_alias"
+            placeholder="FERRE.TORNILLO.MP"
+            class="input-ferre"
+          />
+        </div>
+
+        <p class="text-xs text-slate-400">
+          Estos datos se mostraran al cliente que elija abonar con Transferencia Bancaria.
+        </p>
+      </div>
+    </div>
+
+    <div class="card-industrial overflow-hidden">
+      <button
+        type="button"
+        (click)="toggleSection('mercadolibre')"
+        class="w-full flex items-center justify-between gap-3 p-4 md:p-6 hover:bg-slate-50 transition-colors cursor-pointer"
+      >
+        <div class="flex items-center gap-2 md:gap-3">
+          <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 border border-amber-200">
+            <lucide-icon [name]="ShoppingBag" size="16" class="md:hidden"></lucide-icon>
+            <lucide-icon [name]="ShoppingBag" size="20" class="hidden md:block"></lucide-icon>
+          </div>
+          <h3 class="text-sm md:text-lg font-bold text-slate-900">Mercado Libre</h3>
+        </div>
+        <lucide-icon
+          [name]="expandedSections['mercadolibre'] ? ChevronUp : ChevronDown"
+          size="20"
+          class="text-slate-400 flex-shrink-0"
+        ></lucide-icon>
+      </button>
+
+      <div
+        *ngIf="expandedSections['mercadolibre']"
+        class="px-6 pb-6 space-y-4 border-t border-slate-200"
+      >
+        <div class="rounded-lg p-4 mt-4 bg-amber-50 border border-amber-200">
+          <p class="text-sm text-slate-600">
+            La integracion con Mercado Libre ya no requiere copiar codigos dificiles. Esta automatizada mediante una conexion segura (OAuth).
+          </p>
+        </div>
+        <a
+          routerLink="/admin/meli"
+          class="btn-ferre w-full justify-center py-3"
+        >
+          <lucide-icon [name]="Zap" size="18"></lucide-icon>
+          Gestionar mi cuenta de Mercado Libre
+        </a>
+      </div>
+    </div>
+
+    <div class="card-industrial overflow-hidden">
+      <button
+        type="button"
+        (click)="toggleSection('social')"
+        class="w-full flex items-center justify-between gap-3 p-6 hover:bg-slate-50 transition-colors cursor-pointer"
+      >
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-sky-50 flex items-center justify-center text-sky-600 border border-sky-200">
+            <lucide-icon [name]="Link" size="20"></lucide-icon>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Redes Sociales</h3>
+        </div>
+        <lucide-icon
+          [name]="expandedSections['social'] ? ChevronUp : ChevronDown"
+          size="20"
+          class="text-slate-400 flex-shrink-0"
+        ></lucide-icon>
+      </button>
+
+      <div
+        *ngIf="expandedSections['social']"
+        class="px-6 pb-6 space-y-4 border-t border-slate-200"
+      >
+        <p class="text-xs text-slate-500 mt-4">
+          Configura los links a tus redes sociales. Se mostraran en el footer de tu sitio web.
+        </p>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Numero de WhatsApp</label>
+          <input
+            type="text"
+            formControlName="whatsapp_number"
+            placeholder="Ej: 5491123456789"
+            class="input-ferre font-mono"
+          />
+          <p class="text-xs text-slate-400 mt-2">
+            Ingrese el numero completo con codigo de pais (Ej: 5491112345678).
+          </p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">URL de Instagram</label>
+          <input
+            type="url"
+            formControlName="instagram_url"
+            placeholder="https://instagram.com/tu-ferreteria"
+            class="input-ferre"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">URL de Facebook</label>
+          <input
+            type="url"
+            formControlName="facebook_url"
+            placeholder="https://facebook.com/tu-ferreteria"
+            class="input-ferre"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

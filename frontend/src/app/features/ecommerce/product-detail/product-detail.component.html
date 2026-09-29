@@ -1,0 +1,224 @@
+﻿<div class="min-h-screen bg-slate-50 pt-20 md:pt-24">
+  <div class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-5">
+      <button
+        (click)="goBack()"
+        class="flex items-center gap-1.5 md:gap-2 text-slate-500 hover:text-ferre-400 font-semibold text-xs md:text-sm transition-colors group"
+      >
+        <lucide-icon [name]="ArrowLeft" size="16" class="group-hover:-translate-x-1 transition-transform"></lucide-icon>
+        Volver al catalogo
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && product" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
+
+      <!-- Imagen -->
+      <div class="relative">
+        <div class="aspect-[4/3] bg-white rounded-xl md:rounded-2xl border border-slate-200 p-4 md:p-6 flex items-center justify-center overflow-hidden shadow-sm">
+          <img
+            [src]="getCurrentImage()"
+            [alt]="product.name"
+            (error)="product.image = ''"
+            class="max-h-full max-w-full object-contain"
+          />
+          <div *ngIf="!product.image" class="flex flex-col items-center gap-3 text-slate-300">
+            <lucide-icon [name]="Hammer" size="48"></lucide-icon>
+            <span class="text-xs md:text-sm font-medium">Sin imagen</span>
+          </div>
+        </div>
+        <button
+          *ngIf="productImages.length > 1"
+          (click)="prevImage()"
+          class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
+        >
+          <lucide-icon [name]="ChevronLeft" size="18" class="text-slate-700"></lucide-icon>
+        </button>
+        <button
+          *ngIf="productImages.length > 1"
+          (click)="nextImage()"
+          class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
+        >
+          <lucide-icon [name]="ChevronRight" size="18" class="text-slate-700"></lucide-icon>
+        </button>
+        <div *ngIf="productImages.length > 1" class="flex justify-center gap-1.5 mt-3">
+          <button
+            *ngFor="let img of productImages; let i = index"
+            (click)="currentImageIndex = i"
+            class="w-2 h-2 rounded-full transition-all"
+            [ngClass]="i === currentImageIndex ? 'bg-ferre-500 w-4' : 'bg-slate-300'"
+          ></button>
+        </div>
+      </div>
+
+      <!-- Info del producto -->
+      <div class="flex flex-col gap-3 md:gap-4">
+        <span class="inline-flex items-center bg-ferre-50 text-ferre-700 px-2 md:px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wide w-fit">
+          {{ product.category_name }}
+        </span>
+
+        <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-900 leading-tight" style="font-family: Sora, sans-serif;">
+          {{ product.name }}
+        </h1>
+
+        <p class="text-slate-600 leading-relaxed text-sm md:text-sm">
+          {{ product.description }}
+        </p>
+
+        <div>
+          <div *ngIf="product.discount_percentage && +product.discount_percentage > 0" class="flex items-center gap-2 mb-1">
+            <span class="text-[10px] md:text-sm text-slate-400 line-through">${{ formatPrice(product.price_retail) }}</span>
+            <span class="bg-emerald-500 text-white text-[9px] md:text-[10px] font-black px-1.5 py-0.5 rounded">{{ +product.discount_percentage }}% OFF</span>
+          </div>
+          <span class="text-2xl md:text-3xl font-extrabold text-slate-900" style="font-family: Sora, sans-serif;">
+            ${{ formatPrice(product.discount_percentage && +product.discount_percentage > 0 ? getDiscountedPrice(product) : product.price_retail) }}
+          </span>
+        </div>
+
+        <p class="text-emerald-600 font-semibold text-xs md:text-sm flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          {{ product.stock > 0 ? 'En stock' : 'Sin stock' }}
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-2 md:gap-3">
+          <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden shrink-0">
+            <button (click)="updateQuantity(quantity - 1)" class="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-slate-400 hover:text-ferre-400 hover:bg-ferre-50 transition-colors">
+              <lucide-icon [name]="Minus" size="14"></lucide-icon>
+            </button>
+            <input
+              type="number"
+              [(ngModel)]="quantity"
+              class="w-9 h-9 md:w-10 md:h-10 text-center bg-transparent text-slate-900 font-bold outline-none border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-sm"
+            />
+            <button (click)="updateQuantity(quantity + 1)" class="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-slate-400 hover:text-ferre-400 hover:bg-ferre-50 transition-colors">
+              <lucide-icon [name]="Plus" size="14"></lucide-icon>
+            </button>
+          </div>
+
+          <button
+            (click)="addToCart()"
+            [disabled]="isAddingToCart"
+            class="flex-1 btn-ferre flex items-center justify-center gap-2 py-2.5 md:py-3 px-4 md:px-6 disabled:opacity-50 text-sm md:text-base"
+          >
+            <lucide-icon [name]="ShoppingCart" size="16"></lucide-icon>
+            <span>{{ isAddingToCart ? 'Agregando...' : 'Agregar al Carrito' }}</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 md:gap-3">
+          <div class="flex items-center gap-2 bg-white border border-slate-200 p-2.5 md:p-3 rounded-lg shadow-sm">
+            <lucide-icon [name]="Truck" class="text-slate-400 shrink-0" size="16"></lucide-icon>
+            <p class="text-slate-700 text-[10px] md:text-xs font-semibold">Envio a todo el pais</p>
+          </div>
+          <div class="flex items-center gap-2 bg-white border border-slate-200 p-2.5 md:p-3 rounded-lg shadow-sm">
+            <lucide-icon [name]="Shield" class="text-emerald-600 shrink-0" size="16"></lucide-icon>
+            <div>
+              <p class="text-slate-700 text-[10px] md:text-xs font-semibold">Garantia Pro</p>
+              <p class="text-slate-400 text-[9px] md:text-[10px]">12 Meses</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 md:gap-3">
+          <div class="flex items-center gap-0.5">
+            <span
+              *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+              class="text-base md:text-lg cursor-pointer"
+              [ngClass]="i < (hoverRating > 0 ? hoverRating : Math.round(userRating || averageRating || 0)) ? 'text-amber-400' : 'text-slate-200'"
+              (click)="setRating(i + 1)"
+              (mouseenter)="onStarHover(i + 1)"
+              (mouseleave)="onStarLeave()"
+            >&#9733;</span>
+          </div>
+          <span class="text-[11px] md:text-sm text-slate-500 font-medium">({{ totalReviews }} resenas)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seccion inferior: Specs, WhatsApp, Relacionados -->
+    <div class="mt-4 md:mt-8 border-t border-slate-200 pt-4 md:pt-6">
+      <div class="grid lg:grid-cols-3 gap-4 md:gap-6">
+        <div class="space-y-4 md:space-y-6">
+          <!-- Especificaciones -->
+          <div>
+            <h2 class="text-lg md:text-xl font-extrabold text-slate-900 mb-3 md:mb-4" style="font-family: Sora, sans-serif;">Especificaciones Tecnicas</h2>
+            <div class="grid sm:grid-cols-2 gap-x-6 md:gap-x-10 gap-y-1.5 md:gap-y-3">
+              <div *ngFor="let spec of [
+                { label: 'Marca', value: product.brand },
+                { label: 'Material', value: product.material },
+                { label: 'Dimensiones', value: product.dimensions },
+                { label: 'Peso', value: product.weight }
+              ]" class="flex justify-between py-2 border-b border-slate-200">
+                <span class="text-slate-500 font-medium text-xs md:text-sm">{{ spec.label }}</span>
+                <span class="text-slate-700 font-semibold text-xs md:text-sm">{{ spec.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 grid sm:grid-cols-2 gap-3 md:gap-4">
+          <div *ngIf="whatsappHref" class="bg-white border border-slate-200 p-3 md:p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm md:text-base font-bold text-slate-900 mb-1">Necesitas ayuda?</h3>
+            <p class="text-slate-500 text-[11px] md:text-xs mb-2 md:mb-3">Contamos con expertos para asesorarte en la eleccion de tus herramientas.</p>
+            <a
+              [href]="whatsappHref + '?text=Hola,%20necesito%20asesoramiento%20sobre%20' + product.name"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 text-xs md:text-sm"
+            >
+              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              WhatsApp Ventas
+            </a>
+          </div>
+
+          <app-material-calculator
+            [categoryName]="product.category_name || ''"
+            [productName]="product.name"
+          ></app-material-calculator>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="related && related.length" class="mt-6 md:mt-8 border-t border-slate-200 pt-4 md:pt-6">
+      <h3 class="text-lg md:text-xl font-extrabold text-slate-900 mb-3 md:mb-4" style="font-family: Sora, sans-serif;">Productos relacionados</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+        <a *ngFor="let r of related" [routerLink]="['/product', r.id]" class="block bg-white p-2 md:p-3 rounded-lg border border-slate-200 hover:border-ferre-200 transition-colors shadow-sm">
+          <img [src]="r.image" class="w-full h-16 md:h-24 object-contain mb-2" alt="{{ r.name }}" />
+          <div class="text-[11px] md:text-xs font-semibold text-slate-700 line-clamp-2">{{ r.name }}</div>
+          <div class="text-[11px] md:text-xs text-slate-500 mt-0.5">${{ formatPrice(r.price_retail) }}</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 animate-pulse">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
+      <div class="aspect-square bg-slate-200 rounded-xl md:rounded-2xl"></div>
+      <div class="flex flex-col gap-3 md:gap-4">
+        <div class="w-20 h-4 bg-slate-200 rounded-full"></div>
+        <div class="w-3/4 h-7 bg-slate-200 rounded-lg"></div>
+        <div class="w-28 h-4 bg-slate-200 rounded-full"></div>
+        <div class="space-y-1.5">
+          <div class="w-full h-3 bg-slate-200 rounded-full"></div>
+          <div class="w-5/6 h-3 bg-slate-200 rounded-full"></div>
+        </div>
+        <div class="bg-slate-200 p-4 rounded-xl h-28"></div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !product" class="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+    <lucide-icon [name]="Hammer" size="48" class="text-slate-300 mb-4"></lucide-icon>
+    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-2" style="font-family: Sora, sans-serif;">Producto no encontrado</h2>
+    <p class="text-slate-500 text-sm mb-4">El producto que buscas no existe o fue removido.</p>
+    <button
+      (click)="goBack()"
+      class="btn-ferre px-6 py-2.5 text-sm"
+    >
+      Volver al catalogo
+    </button>
+  </div>
+</div>

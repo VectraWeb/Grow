@@ -1,0 +1,187 @@
+<div
+  *ngIf="isOpen$ | async"
+  class="fixed inset-0 z-[100] overflow-hidden"
+  aria-labelledby="slide-over-title"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity animate-fade-in"
+    (click)="close()"
+  ></div>
+
+  <div class="fixed inset-y-0 right-0 flex max-w-full pl-10">
+    <div
+      class="w-screen max-w-md transform transition-all duration-500 ease-in-out border-l border-slate-200 animate-slide-in bg-white shadow-xl flex h-full flex-col"
+    >
+      <!-- Header del Drawer -->
+      <div class="flex items-center justify-between px-6 py-6 border-b border-slate-200">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-ferre-50 rounded-lg">
+            <lucide-icon [name]="ShoppingCart" size="20" class="text-ferre-700"></lucide-icon>
+          </div>
+          <h2 class="text-xl font-bold text-slate-900" id="slide-over-title">
+            Tu Carrito
+          </h2>
+        </div>
+        <button
+          (click)="close()"
+          class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-all"
+        >
+          <lucide-icon [name]="X" size="24"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Contenido del Carrito -->
+      <div class="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar">
+        <ng-container *ngIf="cart$ | async as cart; else emptyCart">
+          <div *ngIf="cart.items.length > 0; else emptyCart" class="space-y-4">
+            <div *ngFor="let item of cart.items" class="group flex gap-4 bg-white p-4 rounded-xl border border-slate-200 hover:border-slate-300 transition-all shadow-sm">
+              <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-slate-50 border border-slate-200 p-2">
+                <img [src]="item.image" [alt]="item.product_name" class="h-full w-full object-contain group-hover:scale-110 transition-transform">
+              </div>
+
+              <div class="flex flex-1 flex-col justify-between">
+                <div>
+                  <div class="flex justify-between text-sm">
+                    <h3 class="font-semibold text-slate-900 line-clamp-1">
+                      {{ item.product_name }}
+                    </h3>
+                    <p class="ml-4 font-bold text-ferre-700">${{ item.price | number:'1.0-0' }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-end justify-between mt-2">
+                  <div class="flex items-center bg-slate-100 rounded-lg p-1">
+                    <button (click)="updateQuantity(item.id, item.quantity - 1)" class="p-1 text-slate-400 hover:text-ferre-400">
+                      <lucide-icon [name]="Minus" size="14"></lucide-icon>
+                    </button>
+                    <span class="mx-3 text-xs font-semibold text-slate-900 w-4 text-center">{{ item.quantity }}</span>
+                    <button (click)="updateQuantity(item.id, item.quantity + 1)" class="p-1 text-slate-400 hover:text-ferre-400">
+                      <lucide-icon [name]="Plus" size="14"></lucide-icon>
+                    </button>
+                  </div>
+
+                  <button (click)="removeItem(item.id)" class="text-slate-400 hover:text-red-500 transition-colors">
+                    <lucide-icon [name]="Trash2" size="16"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyCart>
+          <div class="flex flex-col items-center justify-center h-full text-center space-y-6 animate-fade-in">
+            <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center text-5xl">
+              🛒
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 mb-2">Tu carrito está vacío</h3>
+              <p class="text-slate-400 text-sm max-w-[200px] mx-auto font-medium">
+                ¡Empieza a agregar herramientas increíbles a tu proyecto!
+              </p>
+            </div>
+            <button (click)="exploreCatalog()" class="text-ferre-700 font-semibold hover:text-ferre-800 transition-colors flex items-center gap-2 group">
+              Explorar Catálogo
+              <lucide-icon [name]="ArrowRight" size="16" class="group-hover:translate-x-1 transition-transform"></lucide-icon>
+            </button>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Footer con Resumen de Compra -->
+      <div *ngIf="cart$ | async as cart" class="border-t border-slate-200 px-6 py-6 bg-slate-50">
+        <div *ngIf="cart.items.length > 0" class="space-y-5">
+
+          <!-- Calculador de Envío -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 mb-2">
+            <h4 class="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <lucide-icon [name]="Truck" size="12"></lucide-icon>
+              Calcular Envío
+            </h4>
+            <div class="flex gap-2">
+              <input
+                type="text"
+                [(ngModel)]="zipCode"
+                placeholder="Código Postal (Ej: 2600)"
+                class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-ferre-400 transition-all font-medium"
+              >
+              <button
+                (click)="updateShipping()"
+                [disabled]="isCalculatingShipping"
+                class="bg-ferre-400 hover:bg-ferre-500 text-slate-800 px-4 py-2 rounded-xl text-xs font-semibold transition-all disabled:opacity-50"
+              >
+                {{ isCalculatingShipping ? '...' : 'CALCULAR' }}
+              </button>
+            </div>
+            <p *ngIf="shippingError" class="text-[10px] text-red-500 mt-2 font-medium">{{ shippingError }}</p>
+          </div>
+
+          <!-- Opciones de Envío -->
+          <div *ngIf="cart.shipping_methods && cart.shipping_methods.length > 0" class="space-y-2 mb-4 animate-in fade-in slide-in-from-top-2 duration-300">
+            <h4 class="text-[10px] font-semibold text-slate-500 uppercase tracking-widest px-1">Selecciona una opción</h4>
+            <div
+              *ngFor="let method of cart.shipping_methods"
+              (click)="selectShipping(method.id)"
+              class="relative bg-white p-4 rounded-xl border transition-all cursor-pointer group"
+              [ngClass]="cart.selected_shipping_id === method.id ? 'border-ferre-400 ring-1 ring-ferre-400' : 'border-slate-200 hover:border-slate-300'"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                   <div class="w-2 h-2 rounded-full transition-all" [ngClass]="cart.selected_shipping_id === method.id ? 'bg-ferre-400 scale-125' : 'bg-slate-300'"></div>
+                   <div>
+                     <p class="text-sm font-semibold" [ngClass]="cart.selected_shipping_id === method.id ? 'text-slate-900' : 'text-slate-600'">{{ method.name }}</p>
+                     <p class="text-[10px] font-medium text-slate-400">{{ method.time }}</p>
+                   </div>
+                </div>
+                <span class="text-sm font-bold" [ngClass]="cart.selected_shipping_id === method.id ? 'text-ferre-700' : 'text-slate-500'">
+                  {{ method.price === 0 ? 'GRATIS' : '$' + (method.price | number:'1.0-0') }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumen -->
+          <div class="space-y-3">
+            <h3 class="text-slate-900 font-semibold text-xs uppercase tracking-widest">Resumen de compra</h3>
+
+            <div class="space-y-2.5 pt-2">
+              <div class="flex justify-between text-sm font-medium text-slate-500">
+                <span>Productos ({{ cartService.getCartItemCount() }})</span>
+                <span class="text-slate-900 font-semibold">${{ cart.total | number:'1.0-0' }}</span>
+              </div>
+
+              <div class="flex justify-between text-sm font-medium text-slate-500">
+                <span>Envío</span>
+                <div class="flex items-center gap-2">
+                  <span *ngIf="!cart.selected_shipping_id" class="text-emerald-600 font-semibold uppercase text-[10px] tracking-wider">A calcular</span>
+                  <span *ngIf="cart.selected_shipping_id && cart.shipping_cost === 0" class="text-emerald-600 font-semibold uppercase text-[10px] tracking-wider">¡Gratis!</span>
+                  <span *ngIf="cart.selected_shipping_id && cart.shipping_cost! > 0" class="text-slate-900 font-semibold">${{ cart.shipping_cost | number:'1.0-0' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-5 border-t border-slate-200 mt-4">
+              <span class="text-lg font-bold text-slate-900">Total</span>
+              <span class="tracking-tight text-2xl font-extrabold text-ferre-700">${{ getFinalTotal(cart) | number:'1.0-0' }}</span>
+            </div>
+
+            <button
+              (click)="checkout()"
+              class="w-full btn-ferre py-4 mt-4 flex items-center justify-center text-sm uppercase tracking-wider gap-2 group"
+            >
+              <span>Continuar ({{ cartService.getCartItemCount() }})</span>
+              <lucide-icon [name]="ArrowRight" size="18" class="group-hover:translate-x-1 transition-transform"></lucide-icon>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-center gap-2 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
+            <lucide-icon [name]="ShieldCheck" size="12"></lucide-icon>
+            <span>Pago seguro con encriptación SSL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

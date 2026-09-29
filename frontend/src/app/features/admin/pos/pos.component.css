@@ -1,0 +1,71 @@
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .pos-title {
+    font-size: 1.1rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .card-industrial {
+    padding: 0.75rem !important;
+  }
+  .section-header {
+    padding: 0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .section-header h2 {
+    font-size: 0.8rem !important;
+  }
+  .section-header .w-10.h-10 {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  .section-header .w-10.h-10 lucide-icon {
+    size: 14px !important;
+  }
+  .pos-input {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.75rem !important;
+  }
+  .pos-label {
+    font-size: 0.6rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+  .product-card {
+    padding: 0.5rem !important;
+  }
+  .product-card .text-lg {
+    font-size: 0.85rem !important;
+  }
+  .product-card .text-sm {
+    font-size: 0.7rem !important;
+  }
+  .product-card .text-xs {
+    font-size: 0.6rem !important;
+  }
+  .cart-section {
+    max-height: 200px !important;
+  }
+  .totals-section .text-lg {
+    font-size: 1rem !important;
+  }
+  .totals-section .text-sm {
+    font-size: 0.7rem !important;
+  }
+  .btn-generate {
+    padding: 0.5rem !important;
+    font-size: 0.65rem !important;
+  }
+}

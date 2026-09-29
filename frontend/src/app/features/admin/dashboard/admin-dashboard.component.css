@@ -1,0 +1,47 @@
+/* Admin Dashboard Styles */
+
+:host {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .dashboard-metrics .card-industrial {
+    padding: 0.75rem !important;
+  }
+  .dashboard-metrics .card-industrial p.text-2xl {
+    font-size: 1rem !important;
+    margin-top: 0.25rem !important;
+  }
+  .dashboard-metrics .card-industrial p.text-\[10px\] {
+    font-size: 8px !important;
+  }
+  .dashboard-metrics .card-industrial .flex.items-start {
+    gap: 0.5rem !important;
+  }
+  .dashboard-metrics .card-industrial .w-10.h-10 {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  .dashboard-metrics .card-industrial .text-xs {
+    font-size: 9px !important;
+  }
+  .dashboard-sections .card-industrial {
+    padding: 0.75rem !important;
+  }
+  .dashboard-sections h3 {
+    font-size: 0.8rem !important;
+  }
+  .chart-area {
+    height: 10rem !important;
+  }
+  .chart-bars {
+    height: 5rem !important;
+  }
+  .chart-bars .w-7 {
+    width: 1rem !important;
+  }
+  .chart-labels .w-7 {
+    width: 1rem !important;
+    font-size: 8px !important;
+  }
+}

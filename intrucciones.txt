@@ -1,0 +1,74 @@
+# 🚀 Manual de Operación SaaS: FerreNexo (Powered by VectraWeb)
+
+Este manual describe los pasos exactos para inicializar y operar tu plataforma multitenant (SaaS) desde cero en tu entorno local.
+
+---
+
+## 1. Preparar la Base de Datos
+Asegúrate de que tu servidor de PostgreSQL esté encendido (puedes verificarlo abriendo **pgAdmin 4** y confirmando que la base de datos `ferre_db` está activa y accesible).
+
+---
+
+## 2. Iniciar el Servidor Backend (Django - El Motor)
+El backend es el cerebro de VectraWeb que procesa las bases de datos de todos los clientes. 
+
+1. Abre una terminal (PowerShell o CMD) en la carpeta `c:\ferre\backend\`
+2. Activa tu entorno virtual de Python:
+   ```bash
+   ..\.venv\Scripts\activate
+   ```
+3. Inicia el servidor local:
+   ```bash
+   python manage.py runserver
+   ```
+El servidor central de tu SaaS quedará encendido escuchando en **http://127.0.0.1:8000**
+
+---
+
+## 3. Iniciar el Frontend (Angular - Lo que ven los clientes)
+El frontend es la interfaz gráfica. 
+
+1. Abre una **nueva** terminal en `c:\ferre\frontend\`
+2. Inicia el servidor de desarrollo de Angular:
+   ```bash
+   npm start
+   ```
+*Nota: Aunque Angular diga que corre en `localhost:4200`, para entrar al sistema de un cliente deberás usar su subdominio (ver paso 5).*
+
+---
+
+## 4. Crear tu Usuario "Dios" (Dueño de VectraWeb)
+Para poder administrar a todos tus clientes, necesitas una cuenta suprema en la base de datos principal (Nave Nodriza). Si aún no lo has hecho, abre una tercera terminal en `backend`, activa el entorno virtual (`..\.venv\Scripts\activate`) y ejecuta:
+
+```bash
+python manage.py tenant_command shell --schema=public
+```
+
+Una vez en la consola de Python (`>>>`), copia, pega y presiona Enter:
+```python
+from apps.users.models import User
+User.objects.create_superuser(email='tucorreo@vectraweb.com', password='TuContraseñaSegura123')
+exit()
+```
+
+---
+
+## 5. Panel de Gestión VectraWeb (Cómo crear un cliente)
+Aquí es donde tú gestionas tu negocio de venta de software:
+
+1. Ve a tu navegador y entra a: **http://127.0.0.1:8000/admin-secure-ferre/**
+2. Inicia sesión con la cuenta de VectraWeb que creaste en el paso 4.
+3. Bajo la sección **TENANTS**, tienes dos pasos para habilitar una ferretería:
+   * **Paso A (Clients):** Crea la base de datos. Haz clic en "Agregar", ponle el nombre real ("Ferretería Los Amigos") y asígnale un `schema_name` (ejemplo: `losamigos`, todo minúscula sin espacios).
+   * **Paso B (Domains):** Enlázale una URL web. Haz clic en "Agregar", pon el dominio (ej: `losamigos.localhost`), selecciona la ferretería que creaste en el paso A, y asegúrate de marcar la casilla **`is_primary`** con el tic verde.
+
+*(Cualquier intruso que intente entrar al panel normal `/admin/` caerá en nuestra trampa Honeypot de ciberseguridad).*
+
+---
+
+## 6. Acceso del Cliente (Cómo usa FerreNexo la ferretería)
+Una vez creada la base de datos de tu cliente:
+
+1. El cliente (o tú para probar) debe abrir su navegador y entrar **exactamente a su subdominio**, agregando el puerto de Angular: 
+   👉 **http://losamigos.localhost:4200**
+2. Verá el sistema FerreNexo en blanco, listo para cargar productos y comenzar a facturar. Cada cliente está 100% aislado en su propia base de datos.

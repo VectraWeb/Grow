@@ -1,0 +1,12 @@
+[phases.setup]
+nixPkgs = ["python313", "gcc", "libpq-dev"]
+
+[phases.build]
+cmds = [
+  "pip install -r requirements.txt",
+  "python manage.py migrate --noinput",
+  "python manage.py collectstatic --noinput"
+]
+
+[start]
+cmd = "gunicorn ferre_saas.wsgi:application --bind 0.0.0.0:$PORT --workers 3"

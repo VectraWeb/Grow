@@ -1,0 +1,122 @@
+<div class="space-y-6">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="section-title">Estadisticas Generales</h2>
+      <p class="section-subtitle mt-1">Monitorea el rendimiento de tu ferreteria.</p>
+    </div>
+  </div>
+
+  <div *ngIf="lowStockAlerts.length > 0" class="p-4 flex items-center justify-between gap-4 rounded-xl border-l-4 border-l-amber-500 bg-amber-50 border border-amber-200">
+    <div class="flex items-center gap-3">
+      <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+      <div>
+        <div class="text-sm font-bold text-amber-800">Productos con stock bajo: <span class="text-amber-900">{{ lowStockAlerts.length }}</span></div>
+        <div class="text-xs text-amber-600">Revisa los productos que requieren reposicion.</div>
+      </div>
+    </div>
+    <button (click)="viewAlerts()" class="text-ferre-700 hover:text-ferre-900 text-sm font-bold whitespace-nowrap">Ver alertas</button>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 dashboard-metrics">
+    <div *ngFor="let metric of metrics" class="card-industrial p-5">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider">{{ metric.label }}</p>
+          <p class="text-2xl font-extrabold text-slate-900 mt-1" style="font-family: Sora, sans-serif;">{{ metric.value }}</p>
+          <div class="flex items-center gap-1 text-xs font-bold mt-1" [ngClass]="metric.change >= 0 ? 'text-emerald-600' : 'text-red-500'">
+            <span>{{ metric.change >= 0 ? '+ ' : '- ' }}{{ Math.abs(metric.change) }}%</span>
+            <span class="text-slate-400 font-medium">vs mes ant.</span>
+          </div>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-ferre-50 flex items-center justify-center shrink-0 border border-ferre-200">
+          <lucide-icon [name]="metric.icon" size="18" class="text-ferre-700"></lucide-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 dashboard-sections">
+    <div class="lg:col-span-2 card-industrial p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-bold text-slate-900">Actividad de Ventas</h3>
+        <select class="bg-white border border-slate-200 text-slate-500 text-xs font-semibold rounded-lg px-3 py-1.5 outline-none focus:border-ferre-400 cursor-pointer">
+          <option>Ultimos 7 dias</option>
+          <option>Este mes</option>
+        </select>
+      </div>
+      <div class="chart-area h-56 rounded-lg bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+        <div class="chart-bars flex items-end gap-2 h-36">
+          <div *ngFor="let h of [40, 70, 45, 90, 65, 80, 55]" [style.height.%]="h"
+            class="w-7 bg-ferre-400 rounded-t-sm transition-all hover:bg-ferre-500 cursor-pointer relative group/bar">
+            <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover/bar:opacity-100 transition-opacity whitespace-nowrap z-20">
+              ${{ h * 150 }}
+            </div>
+          </div>
+        </div>
+        <div class="chart-labels flex gap-2 mt-3">
+          <span *ngFor="let d of ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']" class="w-7 text-center text-[10px] font-bold text-slate-400">{{ d }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-industrial p-6">
+      <h3 class="font-bold text-slate-900 mb-4">Mas Vendidos</h3>
+      <div class="space-y-3">
+        <div *ngIf="topProducts.length === 0" class="flex flex-col items-center justify-center py-10 text-slate-400">
+          <lucide-icon [name]="Package" size="40"></lucide-icon>
+          <p class="font-semibold text-sm mt-2">Sin datos de ventas</p>
+        </div>
+        <div *ngFor="let product of topProducts; let i = index" class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-md bg-ferre-50 flex items-center justify-center text-[10px] font-bold text-amber-800 border border-ferre-200">{{ i + 1 }}</div>
+            <span class="font-semibold text-slate-700 text-sm truncate max-w-[120px]">{{ product.name }}</span>
+          </div>
+          <span class="text-ferre-700 font-bold text-sm">{{ product.sales }}u.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-industrial overflow-hidden">
+    <div class="px-6 py-4 flex items-center justify-between border-b border-slate-200">
+      <h3 class="font-bold text-slate-900">Ordenes Recientes</h3>
+    </div>
+
+    <div *ngIf="recentOrders.length === 0" class="flex flex-col items-center justify-center py-16 text-slate-400">
+      <lucide-icon [name]="ShoppingCart" size="48"></lucide-icon>
+      <p class="font-bold text-sm mt-2">No hay ordenes registradas</p>
+    </div>
+
+    <div class="overflow-x-auto" *ngIf="recentOrders.length > 0">
+      <table class="w-full text-left orders-table">
+        <thead>
+          <tr class="bg-slate-50">
+            <th class="px-3 py-2 font-bold text-slate-500 text-[9px] uppercase tracking-wider border-b border-slate-200">#</th>
+            <th class="px-3 py-2 font-bold text-slate-500 text-[9px] uppercase tracking-wider border-b border-slate-200">Cliente</th>
+            <th class="px-3 py-2 font-bold text-slate-500 text-[9px] uppercase tracking-wider border-b border-slate-200">Monto</th>
+            <th class="px-3 py-2 font-bold text-slate-500 text-[9px] uppercase tracking-wider border-b border-slate-200">Estado</th>
+            <th class="px-3 py-2 font-bold text-slate-500 text-[9px] uppercase tracking-wider border-b border-slate-200">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of recentOrders" class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+            <td class="px-3 py-2 font-bold text-ferre-700 text-[11px] whitespace-nowrap">#{{ order.id.toString().substring(0, 8) }}</td>
+            <td class="px-3 py-2">
+              <div class="flex items-center gap-1.5">
+                <div class="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-[8px] font-bold text-slate-500 shrink-0">{{ order.customer.substring(0, 1) }}</div>
+                <span class="text-slate-700 font-semibold text-[11px] truncate max-w-[80px]">{{ order.customer }}</span>
+              </div>
+            </td>
+            <td class="px-3 py-2 font-bold text-slate-900 text-[11px] whitespace-nowrap">${{ order.total.toLocaleString("es-AR") }}</td>
+            <td class="px-3 py-2">
+              <span class="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase whitespace-nowrap" [ngClass]="order.status === 'entregado' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'">
+                {{ order.status }}
+              </span>
+            </td>
+            <td class="px-3 py-2 text-slate-400 text-[10px] whitespace-nowrap">{{ order.date | date: "dd/MM" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+/* Cart Component Styles */
+
+:host {
+  display: block;
+}
+
+/* Input number spinner fix */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lg\:col-span-2 {
+    grid-column: span 1;
+  }
+
+  .lg\:col-span-1 {
+    grid-column: span 1;
+  }
+
+  .sticky {
+    position: relative !important;
+  }
+}

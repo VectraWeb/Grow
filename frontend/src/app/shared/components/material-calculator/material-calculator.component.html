@@ -1,0 +1,233 @@
+<div *ngIf="canShow" class="h-full">
+  <button
+    (click)="showDialog()"
+    class="w-full h-full flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl group hover:border-ferre-300 transition-all shadow-sm hover:shadow-md"
+  >
+    <div class="flex items-center gap-4">
+      <div class="bg-ferre-50 p-2.5 rounded-xl text-ferre-700 group-hover:scale-110 transition-transform">
+        <lucide-icon [name]="Calculator" size="24"></lucide-icon>
+      </div>
+      <div class="text-left">
+        <p class="text-slate-900 font-bold text-sm">¿No sabes cuánto comprar?</p>
+        <p class="text-slate-500 text-xs font-medium">Usa nuestra calculadora inteligente</p>
+      </div>
+    </div>
+    <div class="text-ferre-700 opacity-0 group-hover:opacity-100 transition-opacity">
+      <lucide-icon [name]="Plus" size="20"></lucide-icon>
+    </div>
+  </button>
+
+  <p-dialog
+    [(visible)]="visible"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: '700px', maxWidth: '95vw' }"
+    header="Calculadora de Materiales"
+    class="custom-dialog"
+  >
+    <ng-template pTemplate="content">
+      <div class="p-4 space-y-6">
+
+        <div class="flex items-center gap-4 border-b border-slate-200 pb-4">
+          <div [ngSwitch]="calculatorType" class="bg-ferre-400 text-slate-800 p-3 rounded-2xl shrink-0">
+            <lucide-icon *ngSwitchCase="'paint'" [name]="Paintbrush" size="32"></lucide-icon>
+            <lucide-icon *ngSwitchCase="'tiles'" [name]="Grid3X3" size="32"></lucide-icon>
+            <lucide-icon *ngSwitchCase="'mix'" [name]="Hammer" size="32"></lucide-icon>
+            <lucide-icon *ngSwitchCase="'none'" [name]="Calculator" size="32"></lucide-icon>
+          </div>
+          <div>
+            <h3 class="text-slate-900 font-bold text-xl">
+              {{ calculatorType === 'paint' ? 'Pintura' : calculatorType === 'tiles' ? 'Cerámicos' : calculatorType === 'mix' ? 'Cemento/Mezcla' : 'Calculadora' }}
+            </h3>
+            <p class="text-slate-400 text-xs font-medium">{{ productName }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 bg-slate-100 p-1 rounded-2xl gap-1">
+          <button
+            (click)="calculatorType = 'paint'"
+            [class.bg-ferre-400]="calculatorType === 'paint'"
+            [class.text-white]="calculatorType === 'paint'"
+            [class.text-slate-500]="calculatorType !== 'paint'"
+            [class.shadow-sm]="calculatorType === 'paint'"
+            class="py-2.5 text-[10px] sm:text-xs font-semibold uppercase rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5"
+          >
+            🎨 Pintura
+          </button>
+          <button
+            (click)="calculatorType = 'tiles'"
+            [class.bg-ferre-400]="calculatorType === 'tiles'"
+            [class.text-white]="calculatorType === 'tiles'"
+            [class.text-slate-500]="calculatorType !== 'tiles'"
+            [class.shadow-sm]="calculatorType === 'tiles'"
+            class="py-2.5 text-[10px] sm:text-xs font-semibold uppercase rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5"
+          >
+            🧱 Cerámicos
+          </button>
+          <button
+            (click)="calculatorType = 'mix'"
+            [class.bg-ferre-400]="calculatorType === 'mix'"
+            [class.text-white]="calculatorType === 'mix'"
+            [class.text-slate-500]="calculatorType !== 'mix'"
+            [class.shadow-sm]="calculatorType === 'mix'"
+            class="py-2.5 text-[10px] sm:text-xs font-semibold uppercase rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5"
+          >
+            🏗️ Mezcla
+          </button>
+        </div>
+
+        <!-- PAINT CALCULATOR -->
+        <div *ngIf="calculatorType === 'paint'" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Superficie a pintar (m²)</label>
+              <div class="relative">
+                <input
+                  type="number"
+                  [(ngModel)]="paintArea"
+                  (ngModelChange)="calculatePaint()"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 font-semibold outline-none focus:border-ferre-400"
+                  placeholder="Ej: 45"
+                >
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">m²</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Manos</label>
+                <div class="flex items-center bg-slate-50 border border-slate-200 rounded-xl p-1 h-[50px]">
+                  <button (click)="paintLayers = Math.max(1, paintLayers - 1); calculatePaint()" class="w-10 h-10 text-ferre-700 flex items-center justify-center"><lucide-icon [name]="Minus" size="16"></lucide-icon></button>
+                  <span class="flex-1 text-center text-slate-900 font-semibold">{{ paintLayers }}</span>
+                  <button (click)="paintLayers = paintLayers + 1; calculatePaint()" class="w-10 h-10 text-ferre-700 flex items-center justify-center"><lucide-icon [name]="Plus" size="16"></lucide-icon></button>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Rinde (m²/L)</label>
+                <input
+                  type="number"
+                  [(ngModel)]="paintYield"
+                  (ngModelChange)="calculatePaint()"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 h-[50px] text-slate-900 text-center font-semibold outline-none"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="flex-1 bg-ferre-50 border border-ferre-200 p-6 rounded-3xl flex flex-col justify-center items-center text-center">
+              <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Necesitas aproximadamente</p>
+              <div class="flex items-baseline justify-center gap-2">
+                <span class="text-5xl font-bold text-slate-900">{{ paintResult }}</span>
+                <span class="text-xl font-bold text-ferre-700">Litros</span>
+              </div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 p-3 rounded-2xl flex items-start gap-3">
+              <lucide-icon [name]="AlertCircle" class="text-blue-500 shrink-0" size="18"></lucide-icon>
+              <p class="text-slate-500 text-[11px] leading-snug">
+                <strong>Tip:</strong> Agrega 10% para recortes. Consigue rodillo y cinta.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TILES CALCULATOR -->
+        <div *ngIf="calculatorType === 'tiles'" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Superficie Total (m²)</label>
+              <input
+                type="number"
+                [(ngModel)]="tilesArea"
+                (ngModelChange)="calculateTiles()"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 font-semibold outline-none focus:border-ferre-400"
+                placeholder="Ej: 20"
+              >
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Desperdicio (%)</label>
+                <input
+                  type="number"
+                  [(ngModel)]="tilesWaste"
+                  (ngModelChange)="calculateTiles()"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 h-[50px] text-slate-900 text-center font-semibold outline-none"
+                >
+              </div>
+              <div class="space-y-2">
+                <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Caja (m²)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  [(ngModel)]="tilesBoxSize"
+                  (ngModelChange)="calculateTiles()"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 h-[50px] text-slate-900 text-center font-semibold outline-none"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <div class="flex-1 bg-ferre-50 border border-ferre-200 p-6 rounded-3xl flex flex-col justify-center items-center text-center">
+              <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Debes comprar</p>
+              <div class="flex items-baseline justify-center gap-2">
+                <span class="text-5xl font-bold text-slate-900">{{ tilesResult }}</span>
+                <span class="text-xl font-bold text-ferre-700">Cajas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MIX CALCULATOR -->
+        <div *ngIf="calculatorType === 'mix'" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Superficie a cubrir (m²)</label>
+              <input
+                type="number"
+                [(ngModel)]="mixArea"
+                (ngModelChange)="calculateMix()"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 font-semibold outline-none focus:border-ferre-400"
+                placeholder="Ej: 10"
+              >
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Espesor (cm)</label>
+              <div class="flex items-center bg-slate-50 border border-slate-200 rounded-xl p-1 h-[50px]">
+                <button (click)="mixThickness = Math.max(1, mixThickness - 1); calculateMix()" class="w-10 h-10 text-ferre-700 flex items-center justify-center"><lucide-icon [name]="Minus" size="16"></lucide-icon></button>
+                <span class="flex-1 text-center text-slate-900 font-semibold">{{ mixThickness }} cm</span>
+                <button (click)="mixThickness = mixThickness + 1; calculateMix()" class="w-10 h-10 text-ferre-700 flex items-center justify-center"><lucide-icon [name]="Plus" size="16"></lucide-icon></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <div class="flex-1 bg-ferre-50 border border-ferre-200 p-6 rounded-3xl flex flex-col justify-center items-center text-center">
+              <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Bolsas Cemento 50kg</p>
+              <div class="flex items-baseline justify-center gap-2">
+                <span class="text-5xl font-bold text-slate-900">{{ mixResult }}</span>
+                <span class="text-xl font-bold text-ferre-700">Unidades</span>
+              </div>
+            </div>
+
+            <p class="text-slate-400 text-[10px] text-center italic mt-2">
+              * Cálculo en mezcla estándar 1:3:3 (Cemento, Arena, Piedra).
+            </p>
+          </div>
+        </div>
+
+        <button
+          (click)="visible = false"
+          class="w-full btn-ferre py-4"
+        >
+          Entendido, cerrar
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>
