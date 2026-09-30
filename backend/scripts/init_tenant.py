@@ -5,7 +5,7 @@ import django
 from django.db import connection
 
 # Setup Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ferre_saas.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
 django.setup()
 
 from apps.tenants.models import Client, Domain

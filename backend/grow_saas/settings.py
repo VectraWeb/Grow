@@ -74,7 +74,7 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',
 ]
 
-ROOT_URLCONF = 'ferre_saas.urls'
+ROOT_URLCONF = 'grow_saas.urls'
 
 TEMPLATES = [
     {
@@ -92,7 +92,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ferre_saas.wsgi.application'
+WSGI_APPLICATION = 'grow_saas.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -136,8 +136,8 @@ else:
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     }
 
-LOGIN_URL = '/admin-secure-ferre/login/'
-LOGIN_REDIRECT_URL = '/admin-secure-ferre/'
+LOGIN_URL = '/admin-secure-grow/login/'
+LOGIN_REDIRECT_URL = '/admin-secure-grow/'
 TWO_FACTOR_PATCH_ADMIN = False
 
 REST_FRAMEWORK = {
@@ -214,7 +214,7 @@ LOGGING = {
     },
 }
 
-ADMIN_URL = 'admin-secure-ferre/'
+ADMIN_URL = 'admin-secure-grow/'
 ADMIN_SITE_HEADER = "VectraWeb Admin Panel"
 
 AUTHENTICATION_BACKENDS = [

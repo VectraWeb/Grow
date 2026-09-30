@@ -4,7 +4,7 @@ from pathlib import Path
 # Setup Django
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ferre_saas.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
 django.setup()
 
 from django.test import RequestFactory

@@ -4,9 +4,9 @@ import os
 from celery import Celery
 from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ferre_saas.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
 
-app = Celery('ferre_saas')
+app = Celery('grow_saas')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 

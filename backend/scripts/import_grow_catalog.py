@@ -10,7 +10,7 @@ import django
 
 # Setup Django environment
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ferre_saas.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
 django.setup()
 
 from django.utils.text import slugify

@@ -5,5 +5,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-    path('admin-secure-ferre/', admin.site.urls),
+    path('admin-secure-grow/', admin.site.urls),
 ]

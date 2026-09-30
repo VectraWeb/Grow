@@ -38,7 +38,7 @@ def home(request):
     return JsonResponse({
         "status": "online",
         "backend": "Tierra Verde Grow",
-        "admin": "/admin-secure-ferre/",
+        "admin": "/admin-secure-grow/",
         "api": "/api/"
     })
 
@@ -58,7 +58,7 @@ urlpatterns = [
     path('', home),
 
     # Panel de administración
-    path('admin-secure-ferre/', admin.site.urls),
+    path('admin-secure-grow/', admin.site.urls),
 
     # API Router
     path('api/', include(router.urls)),

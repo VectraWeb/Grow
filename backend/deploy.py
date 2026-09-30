@@ -8,7 +8,7 @@ if db_url:
     from urllib.parse import urlparse
     info = urlparse(db_url)
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ferre_saas.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
     django.setup()
 
     from django.conf import settings
@@ -21,7 +21,7 @@ if db_url:
         'PORT': info.port or '5432',
     }
 else:
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ferre_saas.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
     django.setup()
 
 from django.core.management import execute_from_command_line
