@@ -130,7 +130,7 @@ class MeLiCallbackView(APIView):
         error = request.query_params.get('error')
 
         # Frontend URL for redirect
-        frontend_url = getattr(settings, 'FRONTEND_URL', 'https://ferreteria-six-lovat.vercel.app')
+        frontend_url = getattr(settings, 'FRONTEND_URL', 'https://tierra-verde-grow.vercel.app')
 
         if error:
             return HttpResponseRedirect(f'{frontend_url}/admin/meli?error={error}')
