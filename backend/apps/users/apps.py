@@ -6,14 +6,15 @@ def crear_superusuario_automatico(sender, **kwargs):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     
-    email_admin = os.environ.get("DJANGO_ADMIN_EMAIL", "admin@ferre.com")
-    password_admin = os.environ.get("DJANGO_ADMIN_PASSWORD", "admin123")
+    email_admin = os.environ.get("DJANGO_ADMIN_EMAIL", "admin@tierraverdegrow.com")
+    password_admin = os.environ.get("DJANGO_ADMIN_PASSWORD", "AdminGrow2026!")
     
     if not User.objects.filter(email=email_admin).exists():
         print("Creando superusuario personalizado por código...")
         User.objects.create_superuser(
             email=email_admin,
-            password=password_admin
+            password=password_admin,
+            role=User.ADMIN
         )
         print("¡Superusuario personalizado creado con éxito!")
 
