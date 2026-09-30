@@ -15,7 +15,8 @@ import {
   Image,
   Menu,
   X,
-  Wrench,
+  Sprout,
+  FileSpreadsheet,
 } from "lucide-angular";
 
 @Component({
@@ -26,24 +27,24 @@ import {
     :host { display: block; }
     .sidebar-link {
       display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.625rem 0.75rem; border-radius: 0.5rem;
+      padding: 0.625rem 0.75rem; border-radius: 0.75rem;
       font-size: 0.875rem; font-weight: 500;
-      color: #64748b;
+      color: #526854;
       transition: all 0.15s;
     }
     .sidebar-link:hover {
-      background: #fffbe6;
-      color: #a67000;
+      background: #f0fdf4;
+      color: #0f9717;
     }
     .sidebar-link.sidebar-active {
-      background: #fffbe6;
-      color: #a67000;
-      font-weight: 600;
+      background: #e8f8ea;
+      color: #0b7a12;
+      font-weight: 700;
     }
-    .sidebar-link.sidebar-active lucide-icon { color: #a67000; }
+    .sidebar-link.sidebar-active lucide-icon { color: #0f9717; }
   `],
   template: `
-    <div class="flex h-dvh bg-slate-50 text-slate-700 font-sans">
+    <div class="flex h-dvh bg-[#fcfdf9] text-slate-700 font-sans">
       <div
         *ngIf="sidebarOpen"
         class="fixed inset-0 bg-black/20 z-30 lg:hidden"
@@ -51,19 +52,15 @@ import {
       ></div>
 
       <aside
-        class="fixed lg:static inset-y-0 left-0 w-64 flex flex-col z-40 transition-transform duration-300 lg:translate-x-0 bg-[#f0ece5] border-r border-slate-200"
+        class="fixed lg:static inset-y-0 left-0 w-64 flex flex-col z-40 transition-transform duration-300 lg:translate-x-0 bg-white border-r border-slate-200/80 shadow-sm"
         [class.-translate-x-full]="!sidebarOpen"
         [class.translate-x-0]="sidebarOpen"
       >
-        <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-100">
-          <div class="w-9 h-9 rounded-lg bg-ferre-400 flex items-center justify-center shadow-sm">
-            <lucide-icon [name]="WrenchIcon" size="20" class="text-slate-800"></lucide-icon>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-extrabold tracking-wider text-slate-900 uppercase" style="font-family: Sora, sans-serif;">
-              Ferre<span class="text-ferre-400">Nexo</span>
-            </span>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">Admin Panel</span>
+        <div class="h-16 flex items-center gap-3 px-5 border-b border-emerald-100 bg-[#fbfdf9]">
+          <img src="assets/logo-tree.png" alt="Tierra Verde Grow" class="h-9 w-auto object-contain" />
+          <div class="flex flex-col justify-center leading-none" style="font-family: Sora, sans-serif;">
+            <span class="text-[10px] font-black tracking-widest text-[#874e04]">TIERRA VERDE</span>
+            <span class="text-xs font-black tracking-wider text-[#0f9717] mt-0.5">GROW ADMIN</span>
           </div>
           <button (click)="sidebarOpen = false" class="lg:hidden p-1 text-slate-400 hover:text-slate-700 ml-auto">
             <lucide-icon [name]="X" size="18"></lucide-icon>
@@ -100,6 +97,12 @@ import {
             class="sidebar-link" (click)="closeSidebarOnMobile()">
             <lucide-icon [name]="ImageIcon" size="18"></lucide-icon>
             Banners
+          </a>
+
+          <a routerLink="/admin/google-sheets" routerLinkActive="sidebar-active"
+            class="sidebar-link" (click)="closeSidebarOnMobile()">
+            <lucide-icon [name]="FileSpreadsheet" size="18"></lucide-icon>
+            Sincronizar Sheets
           </a>
 
           <div class="h-px my-3 bg-slate-100"></div>
@@ -148,7 +151,7 @@ export class AdminLayoutComponent implements OnInit {
   router = inject(Router);
   api = inject(ApiService);
 
-  tenantName: string = "FerreNexo";
+  tenantName: string = "Tierra Verde Grow";
   sidebarOpen = false;
 
   LayoutDashboard = LayoutDashboard;
@@ -160,17 +163,18 @@ export class AdminLayoutComponent implements OnInit {
   LogOut = LogOut;
   MenuIcon = Menu;
   X = X;
-  WrenchIcon = Wrench;
+  SproutIcon = Sprout;
   ImageIcon = Image;
+  FileSpreadsheet = FileSpreadsheet;
   Home = Home;
 
   ngOnInit() {
     this.api.get<any>('/auth/profile/').subscribe({
       next: (res) => {
-        this.tenantName = res.tenant_name || "FerreNexo";
+        this.tenantName = res.tenant_name || "Tierra Verde Grow";
       },
       error: () => {
-        this.tenantName = "FerreNexo";
+        this.tenantName = "Tierra Verde Grow";
       }
     });
   }

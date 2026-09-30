@@ -14,9 +14,16 @@ backend/media/
 
 # Dependencias y compilación de Angular (dentro de frontend)
 frontend/node_modules/
+node_modules/
 frontend/.angular/
 frontend/dist/
 
 # Sistema y editores
 .DS_Store
 .vscode/
+.neon
+.env.local
+.agents/
+*.xlsx
+
+

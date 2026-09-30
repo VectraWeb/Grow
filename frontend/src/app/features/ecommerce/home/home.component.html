@@ -1,4 +1,4 @@
-﻿<div class="relative overflow-hidden bg-white banner-carousel mt-[76px]" *ngIf="banners.length > 0">
+<div class="relative overflow-hidden bg-white banner-carousel mt-[76px]" *ngIf="banners.length > 0">
   <div
     class="relative h-full w-full overflow-hidden"
     (touchstart)="onTouchStart($event)"
@@ -52,25 +52,26 @@
 </div>
 
 <!-- Products Catalog -->
-<div id="catalog" class="pt-24 pb-16 bg-slate-50 border-t border-slate-200">
+<div id="catalog" class="pt-24 pb-16 bg-[#fcfdf9] border-t border-emerald-100/60">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
       <div>
+        <span class="text-xs font-black tracking-widest text-[#874e04] uppercase">TIERRA VERDE GROWSHOP</span>
         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-1" style="font-family: Sora, sans-serif;">
-          Catalogo de Productos
+          Catálogo de Cultivo & Equipamiento
         </h2>
-        <p class="text-slate-500 text-sm">Encontra todo lo que necesitas para tu proyecto</p>
+        <p class="text-slate-500 text-sm">Encontrá todo lo necesario para optimizar tu cosecha indoor y outdoor</p>
       </div>
       <div class="flex items-center gap-3">
         <select
           (change)="setSortBy($any($event.target).value)"
           [value]="sortBy"
-          class="bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl px-4 py-2.5 outline-none focus:border-ferre-400 cursor-pointer"
+          class="bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl px-4 py-2.5 outline-none focus:border-ferre-400 cursor-pointer shadow-sm"
         >
           <option value="relevancia">Relevancia</option>
           <option value="precio-asc">Menor Precio</option>
           <option value="precio-desc">Mayor Precio</option>
-          <option value="vendido">Mas Vendido</option>
+          <option value="vendido">Más Vendido</option>
           <option value="nuevo">Nuevo</option>
         </select>
       </div>
@@ -79,24 +80,24 @@
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5" *ngIf="displayedProducts.length > 0">
       <article
         *ngFor="let product of displayedProducts; trackBy: trackByProductId"
-        class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-ferre-200 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col"
+        class="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-ferre-300 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col"
         [routerLink]="['/product', product.id]"
       >
-        <div class="relative bg-slate-50 p-2 md:p-6 h-28 md:h-52 flex items-center justify-center overflow-hidden">
+        <div class="relative bg-[#f7faf6] p-2 md:p-6 h-28 md:h-52 flex items-center justify-center overflow-hidden">
           <img
             *ngIf="product.image"
             [src]="product.image"
             [alt]="product.name"
             class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
-          <lucide-icon *ngIf="!product.image" [name]="Hammer" size="40" class="text-slate-300"></lucide-icon>
+          <lucide-icon *ngIf="!product.image" [name]="Sprout" size="40" class="text-emerald-400"></lucide-icon>
         </div>
         <div class="p-2 md:p-4 flex flex-col flex-1">
           <span class="text-[8px] md:text-[10px] font-bold text-ferre-700 uppercase tracking-wider truncate">{{ product.category_name }}</span>
           <h3 class="font-semibold text-slate-900 text-[11px] md:text-sm mt-0.5 md:mt-1 line-clamp-2 mb-1 md:mb-2 leading-snug">{{ product.name }}</h3>
           <div class="flex items-center gap-1.5 mb-1 md:mb-2" *ngIf="product.rating">
             <div class="flex">
-              <span *ngFor="let s of [1,2,3,4,5]" class="text-[10px] md:text-xs" [ngClass]="s <= Math.round(product.rating || 0) ? 'text-amber-400' : 'text-slate-200'">&#9733;</span>
+              <span *ngFor="let s of [1,2,3,4,5]" class="text-[10px] md:text-xs" [ngClass]="s <= Math.round(product.rating || 0) ? 'text-[#e0b721]' : 'text-slate-200'">&#9733;</span>
             </div>
             <span class="text-[8px] md:text-[10px] text-slate-400">({{ product.reviews_count }})</span>
           </div>
@@ -104,7 +105,7 @@
             <div *ngIf="product.discount_percentage && +product.discount_percentage > 0">
               <div class="flex items-center gap-1.5">
                 <span class="text-[10px] md:text-sm text-slate-400 line-through">${{ formatPrice(product.price_retail) }}</span>
-                <span class="bg-emerald-500 text-white text-[7px] md:text-[10px] font-black px-1.5 py-0.5 rounded">{{ +product.discount_percentage }}% OFF</span>
+                <span class="bg-gradient-to-r from-[#e0b721] to-[#ca8a04] text-slate-900 text-[7px] md:text-[10px] font-black px-1.5 py-0.5 rounded shadow-sm">{{ +product.discount_percentage }}% OFF</span>
               </div>
               <span class="text-sm md:text-lg font-extrabold text-slate-900 block mt-0.5" style="font-family: Sora, sans-serif;">${{ formatPrice(getDiscountedPrice(product)) }}</span>
             </div>
@@ -112,17 +113,10 @@
               <span class="text-sm md:text-lg font-extrabold text-slate-900" style="font-family: Sora, sans-serif;">${{ formatPrice(product.price_retail) }}</span>
             </div>
           </div>
-          <div class="flex items-center gap-2 mt-2 md:mt-3">
-            <span
-              *ngIf="product.stock_current !== undefined && product.stock_current !== null"
-              class="text-[8px] md:text-[10px] font-semibold shrink-0"
-              [ngClass]="product.stock_current > 0 ? 'text-emerald-600' : 'text-red-500'"
-            >
-              {{ product.stock_current > 0 ? 'En stock' : 'Sin stock' }}
-            </span>
+          <div class="mt-2 md:mt-3">
             <button
               (click)="addToCart(product); $event.stopPropagation()"
-              class="flex-1 bg-ferre-400 hover:bg-ferre-500 text-slate-800 font-bold text-[10px] md:text-sm py-1.5 md:py-2 rounded-lg transition-colors flex items-center justify-center gap-1 md:gap-2"
+              class="w-full btn-ferre text-[10px] md:text-sm py-1.5 md:py-2 rounded-xl transition-all flex items-center justify-center gap-1 md:gap-2 shadow-sm hover:shadow-md"
             >
               <lucide-icon [name]="ShoppingCart" size="14"></lucide-icon>
               Agregar
@@ -162,81 +156,86 @@
 </div>
 
 <!-- CTA Section -->
-<div *ngIf="whatsappHrefConsult" class="py-6 md:py-10 bg-white border-y border-slate-200">
+<div *ngIf="whatsappHrefConsult" class="py-8 md:py-12 bg-white border-y border-emerald-100/70">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 class="text-lg md:text-xl font-extrabold text-slate-900 mb-1 md:mb-2" style="font-family: Sora, sans-serif;">
-      Necesitas asesoria profesional?
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      Asesoría Personalizada
+    </div>
+    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-2" style="font-family: Sora, sans-serif;">
+      ¿Dudas con tu cultivo o armado de indoor?
     </h2>
-    <p class="text-slate-500 text-xs md:text-sm mb-4 md:mb-6 max-w-lg mx-auto">
-      Nuestro equipo de expertos te ayuda a encontrar las herramientas y materiales exactos para tu proyecto.
+    <p class="text-slate-600 text-xs md:text-sm mb-6 max-w-xl mx-auto leading-relaxed">
+      Nuestro equipo de cultivadores expertos te asesora de forma gratuita para elegir sustratos, dosificación de bioestimulantes, carpas y luces exactas para tu espacio.
     </p>
     <a
       [href]="whatsappHrefConsult"
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 md:px-6 py-2 md:py-2.5 rounded-lg transition-colors shadow-sm hover:shadow-md text-xs md:text-sm"
+      class="inline-flex items-center gap-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg text-sm"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
       </svg>
-      Consultar Asesor
+      Consultar con un Asesor Cultivador
     </a>
   </div>
 </div>
 
 <!-- Material Calculator Section -->
-<div id="material-calculator-section" class="py-6 md:py-10 bg-slate-50 border-t border-slate-200">
+<div id="material-calculator-section" class="py-8 md:py-12 bg-[#fcfdf9] border-t border-emerald-100/70">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 class="text-lg md:text-xl font-extrabold text-slate-900 mb-1 md:mb-2" style="font-family: Sora, sans-serif;">
-      Calculadora de Materiales
+    <span class="text-xs font-bold text-[#874e04] uppercase tracking-widest">HERRAMIENTA GRATUITA</span>
+    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-2 mt-1" style="font-family: Sora, sans-serif;">
+      Calculadora de Cultivo Inteligente
     </h2>
-    <p class="text-slate-500 text-xs md:text-sm mb-4 md:mb-6 max-w-lg mx-auto">
-      Calcula al instante las cantidades que necesitas para pintar, revestir o hacer un contrapiso.
+    <p class="text-slate-600 text-xs md:text-sm mb-6 max-w-lg mx-auto">
+      Calculá al instante los litros de sustrato para tus macetas, la potencia LED para tu carpa o la turbina extractora ideal.
     </p>
     <div class="max-w-md mx-auto">
-      <app-material-calculator categoryName="todos" productName="Proyecto General"></app-material-calculator>
+      <app-material-calculator categoryName="sustratos" productName="Cultivo Indoor"></app-material-calculator>
     </div>
   </div>
 </div>
 
 <!-- Benefits Bar -->
-<div class="bg-slate-50/60 py-6">
+<div class="bg-white py-8 border-t border-slate-200/80">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="py-4 px-4 flex items-center gap-3">
-        <div class="w-10 h-10 bg-ferre-50 rounded-xl flex items-center justify-center shrink-0">
-          <lucide-icon [name]="Truck" size="20" class="text-ferre-700"></lucide-icon>
+      <div class="py-4 px-4 flex items-center gap-3.5 bg-[#fcfdf9] rounded-2xl border border-emerald-100/60">
+        <div class="w-11 h-11 bg-emerald-50 rounded-xl flex items-center justify-center shrink-0 text-emerald-700">
+          <lucide-icon [name]="Truck" size="22"></lucide-icon>
         </div>
         <div>
-          <h3 class="font-semibold text-slate-900 text-sm">Envios a todo el pais</h3>
-          <p class="text-xs text-slate-500">Recibis donde estas</p>
+          <h3 class="font-bold text-slate-900 text-sm">Envíos discretos</h3>
+          <p class="text-xs text-slate-500">Embalaje 100% neutro y seguro</p>
         </div>
       </div>
-      <div class="py-4 px-4 flex items-center gap-3">
-        <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center shrink-0">
-          <lucide-icon [name]="ShieldCheck" size="20" class="text-emerald-600"></lucide-icon>
+      <div class="py-4 px-4 flex items-center gap-3.5 bg-[#fcfdf9] rounded-2xl border border-emerald-100/60">
+        <div class="w-11 h-11 bg-emerald-50 rounded-xl flex items-center justify-center shrink-0 text-emerald-600">
+          <lucide-icon [name]="Sprout" size="22"></lucide-icon>
         </div>
         <div>
-          <h3 class="font-semibold text-slate-900 text-sm">Garantia de stock</h3>
-          <p class="text-xs text-slate-500">Siempre disponibilidad</p>
+          <h3 class="font-bold text-slate-900 text-sm">Asesoría de cultivo</h3>
+          <p class="text-xs text-slate-500">Guía técnica en cada etapa</p>
         </div>
       </div>
-      <div class="py-4 px-4 flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
-          <lucide-icon [name]="Shield" size="20" class="text-blue-600"></lucide-icon>
+      <div class="py-4 px-4 flex items-center gap-3.5 bg-[#fcfdf9] rounded-2xl border border-emerald-100/60">
+        <div class="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center shrink-0 text-amber-600">
+          <lucide-icon [name]="ShieldCheck" size="22"></lucide-icon>
         </div>
         <div>
-          <h3 class="font-semibold text-slate-900 text-sm">Calidad profesional</h3>
-          <p class="text-xs text-slate-500">Marcas reconocidas</p>
+          <h3 class="font-bold text-slate-900 text-sm">Garantía oficial</h3>
+          <p class="text-xs text-slate-500">Marcas líderes y certificadas</p>
         </div>
       </div>
-      <div class="py-4 px-4 flex items-center gap-3">
-        <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center shrink-0">
-          <lucide-icon [name]="Zap" size="20" class="text-amber-600"></lucide-icon>
+      <div class="py-4 px-4 flex items-center gap-3.5 bg-[#fcfdf9] rounded-2xl border border-emerald-100/60">
+        <div class="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center shrink-0 text-[#e0b721]">
+          <lucide-icon [name]="Zap" size="22"></lucide-icon>
         </div>
         <div>
-          <h3 class="font-semibold text-slate-900 text-sm">Coordinado por WhatsApp</h3>
-          <p class="text-xs text-slate-500">Atencion directa</p>
+          <h3 class="font-bold text-slate-900 text-sm">Atención por WhatsApp</h3>
+          <p class="text-xs text-slate-500">Respuesta rápida a tus consultas</p>
         </div>
       </div>
     </div>
@@ -244,67 +243,72 @@
 </div>
 
 <!-- Footer -->
-<footer class="bg-[#f0ece5] py-8 text-slate-500 border-t border-slate-200">
+<footer class="bg-[#f7faf5] py-10 text-slate-600 border-t border-emerald-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
-      <div class="space-y-2">
-        <span class="text-xl font-extrabold tracking-tight text-slate-900" style="font-family: Sora, sans-serif;">
-          Ferre<span class="text-ferre-400">Nexo</span>
-        </span>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+      <div class="space-y-3 col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2.5">
+          <img src="assets/logo-tree.png" alt="Tierra Verde Grow" class="h-10 w-auto object-contain" />
+          <div class="flex flex-col justify-center leading-none" style="font-family: Sora, sans-serif;">
+            <span class="text-[11px] font-black tracking-widest text-[#874e04]">TIERRA</span>
+            <span class="text-sm font-black tracking-wider text-[#0f9717] -mt-0.5">VERDE</span>
+            <span class="text-[10px] font-black tracking-[0.22em] text-[#e0b721] -mt-0.5">GROW</span>
+          </div>
+        </div>
         <p class="text-xs leading-relaxed text-slate-500">
-          Tu proveedor de herramientas y materiales de construccion. Calidad profesional, precio justo.
+          Tu growshop especializado en cultivo indoor y outdoor. Sustratos premium, nutrición vegetal, luminarias LED y parafernalia de primer nivel.
         </p>
       </div>
       <div>
-        <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider mb-2">Productos</h4>
-        <ul class="space-y-1 text-xs text-slate-500">
-          <li><button (click)="scrollToCategory('herramientas-electricas')" class="hover:text-ferre-500 transition-colors">Herramientas Electricas</button></li>
-          <li><button (click)="scrollToCategory('materiales')" class="hover:text-ferre-500 transition-colors">Construccion</button></li>
-          <li><button (click)="scrollToCategory('herramientas-manuales')" class="hover:text-ferre-500 transition-colors">Herramientas Manuales</button></li>
+        <h4 class="font-bold text-slate-900 text-[11px] uppercase tracking-wider mb-2.5">Productos</h4>
+        <ul class="space-y-1.5 text-xs text-slate-500">
+          <li><button (click)="scrollToCategory('sustratos-y-tierras')" class="hover:text-ferre-600 transition-colors">Sustratos & Tierras</button></li>
+          <li><button (click)="scrollToCategory('fertilizantes-y-nutrientes')" class="hover:text-ferre-600 transition-colors">Fertilizantes & Nutrición</button></li>
+          <li><button (click)="scrollToCategory('carpas-e-indoor')" class="hover:text-ferre-600 transition-colors">Carpas & Iluminación LED</button></li>
         </ul>
       </div>
       <div>
-        <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider mb-2">Ayuda</h4>
-        <ul class="space-y-1 text-xs text-slate-500">
-          <li><button (click)="openLegal('soporte')" class="hover:text-ferre-500 transition-colors">Soporte Tecnico</button></li>
-          <li><button (click)="openLegal('garantias')" class="hover:text-ferre-500 transition-colors">Garantias</button></li>
-          <li><button (click)="openLegal('envios')" class="hover:text-ferre-500 transition-colors">Envios y Entregas</button></li>
+        <h4 class="font-bold text-slate-900 text-[11px] uppercase tracking-wider mb-2.5">Ayuda</h4>
+        <ul class="space-y-1.5 text-xs text-slate-500">
+          <li><button (click)="openLegal('soporte')" class="hover:text-ferre-600 transition-colors">Asesoría de Cultivo</button></li>
+          <li><button (click)="openLegal('garantias')" class="hover:text-ferre-600 transition-colors">Garantías de Equipos</button></li>
+          <li><button (click)="openLegal('envios')" class="hover:text-ferre-600 transition-colors">Envíos Discretos</button></li>
         </ul>
       </div>
       <div>
-        <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider mb-2">Redes Sociales</h4>
+        <h4 class="font-bold text-slate-900 text-[11px] uppercase tracking-wider mb-2.5">Redes Sociales</h4>
         <div class="flex gap-2">
-          <a *ngIf="whatsappHref" [href]="whatsappHref" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-slate-200/60 flex items-center justify-center text-slate-500 hover:bg-emerald-600 hover:text-white transition-all">
-            <lucide-icon [name]="MessageCircle" size="14"></lucide-icon>
+          <a *ngIf="whatsappHref" [href]="whatsappHref" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-emerald-100/70 flex items-center justify-center text-emerald-700 hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+            <lucide-icon [name]="MessageCircle" size="16"></lucide-icon>
           </a>
-          <a *ngIf="instagramUrl" [href]="instagramUrl" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-slate-200/60 flex items-center justify-center text-slate-500 hover:bg-pink-600 hover:text-white transition-all">
-            <lucide-icon [name]="Instagram" size="14"></lucide-icon>
+          <a *ngIf="instagramUrl" [href]="instagramUrl" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-pink-100/70 flex items-center justify-center text-pink-700 hover:bg-pink-600 hover:text-white transition-all shadow-sm">
+            <lucide-icon [name]="Instagram" size="16"></lucide-icon>
           </a>
-          <a *ngIf="facebookUrl" [href]="facebookUrl" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-slate-200/60 flex items-center justify-center text-slate-500 hover:bg-blue-600 hover:text-white transition-all">
-            <lucide-icon [name]="Facebook" size="14"></lucide-icon>
+          <a *ngIf="facebookUrl" [href]="facebookUrl" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-blue-100/70 flex items-center justify-center text-blue-700 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+            <lucide-icon [name]="Facebook" size="16"></lucide-icon>
           </a>
         </div>
       </div>
       <div *ngIf="storeAddress">
-        <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          Nuestra Sucursal
+        <h4 class="font-bold text-slate-900 text-[11px] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Nuestro Local
         </h4>
-        <a [href]="getMapsLink()" target="_blank" class="block rounded-lg overflow-hidden border border-slate-200 h-20 mb-1.5 hover:border-ferre-400/50 transition-colors">
+        <a [href]="getMapsLink()" target="_blank" class="block rounded-xl overflow-hidden border border-emerald-100 h-20 mb-1.5 hover:border-ferre-400 transition-colors shadow-sm">
           <iframe
             width="100%" height="100%" frameborder="0"
             style="border:0; pointer-events:none;"
             [src]="mapSafeUrl"
           ></iframe>
         </a>
-        <p class="text-[10px] text-slate-400">{{ storeAddress }}</p>
+        <p class="text-[11px] text-slate-500">{{ storeAddress }}</p>
       </div>
     </div>
-    <div class="border-t border-slate-200 pt-4 flex flex-col md:flex-row justify-between items-center text-[11px] text-slate-400">
-      <p>&copy; 2026 FerreNexo. Todos los derechos reservados.</p>
-      <div class="flex gap-4 mt-2 md:mt-0">
-        <button (click)="openLegal('privacidad')" class="hover:text-slate-700 transition-colors">Privacidad</button>
-        <button (click)="openLegal('terminos')" class="hover:text-slate-700 transition-colors">Terminos</button>
+    <div class="border-t border-emerald-200/60 pt-5 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 gap-3">
+      <p>&copy; 2026 Tierra Verde Grow. Todos los derechos reservados.</p>
+      <div class="flex gap-5">
+        <button (click)="openLegal('privacidad')" class="hover:text-emerald-700 transition-colors">Privacidad</button>
+        <button (click)="openLegal('terminos')" class="hover:text-emerald-700 transition-colors">Términos</button>
       </div>
     </div>
   </div>

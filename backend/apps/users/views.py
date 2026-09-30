@@ -218,7 +218,7 @@ class StoreInfoView(APIView):
     def get(self, request):
         config = StoreConfig.objects.first()
         if not config:
-            return Response({'has_mp': False, 'name': 'FerreNexo'})
+            return Response({'has_mp': False, 'name': 'Tierra Verde Grow'})
             
         return Response({
             'name': config.name,

@@ -26,6 +26,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: "banners", component: BannersComponent },
       { path: "orders", component: OrdersComponent },
       { path: "meli", component: MeliAuthComponent },
+      { path: "google-sheets", loadComponent: () => import('./google-sheets/google-sheets-sync.component').then(m => m.GoogleSheetsSyncComponent) },
       { path: "settings", loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent) },
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
     ],

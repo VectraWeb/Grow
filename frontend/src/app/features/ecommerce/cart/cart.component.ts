@@ -52,9 +52,9 @@ export class CartComponent implements OnInit {
 
   bankDetails = {
     bank: 'Banco Nación / Santander',
-    owner: 'FerreNexo by VectraWeb',
-    cuit: '30-12345678-9',
-    alias: 'FERRE.PRO.SASA',
+    owner: 'Tierra Verde Grow',
+    cuit: '30-71829341-9',
+    alias: 'TIERRA.VERDE.GROW',
     cbu: '0110123456789012345678',
     whatsapp: '+5491123456789'
   };

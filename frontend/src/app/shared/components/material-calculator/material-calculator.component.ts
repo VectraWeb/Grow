@@ -1,7 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Calculator, Paintbrush, Grid3X3, Hammer, Ruler, AlertCircle, ShoppingCart, Plus, Minus } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Calculator,
+  Sprout,
+  Sun,
+  Wind,
+  AlertCircle,
+  Plus,
+  Minus,
+  Droplets,
+  Zap
+} from 'lucide-angular';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
@@ -14,56 +25,61 @@ import { DialogModule } from 'primeng/dialog';
 export class MaterialCalculatorComponent implements OnInit {
   @Input() categoryName: string = '';
   @Input() productName: string = '';
-  
+
   visible: boolean = false;
-  calculatorType: 'paint' | 'tiles' | 'mix' | 'none' = 'none';
+  calculatorType: 'substrate' | 'light' | 'ventilation' = 'substrate';
 
-  // Paint Calculator
-  paintArea: number = 0;
-  paintLayers: number = 2;
-  paintYield: number = 10; // m2 per liter
-  paintResult: number = 0;
+  // 1. Calculadora de Sustrato & Macetas
+  potCount: number = 4;
+  potSize: number = 11; // Litros por maceta
+  extraMargin: number = 10; // % margen de asentamiento/relleno
+  substrateResult: number = 49; // Litros totales
+  bagsResult: number = 1; // Bolsas de 50L
 
-  // Tiles Calculator
-  tilesArea: number = 0;
-  tilesWaste: number = 10; // percentage
-  tilesBoxSize: number = 1.8; // m2 per box
-  tilesResult: number = 0;
+  // 2. Calculadora de Iluminación LED
+  tentWidth: number = 80; // cm
+  tentLength: number = 80; // cm
+  lightResult: number = 240; // Watts recomendados
+  plantCapacity: string = '4 a 6 plantas';
 
-  // Mix Calculator (Contrapiso)
-  mixArea: number = 0;
-  mixThickness: number = 5; // cm
-  mixResult: number = 0; // bags of cement
+  // 3. Calculadora de Extracción & Clima
+  tentWidthM: number = 0.8; // m
+  tentLengthM: number = 0.8; // m
+  tentHeightM: number = 1.6; // m
+  ventResult: number = 80; // m3/h extractor recomendado
+  tentVolume: number = 1.02; // m3
 
   Math = Math;
 
   readonly Calculator = Calculator;
-  readonly Paintbrush = Paintbrush;
-  readonly Grid3X3 = Grid3X3;
-  readonly Hammer = Hammer;
-  readonly Ruler = Ruler;
+  readonly Sprout = Sprout;
+  readonly Sun = Sun;
+  readonly Wind = Wind;
   readonly AlertCircle = AlertCircle;
-  readonly ShoppingCart = ShoppingCart;
+  readonly Droplets = Droplets;
+  readonly Zap = Zap;
   readonly Plus = Plus;
   readonly Minus = Minus;
 
   ngOnInit() {
     this.detectType();
+    this.calculateSubstrate();
+    this.calculateLight();
+    this.calculateVentilation();
   }
 
   detectType() {
-    const cat = this.categoryName.toLowerCase();
-    const prod = this.productName.toLowerCase();
+    const cat = (this.categoryName || '').toLowerCase();
+    const prod = (this.productName || '').toLowerCase();
 
-    if (cat.includes('pintura') || prod.includes('pintura') || prod.includes('latex')) {
-      this.calculatorType = 'paint';
-    } else if (cat.includes('piso') || cat.includes('ceramico') || cat.includes('porcelanato')) {
-      this.calculatorType = 'tiles';
-    } else if (cat.includes('construccion') || cat.includes('cemento') || prod.includes('cemento') || prod.includes('mezcla')) {
-      this.calculatorType = 'mix';
+    if (cat.includes('sustrato') || cat.includes('tierra') || prod.includes('sustrato') || prod.includes('maceta')) {
+      this.calculatorType = 'substrate';
+    } else if (cat.includes('luz') || cat.includes('iluminac') || cat.includes('led') || prod.includes('panel') || prod.includes('led')) {
+      this.calculatorType = 'light';
+    } else if (cat.includes('vent') || cat.includes('clima') || cat.includes('carpa') || prod.includes('extractor') || prod.includes('carpa')) {
+      this.calculatorType = 'ventilation';
     } else {
-      // Default to one or allow selection if not detected
-      this.calculatorType = 'paint'; 
+      this.calculatorType = 'substrate';
     }
   }
 
@@ -71,31 +87,65 @@ export class MaterialCalculatorComponent implements OnInit {
     this.visible = true;
   }
 
-  calculatePaint() {
-    if (this.paintArea <= 0) {
-      this.paintResult = 0;
-      return;
-    }
-    this.paintResult = Math.ceil((this.paintArea / this.paintYield) * this.paintLayers);
+  setPotSize(size: number) {
+    this.potSize = size;
+    this.calculateSubstrate();
   }
 
-  calculateTiles() {
-    if (this.tilesArea <= 0) {
-      this.tilesResult = 0;
+  calculateSubstrate() {
+    if (this.potCount <= 0 || this.potSize <= 0) {
+      this.substrateResult = 0;
+      this.bagsResult = 0;
       return;
     }
-    const totalArea = this.tilesArea * (1 + (this.tilesWaste / 100));
-    this.tilesResult = Math.ceil(totalArea / this.tilesBoxSize);
+    const rawLiters = this.potCount * this.potSize;
+    const total = Math.ceil(rawLiters * (1 + this.extraMargin / 100));
+    this.substrateResult = total;
+    this.bagsResult = Math.max(1, Math.ceil(total / 50));
   }
 
-  calculateMix() {
-    if (this.mixArea <= 0) {
-      this.mixResult = 0;
+  setTentDimensions(w: number, l: number, h: number = 1.6) {
+    this.tentWidth = w;
+    this.tentLength = l;
+    this.tentWidthM = w / 100;
+    this.tentLengthM = l / 100;
+    this.tentHeightM = h;
+    this.calculateLight();
+    this.calculateVentilation();
+  }
+
+  calculateLight() {
+    if (this.tentWidth <= 0 || this.tentLength <= 0) {
+      this.lightResult = 0;
       return;
     }
-    // Standard contrapiso: ~6 bags of cement (50kg) per m3
-    const volumeM3 = this.mixArea * (this.mixThickness / 100);
-    this.mixResult = Math.ceil(volumeM3 * 6);
+    const areaM2 = (this.tentWidth / 100) * (this.tentLength / 100);
+    // ~350W-400W LED Quantum Board de alta eficiencia por m2
+    const recommendedWatts = Math.round((areaM2 * 360) / 10) * 10;
+    this.lightResult = Math.max(60, recommendedWatts);
+
+    if (areaM2 <= 0.4) {
+      this.plantCapacity = '1 a 2 plantas';
+    } else if (areaM2 <= 0.7) {
+      this.plantCapacity = '3 a 6 plantas';
+    } else if (areaM2 <= 1.1) {
+      this.plantCapacity = '6 a 9 plantas';
+    } else {
+      this.plantCapacity = '9 a 16 plantas';
+    }
+  }
+
+  calculateVentilation() {
+    if (this.tentWidthM <= 0 || this.tentLengthM <= 0 || this.tentHeightM <= 0) {
+      this.ventResult = 0;
+      this.tentVolume = 0;
+      return;
+    }
+    const volume = this.tentWidthM * this.tentLengthM * this.tentHeightM;
+    this.tentVolume = Math.round(volume * 100) / 100;
+    // 60 renovaciones de aire por hora con 25% de resistencia por filtro de carbón
+    const flowNeeded = Math.ceil(volume * 60 * 1.25);
+    this.ventResult = Math.max(60, flowNeeded);
   }
 
   get canShow(): boolean {

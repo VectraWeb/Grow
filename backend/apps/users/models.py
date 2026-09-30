@@ -47,7 +47,7 @@ class User(AbstractUser):
         return f"{self.email} ({self.role})"
 
 class StoreConfig(models.Model):
-    name = models.CharField(max_length=100, default="Mi Ferretería")
+    name = models.CharField(max_length=100, default="Tierra Verde Grow")
     store_postal_code = models.CharField(max_length=20, null=True, blank=True)
     store_address = models.CharField(max_length=255, null=True, blank=True)
     

@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
@@ -31,6 +32,7 @@ import { CheckboxModule } from "primeng/checkbox";
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RouterModule,
     InputTextModule,

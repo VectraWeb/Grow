@@ -11,6 +11,10 @@ from apps.integrations.marketplace_views import (
     MarketplacePublishView, MarketplaceUpdateView, MarketplaceDeleteView,
     MarketplaceStatusView, MarketplaceFacebookPreviewView
 )
+from apps.integrations.google_sheets_views import (
+    GoogleSheetsConfigView, GoogleSheetsPreviewView,
+    GoogleSheetsSyncView, GoogleSheetsUploadView
+)
 
 urlpatterns = [
     path('meli/config/', MeLiConfigView.as_view(), name='meli_config'),
@@ -36,4 +40,10 @@ urlpatterns = [
     path('marketplace/delete/', MarketplaceDeleteView.as_view(), name='marketplace_delete'),
     path('marketplace/status/<int:product_id>/', MarketplaceStatusView.as_view(), name='marketplace_status'),
     path('marketplace/facebook-preview/<int:product_id>/', MarketplaceFacebookPreviewView.as_view(), name='marketplace_fb_preview'),
+
+    # Google Sheets / Excel Sync
+    path('google-sheets/config/', GoogleSheetsConfigView.as_view(), name='google_sheets_config'),
+    path('google-sheets/preview/', GoogleSheetsPreviewView.as_view(), name='google_sheets_preview'),
+    path('google-sheets/sync/', GoogleSheetsSyncView.as_view(), name='google_sheets_sync'),
+    path('google-sheets/upload/', GoogleSheetsUploadView.as_view(), name='google_sheets_upload'),
 ]

@@ -45,7 +45,7 @@ import {
   ChevronRight,
   Filter,
   X,
-  Hammer,
+  Sprout,
   Map,
   ShieldCheck,
   Store,
@@ -103,41 +103,39 @@ export class HomeComponent implements OnInit, OnDestroy {
   selectedLegal: string | null = null;
   legalContent: any = {
     soporte: {
-      title: "Soporte Técnico",
-      icon: "🛠️",
+      title: "Asesoramiento de Cultivo",
+      icon: "🌱",
       content:
-        "Nuestro equipo técnico está disponible de Lunes a Viernes de 8:00 a 18:00 hs. Podés contactarnos vía WhatsApp al +54 9 3462 612989 para asesoría sobre repuestos, service oficial y reparaciones de herramientas eléctricas y manuales.",
+        "Nuestro equipo de cultivadores está disponible de Lunes a Sábado de 10:00 a 20:00 hs. Podés consultarnos por WhatsApp sobre dosificación de fertilizantes, planes de nutrición, plagas, y armado de carpas indoor.",
     },
     garantias: {
-      title: "Garantías Oficiales",
+      title: "Garantías de Equipamiento",
       icon: "🛡️",
       content:
-        "Todos nuestros productos cuentan con garantía oficial. Las herramientas eléctricas tienen 6 meses de cobertura contra defectos de fabricación. Las herramientas manuales cuentan con garantía de por vida en fallas de material estructural.",
+        "Todos nuestros paneles LED Quantum Board, balastros y turbinas cuentan con garantía oficial de 12 meses ante cualquier falla de fábrica. Brindamos soporte técnico directo y recambio inmediato.",
     },
     envios: {
-      title: "Envíos y Entregas",
-      icon: "🚚",
+      title: "Envíos Discretos y Seguros",
+      icon: "📦",
       content:
-        "Realizamos envíos a todo el país vía Correo Argentino. El plazo de entrega es de 3 a 5 días hábiles en centros urbanos. También ofrecemos retiro en sucursal en 24hs hábiles para productos con stock inmediato.",
+        "Realizamos envíos a todo el país. Todos los pedidos se despachan en embalajes 100% neutros, opacos y reforzados sin ningún logo ni descripción externa, protegiendo absolutamente tu privacidad.",
     },
     privacidad: {
-      title: "Privacidad de Datos",
+      title: "Privacidad del Cultivador",
       icon: "🔐",
       content:
-        "Tus datos están protegidos bajo estrictas normas de seguridad. Solo utilizamos tu información para procesar pedidos y enviarte actualizaciones relevantes. Nunca compartimos tu base de datos con terceros.",
+        "Tu privacidad es nuestra máxima prioridad. Tus datos de compra y envío están cifrados y nunca se comparten con terceros. Solo se utilizan con el único fin de hacerte llegar tu pedido.",
     },
     terminos: {
       title: "Términos y Condiciones",
       icon: "📄",
       content:
-        "Al operar en FerreNexo aceptás nuestras condiciones de venta. Los precios publicados incluyen IVA. Las ofertas son válidas hasta agotar stock. Nos reservamos el derecho de cancelar pedidos ante errores evidentes de publicación.",
+        "Al operar en Tierra Verde Grow aceptás nuestras condiciones de venta y garantía. Los precios publicados incluyen IVA. Todas las semillas comercializadas son para colección botánica y preservación genética según la legislación vigente.",
     },
   };
 
   // Make Math available in template
-  // make Math available in template
   Math = Math;
-
 
   whatsappHref = "";
   whatsappHrefConsult = "";
@@ -146,8 +144,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   instagramUrl = "";
   facebookUrl = "";
 
+  googleMapsUrl = 'https://www.google.com/maps/place/Tierra+Verde+Grow+Shop/@-34.5862498,-60.9528744,17z/data=!3m1!4b1!4m6!3m5!1s0x95b8eb303fd57963:0x1b23999f0e8342e!8m2!3d-34.5862498!4d-60.9502941!16s%2Fg%2F11nw6w766g';
+
   getMapsLink(): string {
-    return 'https://maps.google.com/?q=' + encodeURIComponent(this.storeAddress);
+    return this.googleMapsUrl;
   }
 
   currentSlide = 0;
@@ -167,7 +167,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ChevronRight = ChevronRight;
   Filter = Filter;
   X = X;
-  Hammer = Hammer;
+  Sprout = Sprout;
   Map = Map;
   ShieldCheck = ShieldCheck;
   Store = Store;
@@ -177,9 +177,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.seo.updateMetaTags({
-      title: "Inicio - Herramientas Industriales",
+      title: "Tierra Verde Grow - Growshop | Cultivo Indoor & Outdoor",
       description:
-        "Explora nuestro catálogo premium de herramientas y materiales de construcción.",
+        "Tu growshop de confianza. Fertilizantes orgánicos, sustratos premium, paneles LED Quantum Board, carpas indoor y parafernalia.",
     });
 
     const savedY = sessionStorage.getItem('homeScrollY');
@@ -194,12 +194,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (data.whatsapp_number) {
           const cleanNumber = data.whatsapp_number.replace(/\D/g, '');
           this.whatsappHref = `https://wa.me/${cleanNumber}`;
-          this.whatsappHrefConsult = `https://wa.me/${cleanNumber}?text=Hola,%20me%20gustaría%20recibir%20asesoría%20sobre%20herramientas%20para%20mi%20proyecto`;
+          this.whatsappHrefConsult = `https://wa.me/${cleanNumber}?text=Hola,%20me%20gustaría%20recibir%20asesoría%20sobre%20productos%20para%20mi%20cultivo`;
         }
         if (data.store_address) {
           this.storeAddress = data.store_address;
           this.mapSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-            'https://maps.google.com/maps?q=' + encodeURIComponent(data.store_address) + '&t=&z=15&ie=UTF8&iwloc=&output=embed'
+            'https://maps.google.com/maps?q=-34.5862498,-60.9502941&t=&z=16&ie=UTF8&iwloc=&output=embed'
           );
         }
         if (data.instagram_url) {
@@ -211,17 +211,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Load base products
+    // Load base banners
     this.api.get<any>("/ecommerce/banners/").subscribe({
       next: (res) => {
         const data = res.results || res;
-        this.banners = data.filter((b: Banner) => b.is_active);
-        if (this.banners.length > 0) {
+        this.banners = (data || []).filter((b: Banner) => b.is_active);
+        if (this.banners.length === 0) {
+          this.initFallbackBanners();
+        } else {
           this.startCarousel();
         }
       },
       error: () => {
-        this.banners = [];
+        this.initFallbackBanners();
       }
     });
 
@@ -273,32 +275,214 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  private initFallbackBanners(): void {
+    this.banners = [
+      {
+        id: 1,
+        title: "Cultivo Indoor Pro",
+        subtitle: "Luminarias LED Quantum Board y carpas de alta reflectancia",
+        image: "assets/banner_indoor_grow.jpg",
+        link: "",
+        is_active: true,
+      },
+      {
+        id: 2,
+        title: "Nutrición & Sustratos",
+        subtitle: "Fertilizantes orgánicos, bioestimulantes y mezclas profesionales",
+        image: "assets/banner_nutrients.jpg",
+        link: "",
+        is_active: true,
+      },
+      {
+        id: 3,
+        title: "Equipamiento Completo",
+        subtitle: "Turbinas, filtros de carbón, tijeras y accesorios de precisión",
+        image: "assets/banner_complete_kit.jpg",
+        link: "",
+        is_active: true,
+      },
+    ];
+    this.startCarousel();
+  }
+
+  private getFallbackProducts(): Product[] {
+    return [
+      {
+        id: 1,
+        name: "Sustrato Profesional Growmix Multipro 80L",
+        price_retail: "28500",
+        image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&auto=format&fit=crop&q=80",
+        category_name: "Sustratos y Tierras",
+        rating: 5,
+        reviews_count: 32,
+        stock_current: 40,
+        discount_percentage: 10,
+      },
+      {
+        id: 2,
+        name: "Fertilizante Orgánico Top Crop - Top Veg 1L",
+        price_retail: "18900",
+        image: "https://images.unsplash.com/photo-1592417817098-8f3d6910985b?w=600&auto=format&fit=crop&q=80",
+        category_name: "Fertilizantes y Nutrientes",
+        rating: 5,
+        reviews_count: 24,
+        stock_current: 35,
+        discount_percentage: 0,
+      },
+      {
+        id: 3,
+        name: "Bioestimulante de Floración Big One Top Crop 250ml",
+        price_retail: "22400",
+        image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&auto=format&fit=crop&q=80",
+        category_name: "Fertilizantes y Nutrientes",
+        rating: 5,
+        reviews_count: 41,
+        stock_current: 28,
+        discount_percentage: 15,
+      },
+      {
+        id: 4,
+        name: "Panel LED Quantum Board Samsung LM301H 240W",
+        price_retail: "285000",
+        image: "https://images.unsplash.com/photo-1508873696983-2df570464756?w=600&auto=format&fit=crop&q=80",
+        category_name: "Iluminación LED",
+        rating: 5,
+        reviews_count: 53,
+        stock_current: 12,
+        discount_percentage: 12,
+      },
+      {
+        id: 5,
+        name: "Carpa de Cultivo Indoor 80x80x160cm Mylar 600D Reforzada",
+        price_retail: "145000",
+        image: "https://images.unsplash.com/photo-1584467735871-8e85353a8413?w=600&auto=format&fit=crop&q=80",
+        category_name: "Carpas e Indoor",
+        rating: 5,
+        reviews_count: 19,
+        stock_current: 8,
+        discount_percentage: 0,
+      },
+      {
+        id: 6,
+        name: "Extractor Turbina Lineal 4 Pulgadas (100mm) 220V",
+        price_retail: "42000",
+        image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80",
+        category_name: "Ventilación y Filtros",
+        rating: 4,
+        reviews_count: 14,
+        stock_current: 18,
+        discount_percentage: 5,
+      },
+      {
+        id: 7,
+        name: "Filtro de Carbón Activado Antiolor Pro 4 Pulgadas",
+        price_retail: "48500",
+        image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&auto=format&fit=crop&q=80",
+        category_name: "Ventilación y Filtros",
+        rating: 5,
+        reviews_count: 22,
+        stock_current: 15,
+        discount_percentage: 0,
+      },
+      {
+        id: 8,
+        name: "Maceta Geotextil de Tela 15 Litros con Asas Reforzadas",
+        price_retail: "4200",
+        image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&auto=format&fit=crop&q=80",
+        category_name: "Macetas y Riego",
+        rating: 5,
+        reviews_count: 48,
+        stock_current: 150,
+        discount_percentage: 0,
+      },
+      {
+        id: 9,
+        name: "Medidor Digital de pH Sumergible con Calibrador Automático",
+        price_retail: "18500",
+        image: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&auto=format&fit=crop&q=80",
+        category_name: "Control y Medición",
+        rating: 4,
+        reviews_count: 27,
+        stock_current: 25,
+        discount_percentage: 10,
+      },
+      {
+        id: 10,
+        name: "Termohigrómetro Digital con Sonda Externa Max/Min",
+        price_retail: "12800",
+        image: "https://images.unsplash.com/photo-1584267385494-9fdd9a71ad75?w=600&auto=format&fit=crop&q=80",
+        category_name: "Control y Medición",
+        rating: 5,
+        reviews_count: 36,
+        stock_current: 40,
+        discount_percentage: 0,
+      },
+      {
+        id: 11,
+        name: "Picador Grinder Metálico 4 Partes con Tamiz Polinizador",
+        price_retail: "16500",
+        image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=600&auto=format&fit=crop&q=80",
+        category_name: "Parafernalia y Accesorios",
+        rating: 5,
+        reviews_count: 62,
+        stock_current: 60,
+        discount_percentage: 15,
+      },
+      {
+        id: 12,
+        name: "Tijera de Poda y Manicura Curva Acero Inoxidable",
+        price_retail: "8900",
+        image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&auto=format&fit=crop&q=80",
+        category_name: "Parafernalia y Accesorios",
+        rating: 5,
+        reviews_count: 25,
+        stock_current: 50,
+        discount_percentage: 0,
+      },
+    ];
+  }
+
   private loadAllProducts(): void {
-    // Load products from API (PostgreSQL)
-    this.api.get<Product[]>("/products/").subscribe((products) => {
-      // Handle both paginated and non-paginated responses
-      const rawProducts = (products as any).results || products;
-
-      // Normalize image URLs and pre-calculate slugs
-      this.allProductsData = rawProducts.map((p: Product) => {
-        if (p.image && !p.image.startsWith("http")) {
-          // If image is relative (e.g. /media/products/img.jpg), prepend the backend host
-          // The API base is http://127.0.0.1:8000/api, so media host is http://127.0.0.1:8000
-          p.image = `http://127.0.0.1:8000${p.image}`;
+    this.api.get<Product[]>("/products/").subscribe({
+      next: (products) => {
+        let rawProducts = (products as any).results || products;
+        if (!rawProducts || rawProducts.length === 0) {
+          rawProducts = this.getFallbackProducts();
         }
-        if (p.category_name) {
-          p.search_slug = p.category_name
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/\s+/g, "-");
-        }
-        return p;
-      });
 
-      this.filteredProducts = this.allProductsData;
-      this.applyFilters();
-      this.updateCartCount();
+        this.allProductsData = rawProducts.map((p: Product) => {
+          if (p.image && !p.image.startsWith("http")) {
+            p.image = `http://127.0.0.1:8000${p.image}`;
+          }
+          if (p.category_name) {
+            p.search_slug = p.category_name
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .replace(/\s+/g, "-");
+          }
+          return p;
+        });
+
+        this.filteredProducts = this.allProductsData;
+        this.applyFilters();
+        this.updateCartCount();
+      },
+      error: () => {
+        this.allProductsData = this.getFallbackProducts().map((p: Product) => {
+          if (p.category_name) {
+            p.search_slug = p.category_name
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .replace(/\s+/g, "-");
+          }
+          return p;
+        });
+        this.filteredProducts = this.allProductsData;
+        this.applyFilters();
+        this.updateCartCount();
+      }
     });
   }
 

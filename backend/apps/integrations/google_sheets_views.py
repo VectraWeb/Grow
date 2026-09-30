@@ -1,0 +1,135 @@
+import os
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
+from apps.integrations.models import IntegrationConfig
+from apps.integrations.services.google_sheets_service import (
+    GoogleSheetsSyncService,
+    GoogleSheetsAccessError
+)
+
+
+class GoogleSheetsConfigView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        config = IntegrationConfig.objects.filter(integration_type='GOOGLE_SHEETS').first()
+        if not config:
+            return Response({
+                'is_configured': False,
+                'sheet_url': 'https://docs.google.com/spreadsheets/d/17yIhDzBuelorQm9XrK4SMZ-uxwNzHnEX/edit?gid=699067785#gid=699067785',
+                'last_sync': None,
+                'last_summary': None
+            })
+
+        metadata = config.metadata or {}
+        return Response({
+            'is_configured': bool(metadata.get('sheet_url')),
+            'sheet_url': metadata.get('sheet_url', 'https://docs.google.com/spreadsheets/d/17yIhDzBuelorQm9XrK4SMZ-uxwNzHnEX/edit?gid=699067785#gid=699067785'),
+            'last_sync': config.last_sync,
+            'last_summary': metadata.get('last_sync_summary')
+        })
+
+    def post(self, request):
+        sheet_url = request.data.get('sheet_url', '').strip()
+        if not sheet_url:
+            return Response({'error': 'La URL de Google Sheets es obligatoria.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        config, _ = IntegrationConfig.objects.get_or_create(integration_type='GOOGLE_SHEETS')
+        meta = config.metadata or {}
+        meta['sheet_url'] = sheet_url
+        config.metadata = meta
+        config.save()
+
+        return Response({'message': 'URL guardada exitosamente.', 'sheet_url': sheet_url})
+
+
+class GoogleSheetsPreviewView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        url = request.data.get('url', '').strip()
+        if not url:
+            # Check if saved in config
+            cfg = IntegrationConfig.objects.filter(integration_type='GOOGLE_SHEETS').first()
+            if cfg and cfg.metadata and cfg.metadata.get('sheet_url'):
+                url = cfg.metadata['sheet_url']
+
+        if not url:
+            return Response({'error': 'Debes ingresar la URL del Google Sheet.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            preview_data = GoogleSheetsSyncService.preview('url', url)
+            return Response(preview_data)
+        except GoogleSheetsAccessError as e:
+            return Response({
+                'error': str(e),
+                'error_type': 'RESTRICTED_ACCESS'
+            }, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response({'error': f"Error al procesar la hoja: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleSheetsSyncView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        url = request.data.get('url', '').strip()
+        update_store_info = request.data.get('update_store_info', True)
+
+        if not url:
+            cfg = IntegrationConfig.objects.filter(integration_type='GOOGLE_SHEETS').first()
+            if cfg and cfg.metadata and cfg.metadata.get('sheet_url'):
+                url = cfg.metadata['sheet_url']
+
+        if not url:
+            return Response({'error': 'Debes ingresar la URL del Google Sheet.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            result = GoogleSheetsSyncService.sync('url', url, update_store_info=update_store_info)
+            return Response(result)
+        except GoogleSheetsAccessError as e:
+            return Response({
+                'error': str(e),
+                'error_type': 'RESTRICTED_ACCESS'
+            }, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response({'error': f"Error al sincronizar: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleSheetsUploadView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        file_obj = request.FILES.get('file')
+        action = request.data.get('action', 'preview') # 'preview' or 'sync'
+        update_store_info = request.data.get('update_store_info', 'true').lower() in ('true', '1')
+
+        if not file_obj:
+            return Response({'error': 'No se envió ningún archivo.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        filename = file_obj.name.lower()
+        file_bytes = file_obj.read()
+
+        try:
+            if filename.endswith('.xlsx') or filename.endswith('.xls'):
+                source_type = 'excel_bytes'
+                source_data = file_bytes
+            elif filename.endswith('.csv'):
+                source_type = 'csv_text'
+                source_data = file_bytes.decode('utf-8', errors='replace')
+            else:
+                return Response({'error': 'Formato no soportado. Debe ser un archivo .xlsx o .csv'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if action == 'sync':
+                result = GoogleSheetsSyncService.sync(source_type, source_data, update_store_info=update_store_info)
+                return Response(result)
+            else:
+                preview_data = GoogleSheetsSyncService.preview(source_type, source_data)
+                return Response(preview_data)
+
+        except Exception as e:
+            return Response({'error': f"Error al procesar el archivo: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)

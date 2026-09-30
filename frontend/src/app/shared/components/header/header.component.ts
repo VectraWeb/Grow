@@ -10,7 +10,7 @@ import {
   ShoppingCart,
   User,
   Search,
-  Hammer
+  Sprout
 } from "lucide-angular";
 
 @Component({
@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
   ShoppingCart = ShoppingCart;
   User = User;
   Search = Search;
-  Hammer = Hammer;
+  Sprout = Sprout;
 
   activeDropdown: string | null = null;
   mobileMenuOpen = false;

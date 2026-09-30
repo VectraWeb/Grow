@@ -14,7 +14,7 @@ import {
   Plus,
   Minus,
   Heart,
-  Hammer,
+  Sprout,
   ChevronLeft,
   ChevronRight,
 } from "lucide-angular";
@@ -87,7 +87,7 @@ export class ProductDetailComponent implements OnInit {
   Plus = Plus;
   Minus = Minus;
   Heart = Heart;
-  Hammer = Hammer;
+  Sprout = Sprout;
   ChevronLeft = ChevronLeft;
   ChevronRight = ChevronRight;
 

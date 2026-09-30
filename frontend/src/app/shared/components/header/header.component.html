@@ -1,37 +1,45 @@
 <nav
-  class="fixed w-full top-0 z-50 transition-all duration-200 border-b border-slate-200"
-  [ngClass]="isScrolled ? 'bg-[#f0ece5]/95 backdrop-blur-md shadow-sm border-slate-200 py-2' : 'bg-[#f0ece5] border-slate-200 py-3'"
+  class="fixed w-full top-0 z-50 transition-all duration-200 border-b border-emerald-100/70"
+  [ngClass]="isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-2' : 'bg-[#fcfdf9]/95 backdrop-blur-sm py-3'"
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
-      <!-- Logo -->
-      <div class="flex-shrink-0 flex items-center cursor-pointer" routerLink="/">
-        <span class="text-2xl font-extrabold tracking-tight text-slate-900" style="font-family: Sora, sans-serif;">
-          Ferre<span class="text-ferre-400">Nexo</span>
-        </span>
+      <!-- Logo Tierra Verde Grow -->
+      <div class="flex-shrink-0 flex items-center cursor-pointer gap-2.5 group" routerLink="/">
+        <img
+          src="assets/logo-tree.png"
+          alt="Tierra Verde Grow"
+          class="h-11 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105"
+        />
+        <div class="flex flex-col justify-center leading-none" style="font-family: Sora, sans-serif;">
+          <span class="text-[11px] sm:text-xs font-black tracking-widest text-[#874e04]">TIERRA</span>
+          <span class="text-sm sm:text-base font-black tracking-wider text-[#0f9717] -mt-0.5">VERDE</span>
+          <span class="text-[10px] sm:text-[11px] font-black tracking-[0.22em] text-[#e0b721] -mt-0.5">GROW</span>
+        </div>
       </div>
 
       <!-- Center Nav (desktop) -->
       <div class="hidden lg:flex flex-1 justify-center items-center mx-8 gap-1">
         <button
           (click)="filterByCategory('todos')"
-          class="px-4 py-2 text-slate-500 hover:text-ferre-400 font-semibold text-sm rounded-lg hover:bg-ferre-50 transition-all"
+          class="px-4 py-2 text-slate-600 hover:text-ferre-400 font-semibold text-sm rounded-xl hover:bg-ferre-50 transition-all"
         >
-          Todos
+          Todos los Productos
         </button>
 
         <div class="relative" (mouseenter)="activeDropdown = 'categorias'" (mouseleave)="activeDropdown = null">
-          <button class="px-4 py-2 flex items-center gap-1 text-slate-500 hover:text-ferre-400 font-semibold text-sm rounded-lg hover:bg-ferre-50 transition-all whitespace-nowrap">
+          <button class="px-4 py-2 flex items-center gap-1.5 text-slate-600 hover:text-ferre-400 font-semibold text-sm rounded-xl hover:bg-ferre-50 transition-all whitespace-nowrap">
             Categorías
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" [ngClass]="{'rotate-180': activeDropdown === 'categorias'}"><path d="m6 9 6 6 6-6"/></svg>
           </button>
 
-          <div *ngIf="activeDropdown === 'categorias'" class="absolute left-0 top-full w-56 bg-white border border-slate-200 shadow-lg rounded-xl py-1.5 z-50">
-            <button *ngFor="let cat of categories" (click)="filterByCategory(cat.name); activeDropdown = null" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-ferre-50 hover:text-ferre-400 transition-colors font-medium cursor-pointer">
+          <div *ngIf="activeDropdown === 'categorias'" class="absolute left-0 top-full w-60 bg-white border border-slate-200/80 shadow-xl rounded-2xl py-2 z-50 animate-fade-in">
+            <button *ngFor="let cat of categories" (click)="filterByCategory(cat.name); activeDropdown = null" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-ferre-50 hover:text-ferre-400 transition-colors font-medium cursor-pointer flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-ferre-400"></span>
               {{ cat.name }}
             </button>
             <div *ngIf="categories.length === 0" class="px-4 py-2.5 text-sm text-slate-400">
-              No hay categorías cargadas.
+              Cargando categorías...
             </div>
           </div>
         </div>
@@ -39,11 +47,12 @@
 
       <!-- Right Actions -->
       <div class="flex items-center gap-2">
-        <!-- Search -->
+        <!-- Search Button -->
         <div class="relative" data-search-container *ngIf="!isSearchExpanded">
           <button
             (click)="toggleSearchExpanded()"
-            class="p-2 text-slate-400 hover:text-ferre-400 rounded-lg hover:bg-ferre-50 transition-all"
+            class="p-2.5 text-slate-500 hover:text-ferre-400 rounded-xl hover:bg-ferre-50 transition-all"
+            title="Buscar"
           >
             <lucide-icon [name]="Search" size="20"></lucide-icon>
           </button>
@@ -52,14 +61,14 @@
         <!-- Search Expanded -->
         <div class="absolute left-0 right-0 top-full z-50 px-4 sm:px-6 lg:px-8" data-search-container *ngIf="isSearchExpanded">
           <div class="max-w-7xl mx-auto">
-            <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-3 mt-2">
-              <div class="flex items-center gap-2">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-3 mt-2">
+              <div class="flex items-center gap-2.5">
                 <lucide-icon [name]="Search" size="18" class="text-ferre-400"></lucide-icon>
                 <input
                   [(ngModel)]="searchQuery"
                   (input)="onSearchChange()"
                   type="text"
-                  placeholder="Buscar productos..."
+                  placeholder="Buscar sustratos, carpas, fertilizantes, luces..."
                   class="flex-1 outline-none bg-transparent text-slate-900 placeholder-slate-400 font-medium text-sm"
                 />
                 <button (click)="closeSearch()" class="text-slate-400 hover:text-slate-600 p-1">✕</button>
@@ -71,12 +80,13 @@
         <!-- Cart -->
         <button
           (click)="openCart()"
-          class="p-2 text-slate-400 hover:text-ferre-400 rounded-lg hover:bg-ferre-50 transition-all relative"
+          class="p-2.5 text-slate-500 hover:text-ferre-400 rounded-xl hover:bg-ferre-50 transition-all relative"
+          title="Ver Carrito"
         >
           <lucide-icon [name]="ShoppingCart" size="20"></lucide-icon>
           <span
             *ngIf="cartCount > 0"
-            class="absolute -top-0.5 -right-0.5 h-5 w-5 bg-ferre-400 rounded-full text-[10px] text-slate-800 flex items-center justify-center font-bold"
+            class="absolute -top-0.5 -right-0.5 h-5 w-5 bg-gradient-to-r from-[#e0b721] to-[#ca8a04] text-slate-900 rounded-full text-[11px] flex items-center justify-center font-extrabold shadow-sm"
           >
             {{ cartCount }}
           </span>
@@ -84,10 +94,10 @@
 
         <span class="w-px h-5 bg-slate-200 hidden lg:block"></span>
 
-        <!-- Admin (always visible) -->
+        <!-- Admin Access -->
         <a
           routerLink="/auth/login"
-          class="hidden lg:inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-ferre-400 px-3 py-2 rounded-lg hover:bg-ferre-50 transition-all"
+          class="hidden lg:inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-ferre-400 px-3.5 py-2 rounded-xl hover:bg-ferre-50 transition-all"
         >
           <lucide-icon [name]="User" size="18"></lucide-icon>
           <span>Admin</span>
@@ -96,10 +106,10 @@
         <!-- Hamburger Menu (mobile only) -->
         <button
           (click)="mobileMenuOpen = !mobileMenuOpen"
-          class="lg:hidden p-2 text-slate-400 hover:text-ferre-400 rounded-lg hover:bg-ferre-50 transition-all"
+          class="lg:hidden p-2.5 text-slate-500 hover:text-ferre-400 rounded-xl hover:bg-ferre-50 transition-all"
         >
-          <svg *ngIf="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-          <svg *ngIf="mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <svg *ngIf="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <svg *ngIf="mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
     </div>
@@ -108,30 +118,31 @@
   <!-- Mobile Menu Dropdown -->
   <div
     *ngIf="mobileMenuOpen"
-    class="lg:hidden border-t border-slate-200 bg-[#f0ece5]"
+    class="lg:hidden border-t border-slate-200/80 bg-white/98 backdrop-blur-md shadow-lg"
   >
-    <div class="max-w-7xl mx-auto px-4 py-4 space-y-2">
+    <div class="max-w-7xl mx-auto px-4 py-4 space-y-1.5">
       <button
         (click)="filterByCategory('todos'); mobileMenuOpen = false"
-        class="w-full text-left px-4 py-3 text-sm font-semibold text-slate-700 hover:text-ferre-400 hover:bg-ferre-50 rounded-lg transition-all"
+        class="w-full text-left px-4 py-3 text-sm font-semibold text-slate-800 hover:text-ferre-400 hover:bg-ferre-50 rounded-xl transition-all"
       >
-        Todos los productos
+        🌱 Todos los productos
       </button>
       <button
         *ngFor="let cat of categories"
         (click)="filterByCategory(cat.name); mobileMenuOpen = false"
-        class="w-full text-left px-4 py-3 text-sm font-semibold text-slate-700 hover:text-ferre-400 hover:bg-ferre-50 rounded-lg transition-all"
+        class="w-full text-left px-4 py-3 text-sm font-semibold text-slate-800 hover:text-ferre-400 hover:bg-ferre-50 rounded-xl transition-all flex items-center gap-2"
       >
+        <span class="w-1.5 h-1.5 rounded-full bg-ferre-400"></span>
         {{ cat.name }}
       </button>
       <div class="border-t border-slate-200 pt-2 mt-2">
         <a
           routerLink="/auth/login"
           (click)="mobileMenuOpen = false"
-          class="flex items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-700 hover:text-ferre-400 hover:bg-ferre-50 rounded-lg transition-all"
+          class="flex items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-800 hover:text-ferre-400 hover:bg-ferre-50 rounded-xl transition-all"
         >
           <lucide-icon [name]="User" size="18"></lucide-icon>
-          Iniciar sesion
+          Panel de Administrador
         </a>
       </div>
     </div>

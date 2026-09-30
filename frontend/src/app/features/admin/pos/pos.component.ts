@@ -212,8 +212,8 @@ export class PosComponent implements OnInit {
       </head>
       <body>
         <div class="header">
-          <h1>FerreNexo</h1>
-          <p>Remito de Venta</p>
+          <h1>Tierra Verde Grow</h1>
+          <p>Comprobante de Venta</p>
         </div>
         
         <div class="info">

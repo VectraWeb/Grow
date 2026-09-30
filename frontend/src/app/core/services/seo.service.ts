@@ -8,7 +8,7 @@ export class SeoService {
   constructor(private title: Title, private meta: Meta) {}
 
   updateTitle(title: string) {
-    const fullTitle = `${title} | FerreNexo`;
+    const fullTitle = `${title} | Tierra Verde Grow`;
     this.title.setTitle(fullTitle);
     this.meta.updateTag({ property: 'og:title', content: fullTitle });
     this.meta.updateTag({ name: 'twitter:title', content: fullTitle });

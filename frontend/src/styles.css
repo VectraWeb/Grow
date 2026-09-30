@@ -7,18 +7,19 @@
 @tailwind utilities;
 
 :root {
-  --ferre-primary: #c2b69a;
-  --ferre-primary-dark: #a69a78;
-  --ferre-primary-light: #faf8f5;
-  --ferre-accent: #a69a78;
-  --ferre-bg: #faf8f5;
-  --ferre-text: #1e293b;
-  --ferre-muted: #64748b;
-  --ferre-border: #e2e4e0;
+  --ferre-primary: #0f9717;
+  --ferre-primary-dark: #0b7a12;
+  --ferre-primary-light: #f2f9f1;
+  --ferre-accent: #e0b721;
+  --ferre-earth: #874e04;
+  --ferre-bg: #fcfdf9;
+  --ferre-text: #142318;
+  --ferre-muted: #526854;
+  --ferre-border: #e1e9df;
   --ferre-surface: #ffffff;
-  --ferre-hover: #f5f2ed;
-  --ferre-success: #10b981;
-  --ferre-warning: #f59e0b;
+  --ferre-hover: #f1f7ef;
+  --ferre-success: #0f9717;
+  --ferre-warning: #e0b721;
   --ferre-error: #ef4444;
 }
 
@@ -42,14 +43,15 @@ body {
 }
 
 .btn-ferre {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold rounded-lg transition-all duration-200 text-sm;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold rounded-xl transition-all duration-200 text-sm;
   background: var(--ferre-primary);
-  color: #1e293b;
-  box-shadow: 0 1px 2px rgba(166, 154, 120, 0.3);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 151, 23, 0.28);
 }
 .btn-ferre:hover {
   background: var(--ferre-primary-dark);
-  box-shadow: 0 2px 6px rgba(166, 154, 120, 0.4);
+  box-shadow: 0 4px 14px rgba(15, 151, 23, 0.38);
+  transform: translateY(-1px);
 }
 .btn-ferre:active {
   transform: translateY(0);
@@ -57,18 +59,43 @@ body {
 .btn-ferre:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+}
+
+.btn-earth {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold rounded-xl transition-all duration-200 text-sm;
+  background: #874e04;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(135, 78, 4, 0.28);
+}
+.btn-earth:hover {
+  background: #733f02;
+  box-shadow: 0 4px 14px rgba(135, 78, 4, 0.38);
+  transform: translateY(-1px);
+}
+
+.btn-gold {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold rounded-xl transition-all duration-200 text-sm;
+  background: #e0b721;
+  color: #171200;
+  box-shadow: 0 2px 8px rgba(224, 183, 33, 0.3);
+}
+.btn-gold:hover {
+  background: #c89f13;
+  box-shadow: 0 4px 14px rgba(224, 183, 33, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold rounded-lg transition-all duration-200 text-sm;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold rounded-xl transition-all duration-200 text-sm;
   border: 1.5px solid var(--ferre-border);
   color: var(--ferre-muted);
   background: transparent;
 }
 .btn-outline:hover {
   border-color: var(--ferre-primary);
-  color: #1e293b;
-  background: rgba(166, 154, 120, 0.06);
+  color: var(--ferre-primary);
+  background: rgba(15, 151, 23, 0.06);
 }
 .btn-outline:disabled {
   opacity: 0.5;
@@ -76,7 +103,7 @@ body {
 }
 
 .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-lg transition-all duration-200 text-sm;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-xl transition-all duration-200 text-sm;
   color: var(--ferre-muted);
   background: transparent;
 }
@@ -90,18 +117,18 @@ body {
 }
 
 .card-ferre {
-  @apply rounded-xl transition-all duration-200;
+  @apply rounded-2xl transition-all duration-200;
   background: var(--ferre-surface);
   border: 1px solid var(--ferre-border);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 .card-ferre:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  border-color: #d1d5db;
+  box-shadow: 0 8px 20px rgba(15, 151, 23, 0.08);
+  border-color: #c7e6c1;
 }
 
 .input-ferre {
-  @apply w-full px-4 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm;
+  @apply w-full px-4 py-2.5 rounded-xl font-medium transition-all duration-200 text-sm;
   background: var(--ferre-surface);
   border: 1.5px solid var(--ferre-border);
   color: var(--ferre-text);
@@ -109,10 +136,10 @@ body {
 .input-ferre:focus {
   outline: none;
   border-color: var(--ferre-primary);
-  box-shadow: 0 0 0 3px rgba(166, 154, 120, 0.15);
+  box-shadow: 0 0 0 3px rgba(15, 151, 23, 0.18);
 }
 .input-ferre::placeholder {
-  color: #94a3b8;
+  color: #8fa08e;
 }
 .input-ferre:disabled {
   background: var(--ferre-hover);
@@ -121,8 +148,20 @@ body {
 
 .badge-ferre {
   @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wide;
-  background: rgba(166, 154, 120, 0.12);
-  color: #92400e;
+  background: rgba(15, 151, 23, 0.12);
+  color: #07570b;
+}
+
+.badge-earth {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wide;
+  background: rgba(135, 78, 4, 0.12);
+  color: #874e04;
+}
+
+.badge-gold {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wide;
+  background: rgba(224, 183, 33, 0.18);
+  color: #854d0e;
 }
 
 .badge-success {
@@ -207,12 +246,12 @@ body {
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: var(--ferre-primary) !important;
   border-color: var(--ferre-primary) !important;
-  color: #1e293b !important;
+  color: #ffffff !important;
 }
 .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
-  background: rgba(166, 154, 120, 0.08) !important;
+  background: rgba(15, 151, 23, 0.08) !important;
   border-color: var(--ferre-primary) !important;
-  color: #1e293b !important;
+  color: #0f9717 !important;
 }
 .p-paginator .p-paginator-first,
 .p-paginator .p-paginator-last,
@@ -232,12 +271,12 @@ body {
   border-radius: 6px !important;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
-  background: rgba(166, 154, 120, 0.08) !important;
-  color: #1e293b !important;
+  background: rgba(15, 151, 23, 0.08) !important;
+  color: #0f9717 !important;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
   background: var(--ferre-primary) !important;
-  color: #1e293b !important;
+  color: #ffffff !important;
 }
 
 @media (max-width: 768px) {

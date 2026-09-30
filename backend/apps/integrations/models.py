@@ -5,6 +5,7 @@ class IntegrationConfig(models.Model):
     INTEGRATION_CHOICES = (
         ('MELI', 'Mercado Libre'),
         ('CORREO_ARG', 'Correo Argentino'),
+        ('GOOGLE_SHEETS', 'Google Sheets'),
     )
     
     integration_type = models.CharField(max_length=20, choices=INTEGRATION_CHOICES)

@@ -102,12 +102,19 @@ class DashboardViewSet(viewsets.ViewSet):
             
         return Response(daily_stats)
 
+from rest_framework.pagination import PageNumberPagination
 from django.db.models import Max
 import re
+
+class ProductPagination(PageNumberPagination):
+    page_size = 500
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = ProductPagination
 
     @action(detail=False, methods=['get'], url_path='next-sku')
     def next_sku(self, request):

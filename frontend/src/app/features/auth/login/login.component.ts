@@ -37,18 +37,15 @@ import { RouterModule } from "@angular/router";
       </button>
 
       <div class="z-10 w-full max-w-md">
-        <div class="bg-[#f0ece5] rounded-2xl shadow-lg border border-slate-200 p-8">
+        <div class="bg-white rounded-3xl shadow-xl border border-emerald-100 p-8">
           <div class="text-center mb-8">
-            <div class="w-14 h-14 rounded-xl bg-ferre-400 flex items-center justify-center mx-auto mb-4 shadow-sm">
-              <lucide-icon [name]="LockIcon" size="28" class="text-slate-800"></lucide-icon>
+            <img src="assets/logo-tree.png" alt="Tierra Verde Grow" class="h-16 w-auto object-contain mx-auto mb-2.5" />
+            <div class="flex flex-col items-center justify-center leading-none" style="font-family: Sora, sans-serif;">
+              <span class="text-xs font-black tracking-widest text-[#874e04]">TIERRA</span>
+              <span class="text-lg font-black tracking-wider text-[#0f9717] -mt-0.5">VERDE</span>
+              <span class="text-[11px] font-black tracking-[0.25em] text-[#e0b721] -mt-0.5">GROW</span>
             </div>
-            <span
-              class="text-2xl font-extrabold tracking-wider uppercase text-slate-900"
-              style="font-family: Sora, sans-serif;"
-            >
-              Ferre<span class="text-ferre-400">Nexo</span>
-            </span>
-            <p class="text-slate-400 mt-1 text-sm font-medium uppercase tracking-[0.15em]">Panel de Administracion</p>
+            <p class="text-slate-400 mt-2.5 text-[11px] font-bold uppercase tracking-[0.15em]">Panel de Administración</p>
           </div>
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">

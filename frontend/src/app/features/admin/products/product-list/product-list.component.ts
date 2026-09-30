@@ -13,6 +13,7 @@ import {
   PackageSearch,
   Globe,
   RefreshCw,
+  FileSpreadsheet,
 } from "lucide-angular";
 import { RouterModule, Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
@@ -285,6 +286,15 @@ import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-
 
           <!-- Right: Actions -->
           <div class="relative z-10 flex items-center gap-3 shrink-0">
+            <a
+              routerLink="/admin/google-sheets"
+              class="px-4 py-3.5 rounded-2xl border-2 border-[#0f9717] text-[#0f9717] hover:bg-[#0f9717]/5 font-extrabold text-sm shadow-sm transition-all flex items-center justify-center gap-2 transform hover:scale-105 active:scale-95"
+              title="Sincronizar catálogo con Google Sheets o Excel"
+            >
+              <lucide-icon [name]="FileSpreadsheet" size="18"></lucide-icon>
+              <span class="hidden sm:inline">Sincronizar Sheets</span>
+            </a>
+
             <button
               routerLink="new"
               class="btn-add bg-ferre-400 hover:bg-ferre-500 text-slate-800 px-6 py-3.5 rounded-2xl font-extrabold shadow-sm transition-all flex items-center justify-center gap-2 transform hover:scale-105 active:scale-95 group/plus"
@@ -418,6 +428,7 @@ export class ProductListComponent implements OnInit {
   Search = Search;
   Edit3 = Edit3;
   Trash2 = Trash2;
+  FileSpreadsheet = FileSpreadsheet;
   PackageSearch = PackageSearch;
   Globe = Globe;
   RefreshCw = RefreshCw;

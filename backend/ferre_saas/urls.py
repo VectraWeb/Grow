@@ -37,7 +37,7 @@ from apps.users.views import (
 def home(request):
     return JsonResponse({
         "status": "online",
-        "backend": "Ferreteria",
+        "backend": "Tierra Verde Grow",
         "admin": "/admin-secure-ferre/",
         "api": "/api/"
     })
