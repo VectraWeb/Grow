@@ -111,7 +111,7 @@ import { ApiService } from "../../../core/services/api.service";
           <div class="text-slate-500">
             <div class="flex justify-between">
               <span>Titular</span
-              ><span class="text-slate-900 font-bold">{{ storeInfo?.bank_titular || storeInfo?.name || 'Mi Ferreteria' }}</span>
+              ><span class="text-slate-900 font-bold">{{ storeInfo?.bank_titular || storeInfo?.name || 'Tierra Verde Grow' }}</span>
             </div>
             <div class="flex justify-between">
               <span>CUIT</span

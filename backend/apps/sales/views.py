@@ -67,13 +67,13 @@ class SaleViewSet(viewsets.ModelViewSet):
             f"Hola {sale.customer.name},\n\n"
             f"Tu pedido #{sale.id} ya ha sido enviado y esta en camino a: {sale.shipping_address}.\n\n"
             f"Detalle de tu compra:\n{items_list}\nTotal: ${sale.total}\n\n"
-            f"Gracias por confiar en FerreNexo!"
+            f"Gracias por confiar en Tierra Verde Grow!"
         )
         
         from django.core.mail import send_mail
         send_mail(
             subject, message,
-            settings.DEFAULT_FROM_EMAIL or 'noreply@ferrenexo.com',
+            settings.DEFAULT_FROM_EMAIL or 'noreply@tierraverdegrow.com',
             [sale.customer.email],
             fail_silently=True,
         )
@@ -97,13 +97,13 @@ class SaleViewSet(viewsets.ModelViewSet):
             f"Tu pago de la orden #{sale.id} ha sido procesado exitosamente.\n\n"
             f"Detalle:\n{items_list}\nTotal pagado: ${sale.total}\n\n"
             f"Estamos preparando tu pedido. Te notificaremos cuando sea enviado.\n\n"
-            f"FerreNexo"
+            f"Tierra Verde Grow"
         )
         
         from django.core.mail import send_mail
         send_mail(
             subject, message,
-            settings.DEFAULT_FROM_EMAIL or 'noreply@ferrenexo.com',
+            settings.DEFAULT_FROM_EMAIL or 'noreply@tierraverdegrow.com',
             [sale.customer.email],
             fail_silently=True,
         )

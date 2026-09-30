@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd frontend && npm install && npx ng build --configuration production",
+  "outputDirectory": "frontend/dist/ferre-saas-frontend",
+  "rewrites": [
+    { "source": "/((?!assets/|favicon.ico|robots.txt|.*\\.).*)", "destination": "/index.html" }
+  ]
+}

@@ -251,9 +251,9 @@ class PublicCheckoutViewSet(viewsets.ViewSet):
             items_list = "\n".join([f"- {i['product'].name} (x{i['quantity']}) - ${i['price_at_sale'] * i['quantity']}" for i in validated_items])
             try:
                 send_mail(
-                    f"Pedido #{sale.id} recibido - FerreNexo",
-                    f"Hola {name},\n\nRecibimos tu pedido #{sale.id}.\n\nDetalle:\n{items_list}\n\nTotal: ${final_total}\n\nTe notificaremos cuando sea procesado.\n\nFerreNexo",
-                    settings.DEFAULT_FROM_EMAIL or 'noreply@ferrenexo.com',
+                    f"Pedido #{sale.id} recibido - Tierra Verde Grow",
+                    f"Hola {name},\n\nRecibimos tu pedido #{sale.id}.\n\nDetalle:\n{items_list}\n\nTotal: ${final_total}\n\nTe notificaremos cuando sea procesado.\n\nTierra Verde Grow",
+                    settings.DEFAULT_FROM_EMAIL or 'noreply@tierraverdegrow.com',
                     [email],
                     fail_silently=True,
                 )

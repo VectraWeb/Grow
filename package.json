@@ -1,4 +1,9 @@
 {
+  "name": "tierra-verde-grow",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  },
   "dependencies": {
     "@neon/config": "^1.8.3",
     "@neon/env": "^1.4.8"

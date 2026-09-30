@@ -119,7 +119,7 @@ import { LucideAngularModule, Zap, CheckCircle2, AlertCircle, RefreshCw, Externa
                 <div>
                   <h4 class="text-[11px] font-bold text-slate-900 uppercase tracking-wider" style="font-family: Sora, sans-serif;">Vincular tu cuenta propia de vendedor?</h4>
                   <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-                    Asegurate de iniciar sesion con la cuenta de <strong>tu negocio o ferreteria</strong> en Mercado Libre. Si tenes abierta tu cuenta personal en este navegador, cerrala antes de continuar.
+                    Asegurate de iniciar sesion con la cuenta de <strong>tu negocio o growshop</strong> en Mercado Libre. Si tenes abierta tu cuenta personal en este navegador, cerrala antes de continuar.
                   </p>
                 </div>
               </div>

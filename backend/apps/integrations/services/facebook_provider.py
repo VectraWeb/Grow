@@ -21,14 +21,14 @@ class FacebookMarketplaceProvider(MarketplaceProvider):
     channel = 'FACEBOOK'
 
     CATEGORY_MAP = {
-        'herramientas': 'Herramientas',
-        'electricidad': 'Electricidad',
-        'plomeria': 'Plomería',
-        'pintureria': 'Pinturería',
-        'ferreteria': 'Ferretería',
-        'construccion': 'Construcción',
-        'jardin': 'Jardín',
-        'seguridad': 'Seguridad',
+        'sustratos': 'Jardinería / Sustratos',
+        'fertilizantes': 'Fertilizantes y Nutrientes',
+        'iluminacion': 'Iluminación LED Cultivo',
+        'carpas': 'Carpas Indoor y Cultivo',
+        'ventilacion': 'Ventilación y Clima',
+        'parafernalia': 'Accesorios y Parafernalia',
+        'jardin': 'Jardinería',
+        'cultivo': 'Cultivo Indoor y Outdoor',
     }
 
     def _build_title(self, product: Product) -> str:
@@ -67,7 +67,7 @@ class FacebookMarketplaceProvider(MarketplaceProvider):
         for key, fb_cat in self.CATEGORY_MAP.items():
             if key in cat_name:
                 return fb_cat
-        return 'Ferretería'
+        return 'Growshop'
 
     def _get_image_urls(self, product: Product) -> list:
         urls = []

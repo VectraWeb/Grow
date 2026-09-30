@@ -16,11 +16,11 @@ import { ApiService } from "./core/services/api.service";
   styleUrl: "./app.component.css",
 })
 export class AppComponent implements OnInit {
-  title = "ferre-saas-frontend";
+  title = "tierra-verde-grow";
   showLayout = true;
   
   // Mensaje y link por defecto sin depender de los archivos de entorno (evita el error TS2304)
-  defaultMsg = "Hola, tengo una consulta sobre un producto.";
+  defaultMsg = "Hola Tierra Verde Grow, tengo una consulta sobre un producto.";
   whatsappHref = "";
   
   private api = inject(ApiService);

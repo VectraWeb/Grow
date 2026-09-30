@@ -88,9 +88,9 @@ class PasswordResetRequestView(APIView):
             
             try:
                 send_mail(
-                    "Restablece tu contrasena - FerreNexo",
-                    f"Hola,\n\nRecibimos una solicitud para restablecer tu contrasena.\n\nHace click en el siguiente enlace:\n{reset_url}\n\nSi no solicitaste esto, ignora este mensaje.\n\nFerreNexo",
-                    settings.DEFAULT_FROM_EMAIL or 'noreply@ferrenexo.com',
+                    "Restablece tu contrasena - Tierra Verde Grow",
+                    f"Hola,\n\nRecibimos una solicitud para restablecer tu contrasena.\n\nHace click en el siguiente enlace:\n{reset_url}\n\nSi no solicitaste esto, ignora este mensaje.\n\nTierra Verde Grow",
+                    settings.DEFAULT_FROM_EMAIL or 'noreply@tierraverdegrow.com',
                     [email],
                     fail_silently=True,
                 )

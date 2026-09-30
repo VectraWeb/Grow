@@ -557,7 +557,7 @@ class MercadoPagoWebhookView(APIView):
                             if sale.customer and sale.customer.email:
                                 try:
                                     send_mail(
-                                        "Confirmacion de Pago - FerreNexo",
+                                        "Confirmacion de Pago - Tierra Verde Grow",
                                         f"Tu pago de la orden #{sale.id} ha sido procesado exitosamente y estamos preparando tu pedido.",
                                         settings.DEFAULT_FROM_EMAIL,
                                         [sale.customer.email],

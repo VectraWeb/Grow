@@ -244,7 +244,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         origin_zip = config.store_postal_code if config else None
         
         if not origin_zip:
-            return Response({'error': 'La ferretería aún no configuró su código postal origen.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'El growshop aún no configuró su código postal origen.'}, status=status.HTTP_400_BAD_REQUEST)
         
         weight_g = 1000
         if product.weight:
