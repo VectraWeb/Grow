@@ -182,7 +182,7 @@ import { CheckboxModule } from "primeng/checkbox";
               <input
                 pInputText
                 formControlName="name"
-                placeholder="Ej. Taladro Percutor Industrial 20V"
+                placeholder="Ej. Panel LED Quantum Board 240W"
                 (input)="capitalizeName($event)"
                 class="w-full p-4 rounded-2xl bg-white border-slate-200 text-slate-900 focus:ring-2 focus:ring-ferre-400/50 focus:border-ferre-400 transition-all placeholder-slate-400 outline-none"
               />
@@ -197,7 +197,7 @@ import { CheckboxModule } from "primeng/checkbox";
                 <input
                   pInputText
                   formControlName="sku"
-                  placeholder="TP-20V-X1"
+                  placeholder="LED-QB-240W"
                   class="w-full p-4 rounded-2xl bg-white border-slate-200 text-slate-900 focus:ring-2 focus:ring-ferre-400/50 focus:border-ferre-400 transition-all placeholder-slate-400 font-mono uppercase outline-none"
                 />
               </div>

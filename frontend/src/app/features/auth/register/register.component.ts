@@ -19,14 +19,13 @@ import { LucideAngularModule, UserPlus, Mail, Lock, User, Phone, ArrowLeft, Chec
       </button>
 
       <div class="z-10 w-full max-w-md p-8 bg-white border border-slate-200 rounded-xl shadow-sm relative">
-        <div class="text-center mb-8">
-          <div class="w-14 h-14 rounded-lg bg-ferre-400 flex items-center justify-center mx-auto mb-3 shadow-sm">
-            <lucide-icon [name]="UserPlus" size="28" class="text-slate-800"></lucide-icon>
+          <img src="assets/logo-tree.png" alt="Tierra Verde Grow" class="h-14 w-auto object-contain mx-auto mb-2" />
+          <div class="flex flex-col items-center justify-center leading-none" style="font-family: Sora, sans-serif;">
+            <span class="text-xs font-black tracking-widest text-[#874e04]">TIERRA</span>
+            <span class="text-lg font-black tracking-wider text-[#0f9717] -mt-0.5">VERDE</span>
+            <span class="text-[11px] font-black tracking-[0.25em] text-[#e0b721] -mt-0.5">GROW</span>
           </div>
-          <span class="text-2xl font-extrabold tracking-wider uppercase text-slate-900" style="font-family: Sora, sans-serif;">
-            Ferre<span class="text-ferre-400">Nexo</span>
-          </span>
-          <p class="text-slate-500 mt-1 text-sm font-medium">Crea tu cuenta</p>
+          <p class="text-slate-500 mt-2 text-sm font-medium">Crea tu cuenta</p>
         </div>
 
         <div *ngIf="success" class="text-center space-y-4">

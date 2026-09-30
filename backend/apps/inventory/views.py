@@ -112,7 +112,7 @@ class ProductPagination(PageNumberPagination):
     max_page_size = 1000
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.select_related('category').all()
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
 
@@ -194,7 +194,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # Filtering logic for search
-        queryset = Product.objects.all()
+        queryset = Product.objects.select_related('category').all()
         category = self.request.query_params.get('category')
         search = self.request.query_params.get('search')
         is_ecommerce = self.request.query_params.get('is_ecommerce')

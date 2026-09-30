@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             name='StoreConfig',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default='Mi Ferretería', max_length=100)),
+                ('name', models.CharField(default='Tierra Verde Grow', max_length=100)),
                 ('store_postal_code', models.CharField(blank=True, max_length=20, null=True)),
                 ('afip_cuit', models.CharField(blank=True, max_length=20, null=True)),
                 ('bank_cvu', models.CharField(blank=True, max_length=50, null=True)),

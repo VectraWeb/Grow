@@ -9,54 +9,35 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grow_saas.settings')
 django.setup()
 
-from django.db import connection
 from apps.inventory.models import Category
-from apps.tenants.models import Client
+
+GROW_CATEGORIES = [
+    ("Sustratos y Tierras", 1),
+    ("Fertilizantes y Nutrientes", 2),
+    ("Semillas", 3),
+    ("Carpas e Indoor", 4),
+    ("Iluminación LED", 5),
+    ("Ventilación y Filtros", 6),
+    ("Macetas y Riego", 7),
+    ("Control y Medición", 8),
+    ("Parafernalia y Accesorios", 9),
+]
 
 def seed_categories():
-    tenants = Client.objects.exclude(schema_name='public')
-    if not tenants.exists():
-        print("No tenants found.")
-        return
+    print("--- Seeding Tierra Verde Grow categories ---")
+    added = 0
+    for cat_name, order in GROW_CATEGORIES:
+        category, created = Category.objects.get_or_create(
+            name=cat_name,
+            defaults={"display_order": order}
+        )
+        if created:
+            print(f"Created: {cat_name}")
+            added += 1
+        else:
+            print(f"Already exists: {cat_name}")
 
-    categories = [
-        "Herramientas Manuales",
-        "Herramientas Eléctricas",
-        "Herramientas Inalámbricas",
-        "Accesorios para Herramientas",
-        "Materiales de Construcción",
-        "Electricidad",
-        "Iluminación",
-        "Plomería y Agua",
-        "Gas",
-        "Pintura y Cuidado de Superficies",
-        "Tornillería, Clavos y Fijaciones",
-        "Jardinería y Aire Libre",
-        "Seguridad Industrial y Ropa de Trabajo",
-        "Adhesivos, Selladores y Cintas",
-        "Cerrajería y Herrajes",
-        "Automotor y Lubricantes",
-        "Limpieza y Mantenimiento",
-        "Abrasivos",
-        "Cables y Alambres",
-        "Techado y Aislantes",
-        "Baño y Cocina",
-        "Soldadura",
-        "Medición y Nivelación"
-    ]
+    print(f"--- Seeding completed. Added {added} new categories. ---\n")
 
-    for tenant in tenants:
-        print(f"--- Seeding categories for schema '{tenant.schema_name}' ---")
-        connection.set_tenant(tenant)
-        added = 0
-        for cat_name in categories:
-            category, created = Category.objects.get_or_create(name=cat_name)
-            if created:
-                print(f"Created: {cat_name}")
-                added += 1
-            else:
-                print(f"Already exists: {cat_name}")
-
-        print(f"--- Seeding completed for {tenant.schema_name}. Added {added} new categories. ---\n")
 if __name__ == "__main__":
     seed_categories()

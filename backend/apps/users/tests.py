@@ -48,7 +48,7 @@ class StoreInfoPublicTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.config = StoreConfig.objects.create(
-            name="Mi Ferreteria",
+            name="Tierra Verde Grow",
             store_address="Av. Corrientes 1234",
         )
 
@@ -56,7 +56,7 @@ class StoreInfoPublicTest(TestCase):
         resp = self.client.get("/api/tenant/info/")
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
-        self.assertEqual(data["name"], "Mi Ferreteria")
+        self.assertEqual(data["name"], "Tierra Verde Grow")
         self.assertEqual(data["store_address"], "Av. Corrientes 1234")
 
 

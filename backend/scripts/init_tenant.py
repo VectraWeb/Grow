@@ -1,5 +1,4 @@
 # Script para inicializar un nuevo tenant con sus tablas de bd y datos de prueba
-# Realiza migraciones y crea usuarios administradores para cada cliente
 import os
 import django
 from django.db import connection
@@ -12,7 +11,7 @@ from apps.tenants.models import Client, Domain
 from apps.users.models import User
 
 def initialize():
-    print("--- Initializing FerreSaaS ---")
+    print("--- Initializing Tierra Verde Grow SaaS ---")
     
     # 1. Create Public Tenant
     if not Client.objects.filter(schema_name='public').exists():
@@ -29,28 +28,28 @@ def initialize():
         print("Done: Public schema and domain 'localhost' created.")
     
     # 2. Create the first Store Tenant
-    if not Client.objects.filter(schema_name='ferre1').exists():
-        ferre1 = Client(
-            schema_name='ferre1',
-            name='Ferretería Central'
+    if not Client.objects.filter(schema_name='grow1').exists():
+        grow1 = Client(
+            schema_name='grow1',
+            name='Tierra Verde Grow'
         )
-        ferre1.save()
+        grow1.save()
         Domain.objects.create(
-            domain='ferre1.localhost',
-            tenant=ferre1,
+            domain='grow1.localhost',
+            tenant=grow1,
             is_primary=True
         )
-        print("Done: Tenant 'ferre1' and domain 'ferre1.localhost' created.")
+        print("Done: Tenant 'grow1' and domain 'grow1.localhost' created.")
     
     # 3. Create Superuser in Public (for SaaS management)
-    if not User.objects.filter(email='admin@ferresaas.com').exists():
+    if not User.objects.filter(email='admin@tierraverdegrow.com').exists():
         User.objects.create_superuser(
-            email='admin@ferresaas.com',
-            password='adminpassword',
+            email='admin@tierraverdegrow.com',
+            password='AdminGrow2026!',
             first_name='Admin',
-            last_name='Global'
+            last_name='Tierra Verde'
         )
-        print("Done: Superuser admin@ferresaas.com created.")
+        print("Done: Superuser admin@tierraverdegrow.com created.")
 
 if __name__ == "__main__":
     initialize()

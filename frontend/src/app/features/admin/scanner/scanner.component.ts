@@ -164,12 +164,12 @@ export class AdminScannerComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.lastResult = {
-        name: "Taladro Percutor Bosch GSB 13 RE",
-        sku: "BSCH-452109",
-        price: "89.500",
-        stock: 14,
+        name: "Sustrato Profesional Growmix Multipro 80L",
+        sku: "SUST-GMIX-80L",
+        price: "24.500",
+        stock: 35,
         image:
-          "https://images.unsplash.com/photo-1504148455328-c996973521f5?q=80&w=200",
+          "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?q=80&w=200",
       };
     }, 4000);
   }

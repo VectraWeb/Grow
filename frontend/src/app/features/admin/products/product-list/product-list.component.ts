@@ -17,6 +17,7 @@ import {
 } from "lucide-angular";
 import { RouterModule, Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
+import { environment } from "src/environments/environment";
 import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-publish.component";
 
 @Component({
@@ -455,9 +456,10 @@ export class ProductListComponent implements OnInit {
       (response: any) => {
         const rawProducts = response.results || response;
 
+        const baseUrl = environment.apiUrl.replace(/\/api\/?$/, "");
         this.products = rawProducts.map((p: any) => {
           if (p.image && !p.image.startsWith("http")) {
-            p.image = `http://127.0.0.1:8000${p.image}`;
+            p.image = `${baseUrl}${p.image.startsWith("/") ? "" : "/"}${p.image}`;
           }
           return p;
         });

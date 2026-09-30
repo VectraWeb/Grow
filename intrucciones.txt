@@ -1,6 +1,6 @@
-# 🚀 Manual de Operación SaaS: FerreNexo (Powered by VectraWeb)
+# 🚀 Manual de Operación: Tierra Verde Grow
 
-Este manual describe los pasos exactos para inicializar y operar tu plataforma multitenant (SaaS) desde cero en tu entorno local.
+Este manual describe los pasos exactos para inicializar y operar tu plataforma multitenant desde cero en tu entorno local.
 
 ---
 
@@ -53,22 +53,22 @@ exit()
 
 ---
 
-## 5. Panel de Gestión VectraWeb (Cómo crear un cliente)
-Aquí es donde tú gestionas tu negocio de venta de software:
+## 5. Panel de Gestión (Cómo crear un cliente)
+Aquí es donde gestionas tu negocio de software:
 
-1. Ve a tu navegador y entra a: **http://127.0.0.1:8000/admin-secure-ferre/**
-2. Inicia sesión con la cuenta de VectraWeb que creaste en el paso 4.
-3. Bajo la sección **TENANTS**, tienes dos pasos para habilitar una ferretería:
-   * **Paso A (Clients):** Crea la base de datos. Haz clic en "Agregar", ponle el nombre real ("Ferretería Los Amigos") y asígnale un `schema_name` (ejemplo: `losamigos`, todo minúscula sin espacios).
-   * **Paso B (Domains):** Enlázale una URL web. Haz clic en "Agregar", pon el dominio (ej: `losamigos.localhost`), selecciona la ferretería que creaste en el paso A, y asegúrate de marcar la casilla **`is_primary`** con el tic verde.
+1. Ve a tu navegador y entra a: **http://127.0.0.1:8000/admin-secure-grow/**
+2. Inicia sesión con la cuenta de administrador.
+3. Bajo la sección **TENANTS**, tienes dos pasos para habilitar una sucursal/tienda:
+   * **Paso A (Clients):** Crea la base de datos. Haz clic en "Agregar", ponle el nombre real ("Tierra Verde Grow") y asígnale un `schema_name` (ejemplo: `tierraverde`, todo minúscula sin espacios).
+   * **Paso B (Domains):** Enlázale una URL web. Haz clic en "Agregar", pon el dominio (ej: `tierraverde.localhost`), selecciona la tienda que creaste en el paso A, y asegúrate de marcar la casilla **`is_primary`** con el tic verde.
 
 *(Cualquier intruso que intente entrar al panel normal `/admin/` caerá en nuestra trampa Honeypot de ciberseguridad).*
 
 ---
 
-## 6. Acceso del Cliente (Cómo usa FerreNexo la ferretería)
-Una vez creada la base de datos de tu cliente:
+## 6. Acceso del Cliente (Cómo se usa la tienda Growshop)
+Una vez creada la base de datos:
 
-1. El cliente (o tú para probar) debe abrir su navegador y entrar **exactamente a su subdominio**, agregando el puerto de Angular: 
-   👉 **http://losamigos.localhost:4200**
-2. Verá el sistema FerreNexo en blanco, listo para cargar productos y comenzar a facturar. Cada cliente está 100% aislado en su propia base de datos.
+1. Abre tu navegador y entra al subdominio con el puerto de Angular: 
+   👉 **http://tierraverde.localhost:4200**
+2. Verás el sistema de Tierra Verde Grow listo para cargar productos y comenzar a gestionar ventas. Cada tienda está 100% aislada en su propia base de datos.
