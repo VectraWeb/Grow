@@ -1,0 +1,1802 @@
+[
+  {
+    "id": 251,
+    "category": "Carpas e Indoor",
+    "name": "Carpa de Cultivo Indoor 100x100x200cm Mylar 600D",
+    "brand": "Magic Box Pro",
+    "sku": "CARP-100-100-200",
+    "description": "Carpa profesional para hasta 9 plantas en macetas de 11L a 15L. Doble fondo impermeable, mangas ajus"
+  },
+  {
+    "id": 250,
+    "category": "Carpas e Indoor",
+    "name": "Carpa de Cultivo Indoor 80x80x160cm Mylar 600D",
+    "brand": "Magic Box Pro",
+    "sku": "CARP-80-80-160",
+    "description": "Armario de cultivo hermético con tela Oxford 600D ultra resistente y revestimiento interno de Mylar "
+  },
+  {
+    "id": 204,
+    "category": "Control y Medición",
+    "name": "BALANZA POKET",
+    "brand": "MISTER BLINDER",
+    "sku": "HE001",
+    "description": "BALANZA POKET. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 206,
+    "category": "Control y Medición",
+    "name": "TIJERAS PUNTA CURVA",
+    "brand": "MISTER BLINDER",
+    "sku": "HE003",
+    "description": "TIJERAS PUNTA CURVA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 205,
+    "category": "Control y Medición",
+    "name": "TIJERAS PUNTA PLANA",
+    "brand": "MISTER BLINDER",
+    "sku": "HE002",
+    "description": "TIJERAS PUNTA PLANA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 53,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "AGUA DE PERRO 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE022",
+    "description": "AGUA DE PERRO 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 55,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "ALGAFISHUM NODOSUM 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE024",
+    "description": "ALGAFISHUM NODOSUM 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 81,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "AMAZONIA 150cc",
+    "brand": "Tierra Verde",
+    "sku": "FE050",
+    "description": "AMAZONIA 150cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 80,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "AMAZONIA 300cc",
+    "brand": "Tierra Verde",
+    "sku": "FE049",
+    "description": "AMAZONIA 300cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 74,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "AURA 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE043",
+    "description": "AURA 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 75,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "B-BOMB 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE044",
+    "description": "B-BOMB 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 37,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIG ONE 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE006",
+    "description": "BIG ONE 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 38,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIG ONE 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE007",
+    "description": "BIG ONE 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 96,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIO NEEM 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE065",
+    "description": "BIO NEEM 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 97,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIO NEEM 30cc",
+    "brand": "Tierra Verde",
+    "sku": "FE066",
+    "description": "BIO NEEM 30cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 95,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIO PROTECT 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE064",
+    "description": "BIO PROTECT 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 94,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIO PROTECT 500cc",
+    "brand": "Tierra Verde",
+    "sku": "FE063",
+    "description": "BIO PROTECT 500cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 122,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIOENERGY AUTO FLORACION 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE091",
+    "description": "BIOENERGY AUTO FLORACION 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 121,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIOENERGY AUTO VEGETATIVO 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE090",
+    "description": "BIOENERGY AUTO VEGETATIVO 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 119,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIOENERGY BASILUS SUBTILIS 50cc",
+    "brand": "Tierra Verde",
+    "sku": "FE088",
+    "description": "BIOENERGY BASILUS SUBTILIS 50cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 120,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIOENERGY BEAUVERIA BASSIANA 50cc",
+    "brand": "Tierra Verde",
+    "sku": "FE089",
+    "description": "BIOENERGY BEAUVERIA BASSIANA 50cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 117,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIOENERGY MICORRIZAS 50cc",
+    "brand": "Tierra Verde",
+    "sku": "FE086",
+    "description": "BIOENERGY MICORRIZAS 50cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 118,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BIOENERGY TRICHODERMAS 50cc",
+    "brand": "Tierra Verde",
+    "sku": "FE087",
+    "description": "BIOENERGY TRICHODERMAS 50cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 71,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BLACK MAGIC 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE040",
+    "description": "BLACK MAGIC 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 70,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BLACK MAGIC 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE039",
+    "description": "BLACK MAGIC 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 63,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BUDHA JUICE 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE032",
+    "description": "BUDHA JUICE 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 62,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "BUDHA JUICE 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE031",
+    "description": "BUDHA JUICE 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 47,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "CALMAG 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE016",
+    "description": "CALMAG 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 46,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "CALMAG 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE015",
+    "description": "CALMAG 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 79,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "CLONASTE 30cc",
+    "brand": "Tierra Verde",
+    "sku": "FE048",
+    "description": "CLONASTE 30cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 32,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "CYCLONE 50cc",
+    "brand": "Tierra Verde",
+    "sku": "FE001",
+    "description": "CYCLONE 50cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 33,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DEEPER UNDERGROUND 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE002",
+    "description": "DEEPER UNDERGROUND 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 34,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DEEPER UNDERGROUND 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE003",
+    "description": "DEEPER UNDERGROUND 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 90,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DETOX 2000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE059",
+    "description": "DETOX 2000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 91,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DETOX 500cc",
+    "brand": "Tierra Verde",
+    "sku": "FE060",
+    "description": "DETOX 500cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 65,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DEVIL JUICE 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE034",
+    "description": "DEVIL JUICE 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 64,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DEVIL JUICE 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE033",
+    "description": "DEVIL JUICE 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 57,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "DYNAMITE 2.0 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE026",
+    "description": "DYNAMITE 2.0 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 59,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "EL TOQUE FINAL 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE028",
+    "description": "EL TOQUE FINAL 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 60,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "FLOR DE AUTO 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE029",
+    "description": "FLOR DE AUTO 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 87,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "FLORA BOOSTER 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE056",
+    "description": "FLORA BOOSTER 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 86,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "FLORA BOOSTER 500cc",
+    "brand": "Tierra Verde",
+    "sku": "FE055",
+    "description": "FLORA BOOSTER 500cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 116,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "GREELEAF DIATOMEAS 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE085",
+    "description": "GREELEAF DIATOMEAS 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 115,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "GREENLEAF POTASICO 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE084",
+    "description": "GREENLEAF POTASICO 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 110,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "HECHIZO BLOOM",
+    "brand": "Tierra Verde",
+    "sku": "FE079",
+    "description": "HECHIZO BLOOM. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 109,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "HECHIZO BOOM",
+    "brand": "Tierra Verde",
+    "sku": "FE078",
+    "description": "HECHIZO BOOM. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 56,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "LECHE DE HUESOS 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE025",
+    "description": "LECHE DE HUESOS 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 114,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "LIXIVIADO DORADO",
+    "brand": "Tierra Verde",
+    "sku": "FE083",
+    "description": "LIXIVIADO DORADO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 113,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "MELACA DORADA",
+    "brand": "Tierra Verde",
+    "sku": "FE082",
+    "description": "MELACA DORADA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 76,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "MIRACLE 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE045",
+    "description": "MIRACLE 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 67,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "MONSTER 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE036",
+    "description": "MONSTER 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 66,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "MONSTER 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE035",
+    "description": "MONSTER 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 77,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "NATURAL KILLER 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE046",
+    "description": "NATURAL KILLER 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 54,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "NITRO MONSTRUOSO 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE023",
+    "description": "NITRO MONSTRUOSO 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 98,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "NUTRIPACK 5cc",
+    "brand": "Tierra Verde",
+    "sku": "FE067",
+    "description": "NUTRIPACK 5cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 83,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "ORO NEGRO 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE052",
+    "description": "ORO NEGRO 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 82,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "ORO NEGRO 500cc",
+    "brand": "Tierra Verde",
+    "sku": "FE051",
+    "description": "ORO NEGRO 500cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 93,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "PH- 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE062",
+    "description": "PH- 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 61,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "PH- 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE030",
+    "description": "PH- 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 92,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "PH- 500cc",
+    "brand": "Tierra Verde",
+    "sku": "FE061",
+    "description": "PH- 500cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 112,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "POCION IMPKABLE",
+    "brand": "Tierra Verde",
+    "sku": "FE081",
+    "description": "POCION IMPKABLE. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 111,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "POCION INFERNAL",
+    "brand": "Tierra Verde",
+    "sku": "FE080",
+    "description": "POCION INFERNAL. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 78,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "POWER POTION 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE047",
+    "description": "POWER POTION 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 69,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SEA MAGIC 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE038",
+    "description": "SEA MAGIC 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 68,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SEA MAGIC 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE037",
+    "description": "SEA MAGIC 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 85,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SHANTI 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE054",
+    "description": "SHANTI 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 84,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SHANTI 500cc",
+    "brand": "Tierra Verde",
+    "sku": "FE053",
+    "description": "SHANTI 500cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 58,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SUGAR CANDY 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE027",
+    "description": "SUGAR CANDY 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 73,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SUPER HONEY 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE042",
+    "description": "SUPER HONEY 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 72,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "SUPER HONEY 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE041",
+    "description": "SUPER HONEY 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 49,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP AUTO 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE018",
+    "description": "TOP AUTO 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 48,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP AUTO 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE017",
+    "description": "TOP AUTO 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 44,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP BARRIER 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE013",
+    "description": "TOP BARRIER 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 45,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP BARRIER 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE014",
+    "description": "TOP BARRIER 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 40,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP BLOOM 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE009",
+    "description": "TOP BLOOM 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 39,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP BLOOM 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE008",
+    "description": "TOP BLOOM 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 43,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP BUD 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE012",
+    "description": "TOP BUD 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 42,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP CANDY 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE011",
+    "description": "TOP CANDY 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 41,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP CANDY 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE010",
+    "description": "TOP CANDY 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 36,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP VEG 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE005",
+    "description": "TOP VEG 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 35,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP VEG 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE004",
+    "description": "TOP VEG 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 50,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TOP WASH 1000cc",
+    "brand": "Tierra Verde",
+    "sku": "FE019",
+    "description": "TOP WASH 1000cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 126,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX A 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE095",
+    "description": "TREEMIX A 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 128,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX CANDY 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE097",
+    "description": "TREEMIX CANDY 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 127,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX F 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE096",
+    "description": "TREEMIX F 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 123,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX MICO 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE092",
+    "description": "TREEMIX MICO 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 125,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX N 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE094",
+    "description": "TREEMIX N 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 124,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX PRO 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE093",
+    "description": "TREEMIX PRO 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 129,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TREEMIX ZYM 200cc",
+    "brand": "Tierra Verde",
+    "sku": "FE098",
+    "description": "TREEMIX ZYM 200cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 89,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TRICO+ 100cc",
+    "brand": "Tierra Verde",
+    "sku": "FE058",
+    "description": "TRICO+ 100cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 88,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TRICO+ 250cc",
+    "brand": "Tierra Verde",
+    "sku": "FE057",
+    "description": "TRICO+ 250cc. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 51,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TRIPACK",
+    "brand": "Tierra Verde",
+    "sku": "FE020",
+    "description": "TRIPACK. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 52,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "TRIPACK AUTO",
+    "brand": "Tierra Verde",
+    "sku": "FE021",
+    "description": "TRIPACK AUTO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 104,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP BASALTO",
+    "brand": "Tierra Verde",
+    "sku": "FE073",
+    "description": "VAMP BASALTO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 102,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP FLORA GALLINA",
+    "brand": "Tierra Verde",
+    "sku": "FE071",
+    "description": "VAMP FLORA GALLINA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 101,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP FLORA MURCIELAGO",
+    "brand": "Tierra Verde",
+    "sku": "FE070",
+    "description": "VAMP FLORA MURCIELAGO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 103,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP ROCAS 3 EN 1",
+    "brand": "Tierra Verde",
+    "sku": "FE072",
+    "description": "VAMP ROCAS 3 EN 1. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 105,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP SAPONITA",
+    "brand": "Tierra Verde",
+    "sku": "FE074",
+    "description": "VAMP SAPONITA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 100,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP VEGE GALLINA",
+    "brand": "Tierra Verde",
+    "sku": "FE069",
+    "description": "VAMP VEGE GALLINA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 99,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP VEGE MURCIELAGO",
+    "brand": "Tierra Verde",
+    "sku": "FE068",
+    "description": "VAMP VEGE MURCIELAGO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 106,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMP ZEOLITA",
+    "brand": "Tierra Verde",
+    "sku": "FE075",
+    "description": "VAMP ZEOLITA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 108,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMPIMELAZA",
+    "brand": "Tierra Verde",
+    "sku": "FE077",
+    "description": "VAMPIMELAZA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 107,
+    "category": "Fertilizantes y Nutrientes",
+    "name": "VAMPKASHI",
+    "brand": "Tierra Verde",
+    "sku": "FE076",
+    "description": "VAMPKASHI. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 130,
+    "category": "Iluminación LED",
+    "name": "LUZ USB",
+    "brand": "TEMU",
+    "sku": "LU001",
+    "description": "LUZ USB. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 253,
+    "category": "Iluminación LED",
+    "name": "Lámpara LED Full Spectrum 150W Cultivo Indoor",
+    "brand": "Quantum Light",
+    "sku": "LED-FS-150W",
+    "description": "Luminaria full spectrum ideal para carpas 60x60 o apoyo vegetativo. Disipador de aluminio pasivo sin"
+  },
+  {
+    "id": 252,
+    "category": "Iluminación LED",
+    "name": "Panel LED Quantum Board Samsung LM301H 240W",
+    "brand": "Samsung Grow Pro",
+    "sku": "LED-QB-240W",
+    "description": "Panel LED de alta gama con diodos Samsung LM301H EVO y rojos lejanos Deep Red 660nm. Driver MeanWell"
+  },
+  {
+    "id": 145,
+    "category": "Macetas y Riego",
+    "name": "GEOTEXTIL 10L",
+    "brand": "Tierra Verde",
+    "sku": "MA015",
+    "description": "GEOTEXTIL 10L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 146,
+    "category": "Macetas y Riego",
+    "name": "GEOTEXTIL 15L",
+    "brand": "Tierra Verde",
+    "sku": "MA016",
+    "description": "GEOTEXTIL 15L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 147,
+    "category": "Macetas y Riego",
+    "name": "GEOTEXTIL 20L",
+    "brand": "Tierra Verde",
+    "sku": "MA017",
+    "description": "GEOTEXTIL 20L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 148,
+    "category": "Macetas y Riego",
+    "name": "GEOTEXTIL 30L",
+    "brand": "Tierra Verde",
+    "sku": "MA018",
+    "description": "GEOTEXTIL 30L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 144,
+    "category": "Macetas y Riego",
+    "name": "GEOTEXTIL 5L",
+    "brand": "Tierra Verde",
+    "sku": "MA014",
+    "description": "GEOTEXTIL 5L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 131,
+    "category": "Macetas y Riego",
+    "name": "MAD ROCKET 10L",
+    "brand": "Tierra Verde",
+    "sku": "MA001",
+    "description": "MAD ROCKET 10L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 132,
+    "category": "Macetas y Riego",
+    "name": "MAD ROCKET 16L",
+    "brand": "Tierra Verde",
+    "sku": "MA002",
+    "description": "MAD ROCKET 16L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 203,
+    "category": "Macetas y Riego",
+    "name": "MAD ROCKET 25L",
+    "brand": "Tierra Verde",
+    "sku": "MAC-MAD-ROCKET-25L",
+    "description": "MAD ROCKET 25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 149,
+    "category": "Macetas y Riego",
+    "name": "PLASTICA ESQUEJES 7 X 3 CM",
+    "brand": "Tierra Verde",
+    "sku": "MA019",
+    "description": "PLASTICA ESQUEJES 7 X 3 CM. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 150,
+    "category": "Macetas y Riego",
+    "name": "PLASTICA PLANTIN 9 X 7 CM",
+    "brand": "Tierra Verde",
+    "sku": "MA020",
+    "description": "PLASTICA PLANTIN 9 X 7 CM. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 133,
+    "category": "Macetas y Riego",
+    "name": "ROOT HOUSE 10L",
+    "brand": "Tierra Verde",
+    "sku": "MA003",
+    "description": "ROOT HOUSE 10L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 134,
+    "category": "Macetas y Riego",
+    "name": "ROOT HOUSE 18L",
+    "brand": "Tierra Verde",
+    "sku": "MA004",
+    "description": "ROOT HOUSE 18L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 135,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 0.1L",
+    "brand": "Tierra Verde",
+    "sku": "MA005",
+    "description": "SOPLADA 0.1L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 136,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 0.25L",
+    "brand": "Tierra Verde",
+    "sku": "MA006",
+    "description": "SOPLADA 0.25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 137,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 0.5L",
+    "brand": "Tierra Verde",
+    "sku": "MA007",
+    "description": "SOPLADA 0.5L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 140,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 10L",
+    "brand": "Tierra Verde",
+    "sku": "MA010",
+    "description": "SOPLADA 10L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 141,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 15L",
+    "brand": "Tierra Verde",
+    "sku": "MA011",
+    "description": "SOPLADA 15L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 138,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 1L",
+    "brand": "Tierra Verde",
+    "sku": "MA008",
+    "description": "SOPLADA 1L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 142,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 20L",
+    "brand": "Tierra Verde",
+    "sku": "MA012",
+    "description": "SOPLADA 20L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 143,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 30L",
+    "brand": "Tierra Verde",
+    "sku": "MA013",
+    "description": "SOPLADA 30L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 139,
+    "category": "Macetas y Riego",
+    "name": "SOPLADA 5L",
+    "brand": "Tierra Verde",
+    "sku": "MA009",
+    "description": "SOPLADA 5L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 243,
+    "category": "Parafernalia y Accesorios",
+    "name": "ARMADOR DE METAL",
+    "brand": "Tierra Verde",
+    "sku": "9876.0",
+    "description": "ARMADOR DE METAL. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 240,
+    "category": "Parafernalia y Accesorios",
+    "name": "ARTURITO BAJO",
+    "brand": "Tierra Verde",
+    "sku": "DA666A",
+    "description": "ARTURITO BAJO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 239,
+    "category": "Parafernalia y Accesorios",
+    "name": "BLACK COBRA CUCHARITA BLISTER",
+    "brand": "Tierra Verde",
+    "sku": "LLLL",
+    "description": "BLACK COBRA CUCHARITA BLISTER. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 249,
+    "category": "Parafernalia y Accesorios",
+    "name": "BLUNT WRAPP",
+    "brand": "Tierra Verde",
+    "sku": "BW01",
+    "description": "BLUNT WRAPP. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 248,
+    "category": "Parafernalia y Accesorios",
+    "name": "BOLSA SIPLOC",
+    "brand": "Tierra Verde",
+    "sku": "ZL001",
+    "description": "BOLSA SIPLOC. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 208,
+    "category": "Parafernalia y Accesorios",
+    "name": "CATALITICO",
+    "brand": "MISTER BLINDER",
+    "sku": "F0088",
+    "description": "CATALITICO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 211,
+    "category": "Parafernalia y Accesorios",
+    "name": "CLIPPER MINI",
+    "brand": "MISTER BLINDER",
+    "sku": "BLIS01",
+    "description": "CLIPPER MINI. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 242,
+    "category": "Parafernalia y Accesorios",
+    "name": "CUCHARITA DAV",
+    "brand": "Tierra Verde",
+    "sku": "RIWO02",
+    "description": "CUCHARITA DAV. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 237,
+    "category": "Parafernalia y Accesorios",
+    "name": "GOLGANTE CUCHARITA",
+    "brand": "Tierra Verde",
+    "sku": "DCU33",
+    "description": "GOLGANTE CUCHARITA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 212,
+    "category": "Parafernalia y Accesorios",
+    "name": "GRANADA ENCENDEDOR",
+    "brand": "MISTER BLINDER",
+    "sku": "COD234",
+    "description": "GRANADA ENCENDEDOR. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 207,
+    "category": "Parafernalia y Accesorios",
+    "name": "KIT TIBET",
+    "brand": "MISTER BLINDER",
+    "sku": "HE004",
+    "description": "KIT TIBET. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 245,
+    "category": "Parafernalia y Accesorios",
+    "name": "LATA LLAVERO",
+    "brand": "Tierra Verde",
+    "sku": "LLL01",
+    "description": "LATA LLAVERO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 247,
+    "category": "Parafernalia y Accesorios",
+    "name": "LATA SMILE CHICA",
+    "brand": "Tierra Verde",
+    "sku": "ST40029",
+    "description": "LATA SMILE CHICA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 246,
+    "category": "Parafernalia y Accesorios",
+    "name": "LATA TUBO",
+    "brand": "Tierra Verde",
+    "sku": "EA10143",
+    "description": "LATA TUBO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 238,
+    "category": "Parafernalia y Accesorios",
+    "name": "LLAVERO BALA CUCHARITA",
+    "brand": "Tierra Verde",
+    "sku": "LLBC44",
+    "description": "LLAVERO BALA CUCHARITA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 213,
+    "category": "Parafernalia y Accesorios",
+    "name": "M18 SMOK",
+    "brand": "MISTER BLINDER",
+    "sku": "RF-157",
+    "description": "M18 SMOK. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 241,
+    "category": "Parafernalia y Accesorios",
+    "name": "PAÑUELO CANABIS",
+    "brand": "Tierra Verde",
+    "sku": "PÑ01",
+    "description": "PAÑUELO CANABIS. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 225,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR A PILA",
+    "brand": "Tierra Verde",
+    "sku": "KC40814",
+    "description": "PICADOR A PILA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 224,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR ALIEN OGLAB",
+    "brand": "Tierra Verde",
+    "sku": "PH1990-5-OG",
+    "description": "PICADOR ALIEN OGLAB. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 226,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR CARGA USB",
+    "brand": "Tierra Verde",
+    "sku": "MEC02",
+    "description": "PICADOR CARGA USB. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 231,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR CON ESTRAS",
+    "brand": "Tierra Verde",
+    "sku": "BB5148",
+    "description": "PICADOR CON ESTRAS. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 235,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR CON MANIJA",
+    "brand": "Tierra Verde",
+    "sku": "KT853",
+    "description": "PICADOR CON MANIJA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 222,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR CONTENEDOR",
+    "brand": "Tierra Verde",
+    "sku": "PCG789",
+    "description": "PICADOR CONTENEDOR. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 219,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR GOLD SILVER",
+    "brand": "Tierra Verde",
+    "sku": "62467.0",
+    "description": "PICADOR GOLD SILVER. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 230,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR GRANADA",
+    "brand": "Tierra Verde",
+    "sku": "GF132440",
+    "description": "PICADOR GRANADA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 221,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR HONGO",
+    "brand": "Tierra Verde",
+    "sku": "547459.0",
+    "description": "PICADOR HONGO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 220,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR KITTI",
+    "brand": "Tierra Verde",
+    "sku": "CATI02",
+    "description": "PICADOR KITTI. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 234,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR METAL CON ABERTURA KUSH",
+    "brand": "Tierra Verde",
+    "sku": "KT536",
+    "description": "PICADOR METAL CON ABERTURA KUSH. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 233,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR METAL CONCAVO CON ABERTURA",
+    "brand": "Tierra Verde",
+    "sku": "KT524",
+    "description": "PICADOR METAL CONCAVO CON ABERTURA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 227,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR METAL LISO",
+    "brand": "Tierra Verde",
+    "sku": "62599-3",
+    "description": "PICADOR METAL LISO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 232,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR METAL Y MADERA KUSH",
+    "brand": "Tierra Verde",
+    "sku": "KT539",
+    "description": "PICADOR METAL Y MADERA KUSH. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 218,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR MINI CHALA METALICO",
+    "brand": "Tierra Verde",
+    "sku": "PAR-PICADOR-MINI-CHA",
+    "description": "PICADOR MINI CHALA METALICO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 223,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR OGLAB",
+    "brand": "Tierra Verde",
+    "sku": "N01-OG",
+    "description": "PICADOR OGLAB. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 217,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR OVNI LLAVERO",
+    "brand": "Tierra Verde",
+    "sku": "PAR-PICADOR-OVNI-LLA",
+    "description": "PICADOR OVNI LLAVERO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 236,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR RAYADOR MINI",
+    "brand": "Tierra Verde",
+    "sku": "DQ1515",
+    "description": "PICADOR RAYADOR MINI. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 229,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR TOMATE METAL ROJOO",
+    "brand": "Tierra Verde",
+    "sku": "K3523",
+    "description": "PICADOR TOMATE METAL ROJOO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 228,
+    "category": "Parafernalia y Accesorios",
+    "name": "PICADOR TORNASOLADO CON VENTANA",
+    "brand": "Tierra Verde",
+    "sku": "SP65139",
+    "description": "PICADOR TORNASOLADO CON VENTANA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 155,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPA AETESANAL",
+    "brand": "Tierra Verde",
+    "sku": "PA005",
+    "description": "PIPA AETESANAL. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 152,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPA BOLA 8",
+    "brand": "Tierra Verde",
+    "sku": "PA002",
+    "description": "PIPA BOLA 8. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 151,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPA DOS PARTES",
+    "brand": "TEMU",
+    "sku": "PA001",
+    "description": "PIPA DOS PARTES. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 157,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPA TERRACOTA MEXICANA",
+    "brand": "Tierra Verde",
+    "sku": "PA007",
+    "description": "PIPA TERRACOTA MEXICANA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 153,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPA VIDRIO",
+    "brand": "Tierra Verde",
+    "sku": "PA003",
+    "description": "PIPA VIDRIO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 154,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPA VIDRIO",
+    "brand": "Tierra Verde",
+    "sku": "PA004",
+    "description": "PIPA VIDRIO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 156,
+    "category": "Parafernalia y Accesorios",
+    "name": "PIPALLAVERO",
+    "brand": "Tierra Verde",
+    "sku": "PA006",
+    "description": "PIPALLAVERO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 214,
+    "category": "Parafernalia y Accesorios",
+    "name": "PISTOLA CIGARRO",
+    "brand": "Tierra Verde",
+    "sku": "JD-YH098",
+    "description": "PISTOLA CIGARRO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 215,
+    "category": "Parafernalia y Accesorios",
+    "name": "PISTOLA MAS LINTERNA",
+    "brand": "Tierra Verde",
+    "sku": "EN-014",
+    "description": "PISTOLA MAS LINTERNA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 216,
+    "category": "Parafernalia y Accesorios",
+    "name": "REVOLVER CATALITICO",
+    "brand": "Tierra Verde",
+    "sku": "RF-154",
+    "description": "REVOLVER CATALITICO. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 209,
+    "category": "Parafernalia y Accesorios",
+    "name": "SOPLETRE ENCCENDEDOR",
+    "brand": "MISTER BLINDER",
+    "sku": "N12",
+    "description": "SOPLETRE ENCCENDEDOR. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 244,
+    "category": "Parafernalia y Accesorios",
+    "name": "TABAQUERA",
+    "brand": "Tierra Verde",
+    "sku": "KT902",
+    "description": "TABAQUERA. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 210,
+    "category": "Parafernalia y Accesorios",
+    "name": "TOTAL BLACK ENCENDEDOR",
+    "brand": "MISTER BLINDER",
+    "sku": "CLB88",
+    "description": "TOTAL BLACK ENCENDEDOR. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 168,
+    "category": "Semillas",
+    "name": "AK-47",
+    "brand": "Tierra Verde",
+    "sku": "SE012",
+    "description": "AK-47. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 180,
+    "category": "Semillas",
+    "name": "Afghan Skunk",
+    "brand": "Tierra Verde",
+    "sku": "SE024",
+    "description": "Afghan Skunk. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 169,
+    "category": "Semillas",
+    "name": "Amnesia Haze",
+    "brand": "Tierra Verde",
+    "sku": "SE013",
+    "description": "Amnesia Haze. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 159,
+    "category": "Semillas",
+    "name": "Ananda001",
+    "brand": "Tierra Verde",
+    "sku": "SE002",
+    "description": "Ananda001. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 165,
+    "category": "Semillas",
+    "name": "Bateku",
+    "brand": "Tierra Verde",
+    "sku": "SE009",
+    "description": "Bateku. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 178,
+    "category": "Semillas",
+    "name": "Blueberry",
+    "brand": "Tierra Verde",
+    "sku": "SE022",
+    "description": "Blueberry. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 166,
+    "category": "Semillas",
+    "name": "Camboya del Chamán Roberto",
+    "brand": "Tierra Verde",
+    "sku": "SE010",
+    "description": "Camboya del Chamán Roberto. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 177,
+    "category": "Semillas",
+    "name": "Chocolope",
+    "brand": "Tierra Verde",
+    "sku": "SE021",
+    "description": "Chocolope. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 163,
+    "category": "Semillas",
+    "name": "Craig",
+    "brand": "Tierra Verde",
+    "sku": "SE007",
+    "description": "Craig. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 172,
+    "category": "Semillas",
+    "name": "Critical 47",
+    "brand": "Tierra Verde",
+    "sku": "SE016",
+    "description": "Critical 47. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 158,
+    "category": "Semillas",
+    "name": "Egipto",
+    "brand": "Tierra Verde",
+    "sku": "SE001",
+    "description": "Egipto. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 175,
+    "category": "Semillas",
+    "name": "Girl Scout",
+    "brand": "Tierra Verde",
+    "sku": "SE019",
+    "description": "Girl Scout. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 161,
+    "category": "Semillas",
+    "name": "Guaraní",
+    "brand": "Tierra Verde",
+    "sku": "SE004",
+    "description": "Guaraní. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 171,
+    "category": "Semillas",
+    "name": "Jack Herer",
+    "brand": "Tierra Verde",
+    "sku": "SE015",
+    "description": "Jack Herer. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 179,
+    "category": "Semillas",
+    "name": "Jack Lemon Haze",
+    "brand": "Tierra Verde",
+    "sku": "SE023",
+    "description": "Jack Lemon Haze. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 160,
+    "category": "Semillas",
+    "name": "Malvina",
+    "brand": "Tierra Verde",
+    "sku": "SE003",
+    "description": "Malvina. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 174,
+    "category": "Semillas",
+    "name": "Moby Dick",
+    "brand": "Tierra Verde",
+    "sku": "SE018",
+    "description": "Moby Dick. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 167,
+    "category": "Semillas",
+    "name": "Mr Smile",
+    "brand": "Tierra Verde",
+    "sku": "SE011",
+    "description": "Mr Smile. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 170,
+    "category": "Semillas",
+    "name": "Northern Light",
+    "brand": "Tierra Verde",
+    "sku": "SE014",
+    "description": "Northern Light. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 162,
+    "category": "Semillas",
+    "name": "Pasionaria CBD",
+    "brand": "Tierra Verde",
+    "sku": "SE005",
+    "description": "Pasionaria CBD. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 176,
+    "category": "Semillas",
+    "name": "Peyote Purple",
+    "brand": "Tierra Verde",
+    "sku": "SE020",
+    "description": "Peyote Purple. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 31,
+    "category": "Semillas",
+    "name": "Purple Karma",
+    "brand": "Tierra Verde",
+    "sku": "SEM-PURPLE-KARMA",
+    "description": "Purple Karma. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 164,
+    "category": "Semillas",
+    "name": "Tropicana WFC",
+    "brand": "Tierra Verde",
+    "sku": "SE008",
+    "description": "Tropicana WFC. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 173,
+    "category": "Semillas",
+    "name": "White Widow",
+    "brand": "Tierra Verde",
+    "sku": "SE017",
+    "description": "White Widow. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 187,
+    "category": "Sustratos y Tierras",
+    "name": "CARLUCCIO COCOMIX 70L",
+    "brand": "Tierra Verde",
+    "sku": "SU007",
+    "description": "CARLUCCIO COCOMIX 70L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 194,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE AUTOFLORECIENTE 25L",
+    "brand": "Tierra Verde",
+    "sku": "SU014",
+    "description": "CULTIVATE AUTOFLORECIENTE 25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 193,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE AUTOFLORECIENTE 80L",
+    "brand": "Tierra Verde",
+    "sku": "SU013",
+    "description": "CULTIVATE AUTOFLORECIENTE 80L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 196,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE COMPLETO 25L",
+    "brand": "Tierra Verde",
+    "sku": "SU016",
+    "description": "CULTIVATE COMPLETO 25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 195,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE COMPLETO 80L",
+    "brand": "Tierra Verde",
+    "sku": "SU015",
+    "description": "CULTIVATE COMPLETO 80L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 199,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE INDOOR 25L",
+    "brand": "Tierra Verde",
+    "sku": "SU019",
+    "description": "CULTIVATE INDOOR 25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 198,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE LIVING SOIL 25L",
+    "brand": "Tierra Verde",
+    "sku": "SU018",
+    "description": "CULTIVATE LIVING SOIL 25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 197,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE LIVING SOIL 80L",
+    "brand": "Tierra Verde",
+    "sku": "SU017",
+    "description": "CULTIVATE LIVING SOIL 80L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 192,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE PREMIUM 25L",
+    "brand": "Tierra Verde",
+    "sku": "SU012",
+    "description": "CULTIVATE PREMIUM 25L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 191,
+    "category": "Sustratos y Tierras",
+    "name": "CULTIVATE PREMIUM 80L",
+    "brand": "Tierra Verde",
+    "sku": "SU011",
+    "description": "CULTIVATE PREMIUM 80L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 182,
+    "category": "Sustratos y Tierras",
+    "name": "FERTINAT HUMUS 15L",
+    "brand": "Tierra Verde",
+    "sku": "SU002",
+    "description": "FERTINAT HUMUS 15L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 183,
+    "category": "Sustratos y Tierras",
+    "name": "FERTINAT HUMUS 5L",
+    "brand": "Tierra Verde",
+    "sku": "SU003",
+    "description": "FERTINAT HUMUS 5L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 181,
+    "category": "Sustratos y Tierras",
+    "name": "FERTINAT SUSTRATO 30L",
+    "brand": "Tierra Verde",
+    "sku": "SU001",
+    "description": "FERTINAT SUSTRATO 30L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 184,
+    "category": "Sustratos y Tierras",
+    "name": "FERTINAT TURBA 5L",
+    "brand": "Tierra Verde",
+    "sku": "SU004",
+    "description": "FERTINAT TURBA 5L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 190,
+    "category": "Sustratos y Tierras",
+    "name": "GROWMIX MULTIPRO 80L",
+    "brand": "Tierra Verde",
+    "sku": "SU010",
+    "description": "GROWMIX MULTIPRO 80L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 186,
+    "category": "Sustratos y Tierras",
+    "name": "JIFFYS 70L",
+    "brand": "Tierra Verde",
+    "sku": "SU006",
+    "description": "JIFFYS 70L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 185,
+    "category": "Sustratos y Tierras",
+    "name": "KLASSMAN DYNAMIC TS3 70L",
+    "brand": "Tierra Verde",
+    "sku": "SU005",
+    "description": "KLASSMAN DYNAMIC TS3 70L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 189,
+    "category": "Sustratos y Tierras",
+    "name": "VAMP HUMUS 10L",
+    "brand": "Tierra Verde",
+    "sku": "SU009",
+    "description": "VAMP HUMUS 10L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 188,
+    "category": "Sustratos y Tierras",
+    "name": "VAMP MULCHING 10L",
+    "brand": "Tierra Verde",
+    "sku": "SU008",
+    "description": "VAMP MULCHING 10L. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 201,
+    "category": "Sustratos y Tierras",
+    "name": "mandicus 10lts",
+    "brand": "Tierra Verde",
+    "sku": "SU102",
+    "description": "mandicus 10lts. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 202,
+    "category": "Sustratos y Tierras",
+    "name": "mandicus 25lts",
+    "brand": "Tierra Verde",
+    "sku": "SU103",
+    "description": "mandicus 25lts. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 200,
+    "category": "Sustratos y Tierras",
+    "name": "mandicus 60lts",
+    "brand": "Tierra Verde",
+    "sku": "SU101",
+    "description": "mandicus 60lts. Calidad garantizada para cultivo en Tierra Verde Growshop."
+  },
+  {
+    "id": 254,
+    "category": "Ventilación y Filtros",
+    "name": "Extractor Turbina Lineal 4 Pulgadas (100mm) 220V",
+    "brand": "Turbonex",
+    "sku": "VENT-TURB-4P",
+    "description": "Extractor centrífugo lineal de alta presión estática. Silencioso y apto para funcionamiento continuo"
+  },
+  {
+    "id": 255,
+    "category": "Ventilación y Filtros",
+    "name": "Filtro de Carbón Activado Antiolor Pro 4 Pulgadas",
+    "brand": "PureFilter",
+    "sku": "VENT-FILT-4P",
+    "description": "Filtro cilíndrico relleno de carbón activado virgen 100% australiano RC-48. Elimina hasta el 99.8% d"
+  }
+]

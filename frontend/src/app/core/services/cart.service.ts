@@ -2,6 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ApiService } from "./api.service";
+import { environment } from "../../../environments/environment";
 
 export interface CartItem {
   id: number;
@@ -126,7 +127,8 @@ export class CartService {
           // Normalize image URL before saving to cart
           let imageUrl = image;
           if (imageUrl && !imageUrl.startsWith("http")) {
-            imageUrl = `http://127.0.0.1:8000${imageUrl}`;
+            const baseUrl = environment.apiUrl.replace(/\/api\/?$/, "");
+            imageUrl = `${baseUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
           }
 
           const newItem: CartItem = {

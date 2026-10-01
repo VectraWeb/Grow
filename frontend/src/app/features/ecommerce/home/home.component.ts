@@ -9,6 +9,7 @@ import { CartService } from "../../../core/services/cart.service";
 import { NavigationService } from "../../../core/services/navigation.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SeoService } from "../../../core/services/seo.service";
+import { environment } from "../../../../environments/environment";
 
 interface Product {
   id: number;
@@ -443,16 +444,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private loadAllProducts(): void {
-    this.api.get<Product[]>("/products/").subscribe({
+    this.api.get<Product[]>("/products/", { in_stock: "true", is_active: "true" }).subscribe({
       next: (products) => {
         let rawProducts = (products as any).results || products;
         if (!rawProducts || rawProducts.length === 0) {
           rawProducts = this.getFallbackProducts();
         }
 
+        const baseUrl = environment.apiUrl.replace(/\/api\/?$/, "");
         this.allProductsData = rawProducts.map((p: Product) => {
           if (p.image && !p.image.startsWith("http")) {
-            p.image = `http://127.0.0.1:8000${p.image}`;
+            p.image = `${baseUrl}${p.image.startsWith("/") ? "" : "/"}${p.image}`;
           }
           if (p.category_name) {
             p.search_slug = p.category_name
@@ -494,6 +496,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     // Filter products from API cache
     let filtered = [...this.allProductsData];
+
+    // Hide products that are out of stock
+    filtered = filtered.filter((p) => (p.stock_current ?? 0) > 0);
 
     if (this.selectedCategory !== "todos") {
       const searchSlug = this.selectedCategory

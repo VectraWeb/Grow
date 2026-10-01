@@ -32,14 +32,17 @@ class PromotionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 class EcommerceProductViewSet(viewsets.ReadOnlyModelViewSet):
-    """ Publicly accessible product list for ecommerce """
-    queryset = Product.objects.filter(is_active=True, is_ecommerce=True)
+    """ Publicly accessible product list for ecommerce (only in-stock active items) """
+    queryset = Product.objects.filter(is_active=True, is_ecommerce=True, stock_current__gt=0)
     serializer_class = ProductListSerializer
     permission_classes = [permissions.AllowAny]
 
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True, is_ecommerce=True, stock_current__gt=0)
+
     @action(detail=False, methods=['get'])
     def featured(self, request):
-        featured_products = self.queryset.filter(featured=True)[:8]
+        featured_products = self.get_queryset().filter(featured=True)[:8]
         serializer = self.get_serializer(featured_products, many=True)
         return Response(serializer.data)
 

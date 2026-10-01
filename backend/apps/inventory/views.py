@@ -212,6 +212,16 @@ class ProductViewSet(viewsets.ModelViewSet):
             # Convert string 'true'/'false' to boolean
             is_active_bool = is_active.lower() == 'true'
             queryset = queryset.filter(is_active=is_active_bool)
+
+        in_stock = self.request.query_params.get('in_stock')
+        if in_stock is not None:
+            if in_stock.lower() == 'true':
+                queryset = queryset.filter(stock_current__gt=0)
+            elif in_stock.lower() == 'false':
+                queryset = queryset.filter(stock_current__lte=0)
+        elif not self.request.user.is_authenticated:
+            # Unauthenticated public store visitors only see in-stock products
+            queryset = queryset.filter(stock_current__gt=0, is_active=True)
             
         return queryset
 

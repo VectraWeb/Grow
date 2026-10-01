@@ -1,4 +1,4 @@
-﻿<div class="min-h-screen bg-slate-50 pt-20">
+<div class="min-h-screen bg-slate-50 pt-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex items-center justify-between mb-8">
       <button
@@ -47,7 +47,7 @@
             <div *ngFor="let item of items" class="p-6 hover:bg-slate-50 transition-colors">
               <div class="flex gap-4">
                 <div class="flex-shrink-0 w-20 h-20 bg-slate-50 rounded-xl overflow-hidden flex items-center justify-center border border-slate-200">
-                  <img *ngIf="item.image" [src]="item.image" [alt]="item.product_name" class="w-full h-full object-contain p-1" />
+                  <img *ngIf="item.image" [src]="item.image" [alt]="item.product_name" (error)="item.image = ''" class="w-full h-full object-contain p-1" />
                   <lucide-icon *ngIf="!item.image" [name]="ShoppingCart" size="24" class="text-slate-300"></lucide-icon>
                 </div>
 

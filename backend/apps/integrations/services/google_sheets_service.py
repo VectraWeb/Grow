@@ -21,10 +21,10 @@ class GoogleSheetsSyncService:
     DEFAULT_HEADERS_SYNONYMS = {
         'sku': ['sku', 'codigo', 'cod', 'id', 'ref', 'referencia', 'articulo_id', 'cod_prod', 'codigo_barra'],
         'name': ['nombre', 'producto', 'articulo', 'titulo', 'item', 'descripcion_corta', 'denominacion'],
-        'price_retail': ['precio', 'precio_retail', 'precio_minorista', 'precio_venta', 'pvp', 'precio_lista', 'valor', 'precio_final', 'venta'],
-        'price_wholesale': ['precio_mayorista', 'mayorista', 'precio_wholesale', 'distribuidor', 'gremio', 'precio_gremio'],
-        'cost_price': ['costo', 'precio_costo', 'cost_price', 'compra', 'precio_compra'],
-        'stock_current': ['stock', 'cantidad', 'cant', 'stock_current', 'unidades', 'disponible', 'existencia', 'existencias', 'inventario'],
+        'price_retail': ['precio_venta', 'precio', 'precio_retail', 'precio_minorista', 'pvp', 'precio_lista', 'valor', 'precio_final', 'venta'],
+        'price_wholesale': ['precio_mayorista', 'mayorista', 'precio_wholesale', 'precio_distribuidor', 'gremio', 'precio_gremio'],
+        'cost_price': ['costo_unit', 'costo_unitario', 'costo', 'precio_costo', 'cost_price', 'compra', 'precio_compra'],
+        'stock_current': ['stock_actual', 'stock', 'cantidad', 'cant', 'stock_current', 'unidades', 'disponible', 'existencia', 'existencias', 'inventario'],
         'category': ['categoria', 'rubro', 'familia', 'tipo', 'seccion', 'linea', 'departamento'],
         'description': ['descripcion', 'detalle', 'observaciones', 'notas', 'info', 'especificaciones'],
         'brand': ['marca', 'brand', 'fabricante', 'laboratorio'],
@@ -85,14 +85,21 @@ class GoogleSheetsSyncService:
 
     @staticmethod
     def parse_clean_int(value, default=0) -> int:
-        if value is None or str(value).strip() == '':
+        if value is None:
             return default
+        if isinstance(value, (int, float, Decimal)):
+            return int(value)
         val_str = str(value).strip()
-        val_str = re.sub(r'[^\d\-]', '', val_str)
-        try:
-            return int(val_str)
-        except ValueError:
+        if not val_str or val_str.lower() in ('none', 'null', '-', ''):
             return default
+        try:
+            return int(float(val_str.replace(',', '.')))
+        except ValueError:
+            val_clean = re.sub(r'[^\d\-]', '', val_str.split('.')[0].split(',')[0])
+            try:
+                return int(val_clean)
+            except ValueError:
+                return default
 
     @classmethod
     def extract_sheet_id_and_gid(cls, url: str):
@@ -100,9 +107,10 @@ class GoogleSheetsSyncService:
         if not url:
             raise ValueError("URL no proporcionada.")
 
-        # Pattern for standard Google Docs spreadsheet URL
-        # e.g. https://docs.google.com/spreadsheets/d/17yIhDzBuelorQm9XrK4SMZ-uxwNzHnEX/edit?gid=699067785#gid=699067785
-        match = re.search(r'/spreadsheets/d/([a-zA-Z0-9-_]+)', url)
+        # Match Google Docs spreadsheet or Google Drive file URL
+        match = re.search(r'/(?:spreadsheets/d|file/d)/([a-zA-Z0-9-_]+)', url)
+        if not match:
+            match = re.search(r'[?&]id=([a-zA-Z0-9-_]+)', url)
         if not match:
             # If user provided raw ID
             if re.match(r'^[a-zA-Z0-9-_]{20,}$', url.strip()):
@@ -114,27 +122,91 @@ class GoogleSheetsSyncService:
 
         # Extract GID if present
         gid_match = re.search(r'[?&#]gid=([0-9]+)', url)
-        gid = gid_match.group(1) if gid_match else '0'
+        gid = gid_match.group(1) if gid_match else None
 
         return sheet_id, gid
 
     @classmethod
-    def fetch_csv_from_url(cls, url: str) -> str:
-        """Downloads CSV from Google Sheets URL handling permission checks."""
+    def parse_raw_rows_from_excel(cls, file_bytes: bytes, preferred_sheet: str = None):
+        """Parses .xlsx file into raw rows using openpyxl with intelligent sheet selection."""
+        import openpyxl
+        wb = openpyxl.load_workbook(io.BytesIO(file_bytes), data_only=True)
+        
+        target_sheet = None
+        # 1. Preferred sheet by parameter
+        if preferred_sheet and preferred_sheet in wb.sheetnames:
+            target_sheet = wb[preferred_sheet]
+        
+        # 2. Look for sheets named matching inventory/catalog keywords
+        if not target_sheet:
+            for name in wb.sheetnames:
+                if any(k in name.lower() for k in ['inventario', 'stock', 'producto', 'articulo', 'catalogo']):
+                    target_sheet = wb[name]
+                    break
+        
+        # 3. Score sheets by inspecting first 10 rows for product columns
+        if not target_sheet:
+            best_score = -1
+            best_sheet = None
+            for name in wb.sheetnames:
+                ws = wb[name]
+                score = 0
+                for row in ws.iter_rows(max_row=10, values_only=True):
+                    for cell in row:
+                        if not cell:
+                            continue
+                        cell_norm = cls.normalize_text(cell)
+                        if any(syn in cell_norm for syn in ['producto', 'nombre', 'articulo', 'codigo', 'sku', 'stock', 'precio']):
+                            score += 1
+                if score > best_score:
+                    best_score = score
+                    best_sheet = ws
+            if best_score > 0 and best_sheet:
+                target_sheet = best_sheet
+
+        # 4. Fallback to active sheet
+        if not target_sheet:
+            target_sheet = wb.active
+
+        raw_rows = []
+        for row in target_sheet.iter_rows(values_only=True):
+            str_row = [str(cell) if cell is not None else '' for cell in row]
+            if any(cell.strip() for cell in str_row):
+                raw_rows.append(str_row)
+        return raw_rows
+
+    @classmethod
+    def fetch_raw_rows_from_url(cls, url: str):
+        """Downloads data from Google Sheets URL handling permission checks and multi-sheet workbooks."""
         sheet_id, gid = cls.extract_sheet_id_and_gid(url)
 
-        export_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
-        
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         }
 
+        # If GID is specified and not '0', try CSV export first
+        if gid and gid != '0':
+            export_csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
+            try:
+                resp = requests.get(export_csv_url, headers=headers, timeout=15, allow_redirects=True)
+                if resp.status_code == 200 and '<html' not in resp.text.lower()[:300]:
+                    rows = cls.parse_raw_rows_from_csv(resp.text)
+                    h_idx, col_map, _, _ = cls.detect_structure(rows)
+                    if col_map.get('name') or col_map.get('sku'):
+                        return rows
+            except Exception:
+                pass
+
+        # Fallback / Primary for multi-sheet workbooks: Download XLSX workbook
+        export_xlsx_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
         try:
-            response = requests.get(export_url, headers=headers, timeout=15, allow_redirects=True)
+            response = requests.get(export_xlsx_url, headers=headers, timeout=25, allow_redirects=True)
+            if response.status_code != 200:
+                drive_url = f"https://drive.google.com/uc?export=download&id={sheet_id}"
+                response = requests.get(drive_url, headers=headers, timeout=25, allow_redirects=True)
         except Exception as e:
             raise GoogleSheetsAccessError(f"Error de conexión al intentar acceder a Google Sheets: {str(e)}")
 
-        # Check if redirected to Google sign-in or unauthorized
         final_url = response.url.lower()
         if response.status_code in (401, 403) or 'accounts.google.com' in final_url or 'servicelogin' in final_url:
             raise GoogleSheetsAccessError(
@@ -146,32 +218,33 @@ class GoogleSheetsSyncService:
                 "4. Vuelve a hacer clic en Sincronizar."
             )
 
-        if response.status_code != 200:
+        if response.status_code != 200 or len(response.content) < 500:
             raise GoogleSheetsAccessError(f"Error {response.status_code} al consultar Google Sheets.")
 
-        content_type = response.headers.get('content-type', '').lower()
-        content_text = response.text
+        content = response.content
+        if content[:4] == b'PK\x03\x04':
+            return cls.parse_raw_rows_from_excel(content)
+        else:
+            return cls.parse_raw_rows_from_csv(response.text)
 
-        # Secondary check: If response is HTML containing login forms
-        if '<html' in content_text.lower() and ('iniciar sesión' in content_text.lower() or 'sign in' in content_text.lower() or 'servicelogin' in content_text.lower()):
-            raise GoogleSheetsAccessError(
-                "La hoja de cálculo está en modo privado o restringido en Google Drive.\n\n"
-                "👉 Solución rápida:\n"
-                "1. Abre la hoja en Google Sheets.\n"
-                "2. Arriba a la derecha, haz clic en 'Compartir'.\n"
-                "3. En 'Acceso general', selecciona 'Cualquier persona con el enlace' (Lector)."
-            )
-
-        return content_text
+    @classmethod
+    def fetch_csv_from_url(cls, url: str) -> str:
+        """Deprecated: kept for backward compatibility."""
+        sheet_id, gid = cls.extract_sheet_id_and_gid(url)
+        gid = gid or '0'
+        export_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(export_url, headers=headers, timeout=15, allow_redirects=True)
+        if response.status_code != 200:
+            raise GoogleSheetsAccessError(f"Error {response.status_code} al consultar Google Sheets.")
+        return response.text
 
     @classmethod
     def parse_raw_rows_from_csv(cls, csv_text: str):
         """Parses CSV text into a list of list of string values."""
-        # Clean potential BOM
         if csv_text.startswith('\ufeff'):
             csv_text = csv_text[1:]
 
-        # Detect delimiter (comma, semicolon, tab)
         first_lines = csv_text[:4096]
         delimiter = ','
         if first_lines.count(';') > first_lines.count(','):
@@ -181,19 +254,6 @@ class GoogleSheetsSyncService:
 
         reader = csv.reader(io.StringIO(csv_text), delimiter=delimiter)
         raw_rows = [row for row in reader if any(cell.strip() for cell in row)]
-        return raw_rows
-
-    @classmethod
-    def parse_raw_rows_from_excel(cls, file_bytes: bytes):
-        """Parses .xlsx file into raw rows using openpyxl."""
-        import openpyxl
-        wb = openpyxl.load_workbook(io.BytesIO(file_bytes), data_only=True)
-        sheet = wb.active
-        raw_rows = []
-        for row in sheet.iter_rows(values_only=True):
-            str_row = [str(cell) if cell is not None else '' for cell in row]
-            if any(cell.strip() for cell in str_row):
-                raw_rows.append(str_row)
         return raw_rows
 
     @classmethod
@@ -259,8 +319,7 @@ class GoogleSheetsSyncService:
         source_type: 'url', 'csv_text', or 'excel_bytes'
         """
         if source_type == 'url':
-            csv_text = cls.fetch_csv_from_url(source_data)
-            raw_rows = cls.parse_raw_rows_from_csv(csv_text)
+            raw_rows = cls.fetch_raw_rows_from_url(source_data)
         elif source_type == 'csv_text':
             raw_rows = cls.parse_raw_rows_from_csv(source_data)
         elif source_type == 'excel_bytes':
@@ -334,8 +393,7 @@ class GoogleSheetsSyncService:
         Executes synchronization of products and store info into the database.
         """
         if source_type == 'url':
-            csv_text = cls.fetch_csv_from_url(source_data)
-            raw_rows = cls.parse_raw_rows_from_csv(csv_text)
+            raw_rows = cls.fetch_raw_rows_from_url(source_data)
             sheet_url = source_data
         elif source_type == 'csv_text':
             raw_rows = cls.parse_raw_rows_from_csv(source_data)

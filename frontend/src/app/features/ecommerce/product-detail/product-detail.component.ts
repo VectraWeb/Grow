@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ApiService } from "../../../core/services/api.service";
 import { CartService } from "../../../core/services/cart.service";
 import { RatingService } from "../../../core/services/rating.service";
+import { environment } from "../../../../environments/environment";
 import {
   LucideAngularModule,
   ShoppingCart,
@@ -113,12 +114,11 @@ export class ProductDetailComponent implements OnInit {
       this.api.get<any>(`/products/${productId}/`).subscribe({
         next: (response) => {
           this.isLoading = false;
+          const baseUrl = environment.apiUrl.replace(/\/api\/?$/, "");
           // Normalize image URL
-          let imageUrl =
-            response.image ||
-            "https://via.placeholder.com/500x500?text=Producto";
+          let imageUrl = response.image || "";
           if (imageUrl && !imageUrl.startsWith("http")) {
-            imageUrl = `http://127.0.0.1:8000${imageUrl}`;
+            imageUrl = `${baseUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
           }
 
           this.product = {
@@ -144,7 +144,9 @@ export class ProductDetailComponent implements OnInit {
             discount_percentage: response.discount_percentage || 0,
           };
 
-          this.productImages = response.images?.length ? response.images.map((img: string) => img.startsWith('http') ? img : `http://127.0.0.1:8000${img}`) : [imageUrl];
+          this.productImages = response.images?.length
+            ? response.images.map((img: string) => img.startsWith('http') ? img : `${baseUrl}${img.startsWith('/') ? '' : '/'}${img}`)
+            : (imageUrl ? [imageUrl] : []);
           this.currentImageIndex = 0;
 
           this.seo.updateMetaTags({
@@ -162,18 +164,19 @@ export class ProductDetailComponent implements OnInit {
               .get<any>(`/products/`, {
                 category: response.category,
                 is_ecommerce: "true",
+                in_stock: "true",
               })
               .subscribe({
                 next: (res) => {
                   const list = (res.results || res)
-                    .filter((x: any) => x.id !== this.product!.id)
+                    .filter((x: any) => x.id !== this.product!.id && (x.stock_current ?? 0) > 0)
                     .slice(0, 8);
                   this.related = list.map((r: any) => ({
                     ...r,
                     image:
                       r.image && r.image.startsWith("http")
                         ? r.image
-                        : `http://127.0.0.1:8000${r.image}`,
+                        : (r.image ? `${baseUrl}${r.image.startsWith("/") ? "" : "/"}${r.image}` : ""),
                   }));
                 },
                 error: () => {
