@@ -1,0 +1,23 @@
+{
+  "name": "Tierra Verde Grow - Growshop",
+  "short_name": "Tierra Verde",
+  "theme_color": "#0f9717",
+  "background_color": "#fcfdf9",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "assets/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo-tree.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
