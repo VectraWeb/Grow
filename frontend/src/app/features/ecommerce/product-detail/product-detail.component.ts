@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, OnDestroy, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ApiService } from "../../../core/services/api.service";
@@ -25,6 +25,7 @@ import { MaterialCalculatorComponent } from "../../../shared/components/material
 interface ProductDetail {
   id: number;
   name: string;
+  sku?: string;
   price_retail: string;
   image: string;
   category_name?: string;
@@ -43,6 +44,7 @@ interface ProductDetail {
 
 import { SeoService } from "../../../core/services/seo.service";
 
+
 @Component({
   selector: "app-product-detail",
   standalone: true,
@@ -50,7 +52,7 @@ import { SeoService } from "../../../core/services/seo.service";
   templateUrl: "./product-detail.component.html",
   styleUrls: ["./product-detail.component.css"],
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private api = inject(ApiService);
@@ -124,6 +126,7 @@ export class ProductDetailComponent implements OnInit {
           this.product = {
             id: response.id,
             name: response.name,
+            sku: response.sku || String(response.id),
             price_retail: response.price_retail?.toString() || "0",
             image: imageUrl,
             category_name: response.category_name || "Sin categoría",
@@ -211,6 +214,24 @@ export class ProductDetailComponent implements OnInit {
       next: (data) => {
         this.averageRating = data.average_rating || 0;
         this.totalReviews = data.total_reviews || 0;
+
+        // JSON-LD schema: se inyecta DESPUÉS de tener el rating para incluir aggregateRating
+        if (this.product) {
+          this.seo.injectProductSchema({
+            id: this.product.id,
+            name: this.product.name,
+            description: this.product.description,
+            sku: this.product.sku || String(this.product.id),
+            brand: this.product.brand !== 'N/A' ? this.product.brand : undefined,
+            image: this.product.image,
+            price_retail: this.product.price_retail,
+            stock: this.product.stock,
+            averageRating: this.averageRating,
+            totalReviews: this.totalReviews,
+            discount_percentage: this.product.discount_percentage,
+            category_name: this.product.category_name,
+          });
+        }
       },
       error: (err) => {
         console.error("Error loading product ratings:", err);
@@ -218,6 +239,11 @@ export class ProductDetailComponent implements OnInit {
         this.totalReviews = 0;
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    // Limpiar schema al salir de la página de producto
+    this.seo.removeSchema('product-schema');
   }
 
   updateQuantity(value: number): void {

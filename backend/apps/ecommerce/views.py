@@ -1,6 +1,10 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers
+from django.db.models import Avg, Count
 from apps.ecommerce.models import Banner, Promotion, Cart, CartItem, ProductRating
 from apps.ecommerce.serializers import BannerSerializer, PromotionSerializer, CartSerializer, CartItemSerializer, ProductRatingSerializer
 from apps.inventory.models import Product
@@ -32,14 +36,38 @@ class PromotionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 class EcommerceProductViewSet(viewsets.ReadOnlyModelViewSet):
-    """ Publicly accessible product list for ecommerce (only in-stock active items) """
-    queryset = Product.objects.filter(is_active=True, is_ecommerce=True, stock_current__gt=0)
+    """Publicly accessible product list for ecommerce (only in-stock active items)"""
     serializer_class = ProductListSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return Product.objects.filter(is_active=True, is_ecommerce=True, stock_current__gt=0)
+        qs = (
+            Product.objects
+            .filter(is_active=True, is_ecommerce=True, stock_current__gt=0)
+            .select_related('category')   # OPTIMIZACIÓN: evita N+1 al serializar category_name
+            .only(                        # Solo los campos que usa ProductListSerializer
+                'id', 'name', 'sku', 'price_retail', 'stock_current',
+                'image', 'discount_percentage', 'meli_item_id',
+                'meli_category_id', 'category_id', 'category__name',
+                'featured',
+            )
+        )
+        # Filtro por slug de categoría (ej: ?category=fertilizantes)
+        category_slug = self.request.query_params.get('category')
+        if category_slug:
+            qs = qs.filter(category__slug=category_slug)
+        # Búsqueda simple por nombre
+        search = self.request.query_params.get('search')
+        if search:
+            qs = qs.filter(name__icontains=search)
+        return qs
 
+    @method_decorator(cache_page(60 * 5))           # Caché 5 minutos
+    @method_decorator(vary_on_headers("Accept"))    # Correcto para DRF (JSON vs HTML)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @method_decorator(cache_page(60 * 10))          # Destacados cambian menos
     @action(detail=False, methods=['get'])
     def featured(self, request):
         featured_products = self.get_queryset().filter(featured=True)[:8]
@@ -115,28 +143,29 @@ class ProductRatingViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def by_product(self, request):
-        """Obtener calificaciones de un producto"""
+        """Obtener calificaciones y estadísticas de un producto"""
         product_id = request.query_params.get('product_id')
         if not product_id:
             return Response(
                 {'error': 'product_id requerido'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         ratings = self.queryset.filter(product_id=product_id)
         serializer = self.get_serializer(ratings, many=True)
-        
-        # Calcular promedio de calificaciones
-        avg_rating = 0
-        count = ratings.count()
-        if count > 0:
-            avg_rating = sum(r.rating for r in ratings) / count
-        
+
+        # OPTIMIZACIÓN: Aggregate SQL en vez de calcular en Python
+        # ANTES: sum(r.rating for r in ratings) / count  ← cargaba todo en memoria
+        stats = ratings.aggregate(
+            average_rating=Avg('rating'),
+            total_reviews=Count('id')
+        )
+
         return Response({
             'product_id': product_id,
             'ratings': serializer.data,
-            'average_rating': round(avg_rating, 1),
-            'total_reviews': count
+            'average_rating': round(stats['average_rating'] or 0, 1),
+            'total_reviews': stats['total_reviews']
         })
 
     @action(detail=False, methods=['get'])
@@ -199,22 +228,33 @@ class PublicCheckoutViewSet(viewsets.ViewSet):
                 defaults={'customer_type': 'RETAIL'}
             )
             
+        # OPTIMIZACIÓN: Una sola query para todos los productos del carrito.
+        # ANTES: Product.objects.get() dentro del loop → 1 query por ítem.
+        product_ids = [item.get('product_id') for item in cart_items if item.get('product_id')]
+        products_map = {
+            str(p.id): p
+            for p in Product.objects.filter(
+                id__in=product_ids,
+                is_active=True,
+                is_ecommerce=True,
+            ).only('id', 'name', 'price_retail', 'stock_current')
+        }
+
         # Calculate totals securely from DB (never trust client prices)
         total_items = 0
         validated_items = []
         for item in cart_items:
-            try:
-                product = Product.objects.get(id=item.get('product_id'))
-                qty = int(item.get('quantity', 1))
-                price = float(product.price_retail)
-                total_items += price * qty
-                validated_items.append({
-                    'product': product,
-                    'quantity': qty,
-                    'price_at_sale': price
-                })
-            except Product.DoesNotExist:
+            product = products_map.get(str(item.get('product_id')))
+            if not product:
                 continue
+            qty = int(item.get('quantity', 1))
+            price = float(product.price_retail)
+            total_items += price * qty
+            validated_items.append({
+                'product': product,
+                'quantity': qty,
+                'price_at_sale': price
+            })
 
         if not validated_items:
             return Response({"error": "No se encontraron productos validos"}, status=status.HTTP_400_BAD_REQUEST)

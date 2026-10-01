@@ -78,6 +78,7 @@ class GoogleSheetsSyncView(APIView):
     def post(self, request):
         url = request.data.get('url', '').strip()
         update_store_info = request.data.get('update_store_info', True)
+        run_async = request.data.get('async', True)  # Por defecto asíncrono
 
         if not url:
             cfg = IntegrationConfig.objects.filter(integration_type='GOOGLE_SHEETS').first()
@@ -87,6 +88,22 @@ class GoogleSheetsSyncView(APIView):
         if not url:
             return Response({'error': 'Debes ingresar la URL del Google Sheet.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # OPTIMIZACIÓN: Modo asíncrono — no bloquea el hilo web principal.
+        # La tarea corre en el Celery Worker y actualiza IntegrationConfig al terminar.
+        if run_async:
+            try:
+                from apps.integrations.tasks import sync_google_sheets_async
+                task = sync_google_sheets_async.delay(url, update_store_info=update_store_info)
+                return Response({
+                    'message': 'Sincronización iniciada en segundo plano.',
+                    'task_id': task.id,
+                    'status': 'PENDING',
+                }, status=status.HTTP_202_ACCEPTED)
+            except Exception:
+                # Si Celery no está disponible, fallback al modo síncrono
+                pass
+
+        # Fallback síncrono (si Celery no disponible o async=false)
         try:
             result = GoogleSheetsSyncService.sync('url', url, update_store_info=update_store_info)
             return Response(result)

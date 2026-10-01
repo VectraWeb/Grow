@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',       # Sitemap XML dinámico
 
     'apps.users',
     'apps.inventory',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -94,10 +96,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'grow_saas.wsgi.application'
 
+# Detectar si estamos en Neon (producción) para activar connection pooling
+_DATABASE_URL = os.environ.get('DATABASE_URL', '')
+_IS_NEON = 'neon.tech' in _DATABASE_URL
+
 DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=0,
+        # OPTIMIZACIÓN: En Neon serverless, conn_max_age=0 abre/cierra una conexión
+        # por cada request (+200-400ms). Con pooling reutilizamos conexiones 10min.
+        # ⚠️  Usar la URL del Pooler de Neon en Dashboard → Connection Details → "Pooled"
+        conn_max_age=600 if _IS_NEON else 0,
+        conn_health_checks=True,    # Django 4.2+ — verifica que la conexión siga viva
         ssl_require=not DEBUG,
     )
 }
@@ -149,15 +159,27 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    # Throttling para proteger endpoints públicos (catálogo, checkout)
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '120/min',   # Visitantes anónimos (catálogo público)
+        'user': '300/min',   # Usuarios autenticados (admin/POS)
+    },
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),   # Reducido de 1h a 30min
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
     'VERIFY_SIGNATURE': True,
+    'UPDATE_LAST_LOGIN': True,          # Registrar timestamp del último login
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'JTI_CLAIM': 'jti',                 # Para blacklisting efectivo
 }
 
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
@@ -238,6 +260,37 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+# Limitar concurrencia para no saturar Neon en picos
+CELERY_WORKER_CONCURRENCY = env.int("CELERY_CONCURRENCY", default=2)
+CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=False)
+
+# Tareas periódicas (Celery Beat) — guard para entornos sin celery instalado
+try:
+    from celery.schedules import crontab
+    CELERY_BEAT_SCHEDULE = {
+        'sync-meli-stock-hourly': {
+            'task': 'apps.integrations.tasks.sync_meli_active_products',
+            'schedule': crontab(minute=5),  # X:05 de cada hora
+        },
+    }
+except ImportError:
+    pass  # Celery no instalado (dev sin redis)
+
+
+# Caché — usa Redis si está disponible (comparte instancia con Celery), si no locmem
+_REDIS_URL = env("REDIS_URL", default="")
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": _REDIS_URL,
+        "TIMEOUT": 300,
+        "KEY_PREFIX": "tvg",
+    } if _REDIS_URL else {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "tierra-verde-grow",
+        "TIMEOUT": 300,
+    }
+}
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True

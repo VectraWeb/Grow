@@ -27,18 +27,29 @@
     <meta property="twitter:image" content="assets/logo-horizontal.png"/>
 
     <link rel="icon" type="image/png" href="assets/favicon.png"/>
+
+    <!-- Preconnect a orígenes críticos — reduce DNS + TCP handshake time -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-    <style>
-      body {
-        margin: 0;
-        font-family: "DM Sans", sans-serif;
-        background: #fcfdf9;
-        color: #142318;
-      }
-    </style>
+    <link rel="preconnect" href="https://res.cloudinary.com"/>
+
+    <!--
+      OPTIMIZACIÓN FONT LOADING:
+      1. preload: descarga el CSS de fonts con máxima prioridad pero sin bloquear render
+      2. onload: cuando termina, lo aplica como stylesheet real
+      3. noscript: fallback para navegadores sin JS
+      Esto elimina el render-blocking que penaliza LCP/FCP.
+    -->
+    <link rel="preload" as="style"
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Sora:wght@400;600;700;800&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'"/>
+    <noscript>
+      <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Sora:wght@400;600;700;800&display=swap"/>
+    </noscript>
+
     <link rel="manifest" href="manifest.webmanifest">
+
 </head>
   <body class="antialiased">
     <app-root></app-root>

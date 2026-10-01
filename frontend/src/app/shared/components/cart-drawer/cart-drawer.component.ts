@@ -1,7 +1,8 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { CartService } from "../../../core/services/cart.service";
+import { ApiService } from "../../../core/services/api.service";
 import { 
   LucideAngularModule, 
   X, 
@@ -14,7 +15,9 @@ import {
   CreditCard,
   Ticket,
   ChevronRight,
-  Truck
+  Truck,
+  MessageCircle,
+  RotateCcw,
 } from "lucide-angular";
 import { RouterModule, Router } from "@angular/router";
 
@@ -27,9 +30,10 @@ import { NavigationService } from "../../../core/services/navigation.service";
   templateUrl: "./cart-drawer.component.html",
   styleUrls: ["./cart-drawer.component.css"],
 })
-export class CartDrawerComponent {
+export class CartDrawerComponent implements OnInit {
   public cartService = inject(CartService);
   private navigationService = inject(NavigationService);
+  private api = inject(ApiService);
   private router = inject(Router);
   
   X = X;
@@ -43,6 +47,10 @@ export class CartDrawerComponent {
   Ticket = Ticket;
   ChevronRight = ChevronRight;
   Truck = Truck;
+  MessageCircle = MessageCircle;
+  RotateCcw = RotateCcw;
+
+  whatsappNumber = '';   // Obtenido de /api/tenant/info/ al iniciar
   
   zipCode = "";
   isCalculatingShipping = false;
@@ -51,8 +59,25 @@ export class CartDrawerComponent {
   isOpen$ = this.cartService.drawerOpen$;
   cart$ = this.cartService.cart$;
 
+  ngOnInit(): void {
+    // Cargar número de WhatsApp desde la config de tienda
+    this.api.get<any>('/tenant/info/').subscribe({
+      next: (data) => {
+        if (data?.whatsapp_number) {
+          this.whatsappNumber = data.whatsapp_number;
+        }
+      }
+    });
+  }
+
   close(): void {
     this.cartService.closeDrawer();
+  }
+
+  /** Cierra el drawer y abre WhatsApp con el carrito completo prellenado */
+  sendToWhatsApp(cart: any): void {
+    this.cartService.openWhatsApp(cart, this.whatsappNumber);
+    // No cerramos el drawer para que el usuario pueda volver fácilmente
   }
 
   updateQuantity(itemId: number, quantity: number): void {

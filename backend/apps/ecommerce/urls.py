@@ -6,11 +6,12 @@ from apps.ecommerce.views import BannerViewSet, PromotionViewSet, EcommerceProdu
 
 router = DefaultRouter()
 router.register(r'banners', BannerViewSet, basename='banner')
-router.register(r'promotions', PromotionViewSet)
-router.register(r'products', EcommerceProductViewSet)
-router.register(r'carts', CartViewSet)
-router.register(r'ratings', ProductRatingViewSet)
+router.register(r'promotions', PromotionViewSet, basename='promotion')
+router.register(r'products', EcommerceProductViewSet, basename='ecommerce-product')  # basename requerido sin queryset estático
+router.register(r'carts', CartViewSet, basename='cart')
+router.register(r'ratings', ProductRatingViewSet, basename='rating')
 router.register(r'checkout', PublicCheckoutViewSet, basename='checkout')
+
 
 urlpatterns = [
     path('', include(router.urls)),

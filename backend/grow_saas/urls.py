@@ -2,7 +2,9 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.cache import cache_page, cache_control
+from django.contrib.sitemaps.views import sitemap as sitemap_view
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -33,6 +35,42 @@ from apps.users.views import (
     ChangePasswordView,
 )
 
+# Health check para warm-up (UptimeRobot, Render, etc.)
+@cache_control(no_cache=True, no_store=True)
+def health_check(request):
+    """Endpoint de warm-up para evitar cold starts en Render Free Tier."""
+    from django.db import connection
+    try:
+        connection.ensure_connection()
+        db_ok = True
+    except Exception:
+        db_ok = False
+    return JsonResponse({
+        "status": "ok" if db_ok else "degraded",
+        "service": "tierra-verde-grow-api",
+        "db": "connected" if db_ok else "error",
+    }, status=200 if db_ok else 503)
+
+
+# Consultar estado de tarea Celery (para polling desde el frontend)
+def task_status(request, task_id):
+    """Permite al frontend consultar el progreso de una tarea asíncrona."""
+    try:
+        from celery.result import AsyncResult
+        result = AsyncResult(task_id)
+        data = {
+            'task_id': task_id,
+            'status': result.status,   # PENDING, STARTED, SUCCESS, FAILURE
+        }
+        if result.successful():
+            data['result'] = result.result
+        elif result.failed():
+            data['error'] = str(result.result)
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
 # Vista para la raíz del sitio
 def home(request):
     return JsonResponse({
@@ -56,6 +94,12 @@ router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 urlpatterns = [
     # Página principal
     path('', home),
+
+    # Warm-up & Health (pingear con UptimeRobot cada 5 min)
+    path('health/', health_check, name='health_check'),
+
+    # Estado de tareas asíncronas Celery
+    path('api/tasks/<str:task_id>/status/', task_status, name='task_status'),
 
     # Panel de administración
     path('admin-secure-grow/', admin.site.urls),
@@ -87,8 +131,28 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from django.urls import re_path
 
+# Sitemap.xml dinámico
+from apps.ecommerce.sitemaps import SITEMAPS
+
+# robots.txt — apunta a sitemap para mejorar crawl budget de Google
+@cache_page(60 * 60 * 24)  # Cache 24hs (no cambia frecuentemente)
+def robots_txt(request):
+    host = request.build_absolute_uri('/').rstrip('/')
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /admin-secure-grow/\n"
+        "Disallow: /api/auth/\n"
+        f"\nSitemap: {host}/sitemap.xml\n"
+    )
+    return HttpResponse(content, content_type='text/plain')
+
+
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    # Sitemap dinámico — actualizado en cada deploy
+    path('sitemap.xml', cache_page(60 * 60 * 6)(sitemap_view), {'sitemaps': SITEMAPS}, name='sitemap'),
+    path('robots.txt', robots_txt, name='robots_txt'),
 ]
 
 if settings.DEBUG:

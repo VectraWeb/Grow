@@ -1,7 +1,13 @@
-// Configuración principal de la aplicación Angular: providers, rutas y interceptores
+// Configuración principal de la aplicación Angular: providers, rutas e interceptores
 // Define comportamiento global y dependencias
 import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core";
-import { provideRouter, withInMemoryScrolling } from "@angular/router";
+import {
+  provideRouter,
+  withInMemoryScrolling,
+  withPreloading,
+  PreloadAllModules,
+  withViewTransitions,
+} from "@angular/router";
 
 import { routes } from "./app.routes";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
@@ -15,8 +21,12 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
-        scrollPositionRestoration: 'enabled'
-      })
+        scrollPositionRestoration: 'enabled',
+      }),
+      // Pre-carga lazy chunks en background después del boot → navegación instantánea
+      withPreloading(PreloadAllModules),
+      // Transiciones nativas del browser entre rutas (Angular 17+)
+      withViewTransitions({ skipInitialTransition: true }),
     ),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),

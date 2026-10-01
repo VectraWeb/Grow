@@ -303,4 +303,50 @@ export class CartService {
   toggleDrawer(): void {
     this.drawerOpenSubject.next(!this.drawerOpenSubject.value);
   }
+
+  /**
+   * Genera el mensaje prellenado para WhatsApp con todos los ítems del carrito.
+   * Formato: lista de productos, envío seleccionado y total final.
+   */
+  generateWhatsAppMessage(cart: Cart): string {
+    if (!cart || !cart.items.length) return '';
+
+    const itemLines = cart.items
+      .map(item =>
+        `• ${item.product_name} x${item.quantity} — $${Math.round(item.total).toLocaleString('es-AR')}`
+      )
+      .join('\n');
+
+    const subtotal = `$${Math.round(cart.total).toLocaleString('es-AR')}`;
+    const shippingLine = cart.selected_shipping_id
+      ? cart.shipping_cost === 0
+        ? '🚚 Envío: *GRATIS* (Retiro en sucursal)'
+        : `🚚 Envío: *$${Math.round(cart.shipping_cost!).toLocaleString('es-AR')}*`
+      : '🚚 Envío: a calcular';
+
+    const finalTotal = Math.round(cart.total + (cart.shipping_cost || 0));
+    const totalLine = `💰 *Total: $${finalTotal.toLocaleString('es-AR')}*`;
+
+    const message =
+      `¡Hola! Quiero hacer el siguiente pedido 🌿\n\n` +
+      `${itemLines}\n\n` +
+      `${shippingLine}\n` +
+      `Subtotal: ${subtotal}\n` +
+      `${totalLine}\n\n` +
+      `¿Está disponible para coordinar el pago? 😊`;
+
+    return encodeURIComponent(message);
+  }
+
+  /**
+   * Abre WhatsApp con el carrito prellenado.
+   * El número se pasa desde el componente (obtenido de /api/tenant/info/).
+   */
+  openWhatsApp(cart: Cart, whatsappNumber: string): void {
+    const clean = whatsappNumber.replace(/\D/g, '');
+    if (!clean) return;
+    const msg = this.generateWhatsAppMessage(cart);
+    window.open(`https://wa.me/${clean}?text=${msg}`, '_blank', 'noopener,noreferrer');
+  }
 }
+
