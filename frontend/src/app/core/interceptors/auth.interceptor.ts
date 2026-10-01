@@ -10,8 +10,37 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const http = inject(HttpClient);
   const router = inject(Router);
 
-  const token = localStorage.getItem('access_token');
+  // Endpoints públicos de solo lectura que nunca deben fallar por problemas de autenticación
+  const isPublicGet = req.method === 'GET' && (
+    req.url.includes('/products') ||
+    req.url.includes('/categories') ||
+    req.url.includes('/ecommerce/banners') ||
+    req.url.includes('/tenant/info')
+  );
 
+  let token = localStorage.getItem('access_token');
+
+  // Si hay token, validar si está expirado antes de adjuntarlo para evitar 401 en cascada
+  if (token) {
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        if (payload.exp && payload.exp * 1000 < Date.now()) {
+          // Token expirado: limpiarlo
+          localStorage.removeItem('access_token');
+          token = null;
+        }
+      }
+    } catch {
+      localStorage.removeItem('access_token');
+      token = null;
+    }
+  }
+
+  // Si es un GET público y no hay token válido, o incluso con token válido,
+  // para endpoints públicos no es estrictamente necesario enviar token salvo que sea requerido.
+  // Si hay token válido, lo adjuntamos normalmente.
   if (token) {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` }
@@ -20,6 +49,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // Si un GET público falló con 401 (ej. token revocado o formato inválido),
+      // limpiamos los tokens y reintentamos la solicitud limpia como usuario anónimo
+      if (error.status === 401 && isPublicGet) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        const cleanReq = req.clone({
+          headers: req.headers.delete('Authorization')
+        });
+        return next(cleanReq);
+      }
+
       if (error.status === 401 && token && !isRefreshing) {
         isRefreshing = true;
         const refreshToken = localStorage.getItem('refresh_token');
@@ -46,14 +86,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               isRefreshing = false;
               localStorage.removeItem('access_token');
               localStorage.removeItem('refresh_token');
-              router.navigate(['/auth/login']);
+              // Solo redirigir al login si el usuario está en el panel admin
+              if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+                router.navigate(['/auth/login']);
+              }
               return throwError(() => error);
             })
           );
         } else {
           isRefreshing = false;
           localStorage.removeItem('access_token');
-          router.navigate(['/auth/login']);
+          if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+            router.navigate(['/auth/login']);
+          }
         }
       }
       return throwError(() => error);

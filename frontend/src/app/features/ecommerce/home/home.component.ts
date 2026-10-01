@@ -92,6 +92,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   displayedProducts: Product[] = [];
   displayLimit = 8;
   allProductsData: Product[] = []; // Cache for filtering
+  isLoading = true;
+  categories: any[] = [];
   isSearchExpanded = false;
   sortBy:
     | "relevancia"
@@ -228,8 +230,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Load and refresh products
-    this.loadAllProducts();
+    // Load categories for catalog quick filter chips
+    this.api.get<any>("/categories/").subscribe({
+      next: (res) => {
+        const data = res.results || res;
+        this.categories = (data || []).filter((c: any) => c.name && c.name !== 'General');
+      }
+    });
 
     // Subscribe to cart changes
     this.cartService.cart$.subscribe(() => {
@@ -237,8 +244,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     this.cartService.loadCart();
 
-    // Refresh products when returning to this route
-    this.route.queryParams.subscribe(() => {
+    // Subscribe to route params and load products
+    this.route.queryParams.subscribe((params) => {
+      if (params['category']) {
+        this.selectedCategory = params['category'];
+      }
+      if (params['search']) {
+        this.searchQuery = params['search'];
+      }
       this.loadAllProducts();
     });
 
@@ -444,7 +457,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private loadAllProducts(): void {
-    this.api.get<Product[]>("/products/", { in_stock: "true", is_active: "true" }).subscribe({
+    this.isLoading = true;
+    this.api.get<Product[]>("/products/", { is_ecommerce: "true", is_active: "true" }).subscribe({
       next: (products) => {
         let rawProducts = (products as any).results || products;
         if (!rawProducts || rawProducts.length === 0) {
@@ -467,6 +481,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
 
         this.filteredProducts = this.allProductsData;
+        this.isLoading = false;
         this.applyFilters();
         this.updateCartCount();
       },
@@ -482,6 +497,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           return p;
         });
         this.filteredProducts = this.allProductsData;
+        this.isLoading = false;
         this.applyFilters();
         this.updateCartCount();
       }
@@ -497,10 +513,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Filter products from API cache
     let filtered = [...this.allProductsData];
 
-    // Hide products that are out of stock
-    filtered = filtered.filter((p) => (p.stock_current ?? 0) > 0);
+    // Priorizar productos con stock disponible
+    const inStock = filtered.filter((p) => (p.stock_current ?? 0) > 0);
+    if (inStock.length > 0) {
+      filtered = inStock;
+    }
 
-    if (this.selectedCategory !== "todos") {
+    if (this.selectedCategory && this.selectedCategory !== "todos") {
       const searchSlug = this.selectedCategory
         .toLowerCase()
         .normalize("NFD")
@@ -508,18 +527,20 @@ export class HomeComponent implements OnInit, OnDestroy {
         .replace(/\s+/g, "-");
 
       filtered = filtered.filter((p) => {
-        if (this.selectedCategory === "ofertas") return true;
+        if (this.selectedCategory === "ofertas") {
+          return !!(p.discount_percentage && +p.discount_percentage > 0);
+        }
         if (!p.search_slug) return false;
-        return p.search_slug.includes(searchSlug);
+        return p.search_slug.includes(searchSlug) || searchSlug.includes(p.search_slug);
       });
     }
 
     if (this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase();
+      const query = this.searchQuery.toLowerCase().trim();
       filtered = filtered.filter(
         (p) =>
           p.name.toLowerCase().includes(query) ||
-          p.category_name?.toLowerCase().includes(query),
+          (p.category_name && p.category_name.toLowerCase().includes(query)),
       );
     }
 

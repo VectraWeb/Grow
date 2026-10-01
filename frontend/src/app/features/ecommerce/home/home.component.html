@@ -77,7 +77,45 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5" *ngIf="displayedProducts.length > 0">
+    <!-- Category Quick Filters Chips -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none" *ngIf="categories.length > 0">
+      <button
+        (click)="filterByCategory('todos')"
+        class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shrink-0 border shadow-xs"
+        [ngClass]="selectedCategory === 'todos' ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'"
+      >
+        🌱 Todos los productos
+      </button>
+      <button
+        *ngFor="let cat of categories"
+        (click)="filterByCategory(cat.name)"
+        class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shrink-0 border shadow-xs"
+        [ngClass]="selectedCategory === cat.name ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'"
+      >
+        {{ cat.name }}
+      </button>
+      <button
+        (click)="filterByCategory('ofertas')"
+        class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shrink-0 border shadow-xs"
+        [ngClass]="selectedCategory === 'ofertas' ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-white text-amber-700 border-amber-200 hover:border-amber-300'"
+      >
+        🔥 Ofertas
+      </button>
+    </div>
+
+    <!-- Skeleton loader while loading -->
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5" *ngIf="isLoading">
+      <div *ngFor="let s of [1,2,3,4,5,6,7,8]" class="bg-white rounded-2xl border border-slate-200/80 p-3 md:p-4 animate-pulse flex flex-col h-72 md:h-96">
+        <div class="h-28 md:h-52 bg-slate-100 rounded-xl mb-3"></div>
+        <div class="h-2.5 bg-slate-100 rounded w-1/3 mb-2"></div>
+        <div class="h-4 bg-slate-100 rounded w-3/4 mb-3"></div>
+        <div class="h-5 bg-slate-100 rounded w-1/2 mt-auto mb-3"></div>
+        <div class="h-8 md:h-10 bg-slate-100 rounded-xl w-full"></div>
+      </div>
+    </div>
+
+    <!-- Products Catalog Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5" *ngIf="!isLoading && displayedProducts.length > 0">
       <article
         *ngFor="let product of displayedProducts; trackBy: trackByProductId"
         class="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-ferre-300 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col"
@@ -127,8 +165,9 @@
       </article>
     </div>
 
+    <!-- Empty state (only when loading finished and really no products) -->
     <div
-      *ngIf="displayedProducts.length === 0"
+      *ngIf="!isLoading && displayedProducts.length === 0"
       class="text-center py-20"
     >
       <lucide-icon [name]="Search" size="48" class="text-slate-300 mx-auto mb-4"></lucide-icon>
@@ -144,7 +183,7 @@
       </button>
     </div>
 
-    <div class="text-center mt-12" *ngIf="filteredProducts.length > displayLimit">
+    <div class="text-center mt-12" *ngIf="!isLoading && filteredProducts.length > displayLimit">
       <button
         (click)="loadMore()"
         class="btn-outline px-10"
