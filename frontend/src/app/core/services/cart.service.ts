@@ -268,13 +268,17 @@ export class CartService {
     return this.sessionId;
   }
 
-  createMercadoPagoPreference(): Observable<any> {
+  createMercadoPagoPreference(customerData?: any, shippingCost?: number): Observable<any> {
     const items = this.cartItems.map((item) => ({
       product_id: item.product_id,
       quantity: item.quantity,
       price: item.price
     }));
-    return this.api.post("/integrations/mercadopago/preference/", { items });
+    return this.api.post("/integrations/mercadopago/preference/", { 
+      items,
+      customer: customerData,
+      shipping_cost: shippingCost || this.shippingCost || 0
+    });
   }
 
   createCheckout(formData: any, paymentMethod: string): Observable<any> {

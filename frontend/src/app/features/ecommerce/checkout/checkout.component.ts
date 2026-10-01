@@ -417,12 +417,13 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (this.paymentMethod === "mercadopago") {
-      this.cartService.createMercadoPagoPreference().subscribe({
+      this.cartService.createMercadoPagoPreference(this.formData).subscribe({
         next: (res) => {
           if (res.init_point) window.location.href = res.init_point;
         },
-        error: () => {
-          alert("Error creando pago");
+        error: (err) => {
+          const msg = err.error?.error || "Error al conectar con la pasarela de Mercado Pago";
+          alert(msg);
           this.isProcessing = false;
         },
       });

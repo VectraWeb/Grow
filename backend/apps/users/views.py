@@ -138,6 +138,9 @@ class StoreSettingsView(APIView):
         if not config:
             return Response({})
             
+        mp_token = config.mp_access_token or getattr(settings, 'MP_ACCESS_TOKEN', '')
+        mp_token_masked = f"{mp_token[:8]}...{mp_token[-4:]}" if len(mp_token) > 12 else (mp_token if mp_token else '')
+
         data = {
             'store_address': config.store_address or '',
             'bank_titular': config.bank_titular or '',
@@ -146,7 +149,11 @@ class StoreSettingsView(APIView):
             'bank_alias': config.bank_alias,
             'whatsapp_number': config.whatsapp_number,
             'instagram_url': config.instagram_url or '',
-            'facebook_url': config.facebook_url or ''
+            'facebook_url': config.facebook_url or '',
+            'mp_access_token': config.mp_access_token or '',
+            'mp_public_key': config.mp_public_key or getattr(settings, 'MP_PUBLIC_KEY', ''),
+            'has_mp_token': bool(mp_token),
+            'mp_token_masked': mp_token_masked,
         }
             
         return Response(data)
@@ -178,6 +185,12 @@ class StoreSettingsView(APIView):
             config.instagram_url = request.data['instagram_url']
         if 'facebook_url' in request.data:
             config.facebook_url = request.data['facebook_url']
+        if 'mp_access_token' in request.data:
+            token_val = str(request.data['mp_access_token']).strip()
+            if '...' not in token_val:
+                config.mp_access_token = token_val
+        if 'mp_public_key' in request.data:
+            config.mp_public_key = str(request.data['mp_public_key']).strip()
             
         config.save()
         return Response({'status': 'ok', 'message': 'Configuración guardada exitosamente'})
@@ -208,6 +221,12 @@ class StoreSettingsView(APIView):
             config.instagram_url = request.data['instagram_url']
         if 'facebook_url' in request.data:
             config.facebook_url = request.data['facebook_url']
+        if 'mp_access_token' in request.data:
+            token_val = str(request.data['mp_access_token']).strip()
+            if '...' not in token_val:
+                config.mp_access_token = token_val
+        if 'mp_public_key' in request.data:
+            config.mp_public_key = str(request.data['mp_public_key']).strip()
             
         config.save()
         return Response({'status': 'ok'})
@@ -217,8 +236,15 @@ class StoreInfoView(APIView):
     
     def get(self, request):
         config = StoreConfig.objects.first()
+        has_mp = False
+        mp_pub_key = getattr(settings, 'MP_PUBLIC_KEY', '')
+        if config:
+            has_mp = bool(config.mp_access_token or getattr(settings, 'MP_ACCESS_TOKEN', ''))
+            mp_pub_key = config.mp_public_key or mp_pub_key
+            
         if not config:
-            return Response({'has_mp': False, 'name': 'Tierra Verde Grow'})
+            has_mp = bool(getattr(settings, 'MP_ACCESS_TOKEN', ''))
+            return Response({'has_mp': has_mp, 'name': 'Tierra Verde Grow', 'mp_public_key': mp_pub_key})
             
         return Response({
             'name': config.name,
@@ -230,5 +256,6 @@ class StoreInfoView(APIView):
             'whatsapp_number': config.whatsapp_number,
             'instagram_url': config.instagram_url or '',
             'facebook_url': config.facebook_url or '',
-            'has_mp': bool(config.mp_access_token)
+            'has_mp': has_mp,
+            'mp_public_key': mp_pub_key
         })

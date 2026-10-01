@@ -92,6 +92,8 @@ export class SettingsComponent implements OnInit {
       whatsapp_number: [""],
       instagram_url: [""],
       facebook_url: [""],
+      mp_access_token: [""],
+      mp_public_key: [""],
     });
   }
 
@@ -174,7 +176,12 @@ export class SettingsComponent implements OnInit {
           whatsapp_number: data.whatsapp_number || "",
           instagram_url: data.instagram_url || "",
           facebook_url: data.facebook_url || "",
+          mp_access_token: data.mp_token_masked || data.mp_access_token || "",
+          mp_public_key: data.mp_public_key || "",
         });
+        if (data.has_mp_token) {
+          this.hasMpLinked = true;
+        }
       },
       error: (err) => {
         console.error("Error loading settings", err);

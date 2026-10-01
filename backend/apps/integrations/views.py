@@ -309,6 +309,9 @@ class MercadoPagoPreferenceView(APIView):
             Creates a PENDING sale and a Mercado Pago preference.
             """
             cart_items = request.data.get('items', [])
+            shipping_cost = float(request.data.get('shipping_cost') or request.data.get('shippingCost') or 0)
+            customer_data = request.data.get('customer') or request.data.get('formData') or {}
+            
             if not cart_items:
                 return Response({'error': 'Empty cart'}, status=status.HTTP_400_BAD_REQUEST)
                 
@@ -318,81 +321,107 @@ class MercadoPagoPreferenceView(APIView):
                 items_to_create = []
                 items_for_mp = []
                 
+                # Bulk fetch products to avoid N+1 queries
+                prod_ids = [item.get('id') or item.get('product_id') for item in cart_items]
+                products_dict = {str(p.id): p for p in Product.objects.filter(id__in=prod_ids)}
+                
                 for item in cart_items:
-                    try:
-                        product_id = item.get('id') or item.get('product_id')
-                        product = Product.objects.get(id=product_id)
-                        price = float(product.price_retail)
-                        total += price * int(item['quantity'])
-                        
-                        items_for_mp.append({
-                            "id": str(product.id),
-                            "title": product.name,
-                            "quantity": int(item['quantity']),
-                            "unit_price": price,
-                            "currency_id": "ARS"
-                        })
-                        
-                        items_to_create.append({
-                            'product': product,
-                            'quantity': int(item['quantity']),
-                            'price_at_sale': price
-                        })
-                    except Product.DoesNotExist:
+                    prod_id = str(item.get('id') or item.get('product_id'))
+                    product = products_dict.get(prod_id)
+                    if not product:
                         continue
+                    
+                    price = float(product.price_retail)
+                    qty = int(item.get('quantity', 1))
+                    total += price * qty
+                    
+                    items_for_mp.append({
+                        "id": str(product.id),
+                        "title": product.name,
+                        "quantity": qty,
+                        "unit_price": price,
+                        "currency_id": "ARS"
+                    })
+                    
+                    items_to_create.append({
+                        'product': product,
+                        'quantity': qty,
+                        'price_at_sale': price
+                    })
                 
                 if not items_for_mp:
                     return Response({'error': 'No valid products found'}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Safe association with authenticated user if possible
+                # Customer handling
                 customer = None
                 try:
                     if request.user and request.user.is_authenticated:
                         customer = getattr(request.user, 'customer', None)
                 except Exception as auth_err:
-                    print(f"Auth check skipped due to error: {auth_err}")
+                    print(f"Auth check skipped: {auth_err}")
+
+                payer_email = customer_data.get('email')
+                first_name = customer_data.get('firstName') or customer_data.get('first_name', '')
+                last_name = customer_data.get('lastName') or customer_data.get('last_name', '')
+                full_name = customer_data.get('name') or f"{first_name} {last_name}".strip()
+                phone = customer_data.get('phone', '')
+                address = customer_data.get('address', '')
+                city = customer_data.get('city', '')
+                full_address = f"{address}, {city}".strip(', ')
+
+                if payer_email and not customer:
+                    customer, _ = Customer.objects.get_or_create(
+                        email=payer_email,
+                        defaults={'name': full_name or 'Cliente Web'}
+                    )
 
                 sale = Sale.objects.create(
                     customer=customer,
-                    total=total,
+                    total=total + shipping_cost,
                     payment_method='MERCADO_PAGO',
-                    payment_status='PENDING'
+                    payment_status='PENDING',
+                    shipping_address=full_address or None
                 )
                 
                 for item_data in items_to_create:
                     SaleItem.objects.create(sale=sale, **item_data)
                     
-                # Use current host to build absolute URLs
+                # Use current host or settings
                 base_url = f"{request.scheme}://{request.get_host()}"
-                print(f"DEBUG: base_url is {base_url}")
                 
-                # Get tenant specific MP credentials from StoreConfig.objects.first()
-                mp_access_token = StoreConfig.objects.first().mp_access_token if StoreConfig.objects.first() else None
+                # Get tenant specific MP credentials
+                cfg = StoreConfig.objects.first()
+                mp_access_token = cfg.mp_access_token if cfg and cfg.mp_access_token else getattr(settings, 'MP_ACCESS_TOKEN', None)
+
+                payer_dict = {}
+                if payer_email:
+                    payer_dict['email'] = payer_email
+                if full_name:
+                    payer_dict['name'] = full_name
+                if phone:
+                    payer_dict['phone'] = phone
+                if full_address:
+                    payer_dict['address'] = full_address
 
                 try:
-                    print(f"Creating preference for Sale {sale.id} with base_url {base_url}")
-                    print(f"Items for MP: {json.dumps(items_for_mp, indent=2)}")
-                    
                     preference = MercadoPagoService.create_preference(
                         items_for_mp, 
                         external_reference=sale.id,
                         access_token=mp_access_token,
-                        base_url=base_url
+                        base_url=base_url,
+                        payer_data=payer_dict,
+                        shipping_cost=shipping_cost
                     )
                     
-                    # Save preference ID for traceability
                     sale.mp_preference_id = preference.get('id')
                     sale.save()
 
-                    print(f"Preference created successfully: {sale.mp_preference_id}")
                     return Response({
                         'preference_id': preference.get('id'),
                         'init_point': preference.get('init_point'),
                         'sale_id': sale.id
                     })
                 except Exception as e:
-                    # Log the error for debugging
-                    print(f"!!! Mercado Pago SDK Error: {str(e)}")
                     import traceback
                     traceback.print_exc()
                     return Response({'error': 'Error connecting to Mercado Pago API', 'details': str(e)}, status=status.HTTP_400_BAD_REQUEST)

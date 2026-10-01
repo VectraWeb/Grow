@@ -96,25 +96,65 @@
         *ngIf="expandedSections['payment']"
         class="px-6 pb-6 space-y-4 border-t border-slate-200"
       >
-        <div class="rounded-lg p-4 flex gap-3 items-start mt-4 bg-blue-50 border border-blue-200">
-          <lucide-icon [name]="MessageCircle" size="20" class="text-blue-500 mt-0.5 flex-shrink-0"></lucide-icon>
-          <div>
-            <p class="text-sm text-blue-700 font-bold">Cobros con Tarjetas (Automatico)</p>
-            <p class="text-xs text-blue-500 mt-1 mb-2">
-              Para cobrar automaticamente con tarjetas de credito y debito,
-              debes vincular tu cuenta de Mercado Pago.
-            </p>
+        <div class="rounded-xl p-5 bg-gradient-to-br from-blue-50 to-indigo-50/40 border border-blue-200 mt-4 space-y-4">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-black flex items-center justify-center text-lg shadow-sm">
+                M
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">Mercado Pago Checkout</h4>
+                <p class="text-xs text-slate-500">Cobros automáticos con tarjetas de crédito, débito y dinero en cuenta</p>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                  [ngClass]="hasMpLinked ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200'">
+              <span class="w-2 h-2 rounded-full" [ngClass]="hasMpLinked ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"></span>
+              {{ hasMpLinked ? 'Conectado' : 'No conectado' }}
+            </span>
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                Access Token de Producción (o Pruebas)
+              </label>
+              <input
+                type="password"
+                formControlName="mp_access_token"
+                placeholder="APP_USR-..."
+                class="input-ferre font-mono text-xs"
+              />
+              <p class="text-[11px] text-slate-500 mt-1">
+                Pega tu Access Token obtenido en <a href="https://www.mercadopago.com.ar/developers/panel/app" target="_blank" class="text-blue-600 underline font-medium">Mercado Pago Developers &gt; Tus Credenciales</a>.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                Public Key (Opcional)
+              </label>
+              <input
+                type="text"
+                formControlName="mp_public_key"
+                placeholder="APP_USR-..."
+                class="input-ferre font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-blue-200/60">
             <button
               type="button"
               (click)="vincularMP()"
-              class="inline-flex items-center gap-2 text-sm font-bold bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all shadow-sm"
+              class="inline-flex items-center gap-2 text-xs font-bold bg-white hover:bg-blue-50 text-blue-700 border border-blue-300 px-3.5 py-2 rounded-lg transition-all shadow-sm"
             >
-              <lucide-icon [name]="hasMpLinked ? CheckCircle : Link" size="16"></lucide-icon>
-              {{ hasMpLinked ? "Actualizar conexion con Mercado Pago" : "Vincular cuenta de Mercado Pago" }}
+              <lucide-icon [name]="Link" size="14"></lucide-icon>
+              O vincular con cuenta (OAuth)
             </button>
-            <p *ngIf="hasMpLinked" class="text-xs text-emerald-600 mt-2 flex items-center gap-1 font-medium">
-              <lucide-icon [name]="CheckCircle" size="14"></lucide-icon> Cuenta de Mercado Pago vinculada.
-            </p>
+            <span class="text-[11px] text-slate-400">
+              * Recuerda hacer click en "Guardar Cambios" abajo.
+            </span>
           </div>
         </div>
 

@@ -175,22 +175,44 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         product = serializer.save()
-        if product.meli_sync and product.meli_category_id:
-            from apps.integrations.services.meli import MeLiService
-            result = MeLiService.publish_product(product.id, None)
-            if isinstance(result, dict) and "url" in result:
-                self._meli_url = result["url"]
+        from apps.integrations.services.meli import MeLiService
+        meli_token = MeLiService.get_token()
+        if product.meli_sync or meli_token:
+            try:
+                if not product.meli_category_id:
+                    MeLiService.predict_and_assign_category(product)
+                try:
+                    from apps.integrations.tasks import trigger_meli_sync_for_product
+                    trigger_meli_sync_for_product.delay(product.id)
+                except Exception:
+                    result = MeLiService.publish_product(product.id, meli_token)
+                    if isinstance(result, dict) and "url" in result:
+                        self._meli_url = result["url"]
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Error al sincronizar producto en MeLi: {e}")
 
     def perform_update(self, serializer):
         product = serializer.save()
-        if product.meli_sync:
-            from apps.integrations.services.meli import MeLiService
-            if product.meli_item_id:
-                MeLiService.sync_stock_and_price(product.id, None)
-            elif product.meli_category_id:
-                result = MeLiService.publish_product(product.id, None)
-                if isinstance(result, dict) and "url" in result:
-                    self._meli_url = result["url"]
+        from apps.integrations.services.meli import MeLiService
+        meli_token = MeLiService.get_token()
+        if product.meli_sync or (meli_token and product.meli_item_id):
+            try:
+                if product.meli_item_id and not product.meli_item_id.endswith("MOCK"):
+                    try:
+                        from apps.integrations.tasks import trigger_meli_sync_for_product
+                        trigger_meli_sync_for_product.delay(product.id)
+                    except Exception:
+                        MeLiService.sync_stock_and_price(product.id, meli_token)
+                else:
+                    if not product.meli_category_id:
+                        MeLiService.predict_and_assign_category(product)
+                    result = MeLiService.publish_product(product.id, meli_token)
+                    if isinstance(result, dict) and "url" in result:
+                        self._meli_url = result["url"]
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Error al actualizar producto en MeLi: {e}")
 
     def get_queryset(self):
         # Filtering logic for search

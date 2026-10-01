@@ -38,12 +38,12 @@ def sync_meli_active_products(self, product_ids: list = None):
         results = {'synced': 0, 'skipped': 0, 'errors': 0}
 
         for product in products:
-            if not product.meli_item_id:
-                results['skipped'] += 1
-                continue
             try:
-                from apps.integrations.services.meli_service import MeliService
-                MeliService.update_stock(product.meli_item_id, product.stock_current)
+                from apps.integrations.services.meli import MeLiService
+                if product.meli_item_id and not product.meli_item_id.endswith("MOCK"):
+                    MeLiService.sync_stock_and_price(product.id)
+                else:
+                    MeLiService.publish_product(product.id)
                 results['synced'] += 1
             except Exception as e:
                 logger.error(f"[MeLi Sync] Error en producto {product.sku}: {e}")
