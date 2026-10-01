@@ -21,6 +21,8 @@
         *ngIf="banner.image"
         [src]="banner.image"
         [alt]="'Banner ' + (i + 1)"
+        [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
         class="relative w-full h-full object-cover md:object-contain"
         (error)="banner.image = ''"
       />

@@ -1,23 +1,37 @@
 {
   "name": "Tierra Verde Grow - Growshop",
   "short_name": "Tierra Verde",
+  "description": "Tu growshop de confianza. Cultivo Indoor & Outdoor.",
   "theme_color": "#0f9717",
   "background_color": "#fcfdf9",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "/",
+  "start_url": "/",
+  "categories": ["shopping", "business"],
   "icons": [
     {
       "src": "assets/favicon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "assets/logo-tree.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo-tree.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

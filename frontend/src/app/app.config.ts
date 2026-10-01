@@ -1,6 +1,6 @@
 // Configuración principal de la aplicación Angular: providers, rutas e interceptores
 // Define comportamiento global y dependencias
-import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core";
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from "@angular/core";
 import {
   provideRouter,
   withInMemoryScrolling,
@@ -13,6 +13,7 @@ import { routes } from "./app.routes";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { authInterceptor } from "./core/interceptors/auth.interceptor";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import { provideServiceWorker } from "@angular/service-worker";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,5 +31,10 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
+    // Service Worker PWA con estrategia de registro diferida
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };
