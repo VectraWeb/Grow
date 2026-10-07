@@ -25,7 +25,9 @@ class GoogleSheetsSyncService:
         'price_wholesale': ['precio_mayorista', 'mayorista', 'precio_wholesale', 'precio_distribuidor', 'gremio', 'precio_gremio'],
         'cost_price': ['costo_unit', 'costo_unitario', 'costo', 'precio_costo', 'cost_price', 'compra', 'precio_compra'],
         'stock_current': ['stock_actual', 'stock', 'cantidad', 'cant', 'stock_current', 'unidades', 'disponible', 'existencia', 'existencias', 'inventario'],
-        'stock_min': ['stock_minimo', 'stock_min', 'stock minimo', 'minimo', 'existencia_minima'],
+        'stock_min': ['stock_minimo', 'stock_min', 'stock minimo', 'stock_min', 'minimo', 'existencia_minima',
+                      'punto_repos', 'punto repos', 'punto_de_reposicion', 'punto de reposicion',
+                      'punto_reposicion', 'punto reposicion', 'reorder'],
         'category': ['categoria', 'rubro', 'familia', 'tipo', 'seccion', 'linea', 'departamento'],
         'description': ['descripcion', 'detalle', 'observaciones', 'notas', 'info', 'especificaciones'],
         'brand': ['marca', 'brand', 'fabricante', 'laboratorio'],
@@ -66,7 +68,13 @@ class GoogleSheetsSyncService:
         val_str = re.sub(r'[^\d.,\-]', '', val_str)
         if not val_str:
             return default
-        
+
+        # Formato argentino de miles sin decimales: "$11.000" / "1.500" -> 11000 / 1500.
+        # Sin esto, la hoja con precios como texto "$11.000" se leia como 11 y el
+        # sync re-grababa los 222 productos en cada corrida (nunca convergia).
+        if ',' not in val_str and re.fullmatch(r'\d{1,3}(?:\.\d{3})+', val_str):
+            return Decimal(val_str.replace('.', ''))
+
         # Argentine / European number format check: 1.500,00 vs US format 1,500.00
         if ',' in val_str and '.' in val_str:
             if val_str.rfind(',') > val_str.rfind('.'):
@@ -92,6 +100,12 @@ class GoogleSheetsSyncService:
             return int(value)
         val_str = str(value).strip()
         if not val_str or val_str.lower() in ('none', 'null', '-', ''):
+            return default
+        val_str = re.sub(r'[^\d.,\-]', '', val_str)  # sin símbolos ($, etc.)
+        # Miles en formato argentino: "1.000" -> 1000 (igual que en decimales)
+        if ',' not in val_str and re.fullmatch(r'\d{1,3}(?:\.\d{3})+', val_str):
+            val_str = val_str.replace('.', '')
+        if not val_str or val_str == '-':
             return default
         try:
             return int(float(val_str.replace(',', '.')))
@@ -465,6 +479,11 @@ class GoogleSheetsSyncService:
                     store_cfg.bank_cvu = store_info['cvu']
                 store_cfg.save()
 
+            # Evita peleas entre filas duplicadas: si el mismo SKU aparece 2 veces
+            # (p.ej. una fila completa y otra a medio completar), gana la primera.
+            # Sin esto, ambas filas se re-graban en cada sync y nunca converge.
+            seen_skus = set()
+
             for r_idx, row in enumerate(data_rows):
                 try:
                     name_val = row[col_map['name']].strip() if 'name' in col_map and col_map['name'] < len(row) else ''
@@ -519,6 +538,10 @@ class GoogleSheetsSyncService:
                     # Auto SKU if not present
                     if not sku_val:
                         sku_val = f"TVG-{slugify(name_val)[:30].upper()}"
+
+                    if sku_val in seen_skus:
+                        continue
+                    seen_skus.add(sku_val)
 
                     # Product search en memoria: primero por SKU, luego por nombre
                     # (misma semántica que antes: SKU exacto, nombre insensible a mayúsculas)
