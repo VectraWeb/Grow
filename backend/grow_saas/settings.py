@@ -121,9 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Argon2 primero: más seguro que PBKDF2 y MUCHO más rápido en la CPU limitada
 # de Render (login ~2.5s con PBKDF2 1M iteraciones vs <0.5s con Argon2).
-# PBKDF2 queda como fallback para verificar hashes viejos; el backend de
-# autenticación los re-hashea en el primer login exitoso.
+# FastArgon2PasswordHasher = params OWASP (m=19MB, t=2, p=1): los defaults de
+# Django (100MB, 8 hilos) tardaban ~2.5s en Render. PBKDF2 queda como fallback
+# para verificar hashes viejos; el backend de autenticación los re-hashea en el
+# primer login exitoso (detecta tanto cambio de algoritmo como de parámetros).
 PASSWORD_HASHERS = [
+    'apps.users.hashers.FastArgon2PasswordHasher',
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
@@ -295,15 +298,32 @@ except ImportError:
     pass  # Celery no instalado (dev sin redis)
 
 
-# Caché — usa Redis si está disponible (comparte instancia con Celery), si no locmem
+# Caché — Redis si está disponible, si no LocMem (Render Free corre 1 solo
+# worker de gunicorn, así que LocMem comparte proceso con todos los requests).
+# ⚠️ Si REDIS_URL apunta a un Redis caído/eliminado, django-redis lanza en
+# cada get/set y la caché quedaba muerta en silencio: por eso primero hacemos
+# un ping con timeout corto y caemos a LocMem si no responde.
+def _redis_ping(url):
+    if not url:
+        return False
+    try:
+        import redis as _redis
+        return bool(
+            _redis.Redis.from_url(url, socket_connect_timeout=2, socket_timeout=2).ping()
+        )
+    except Exception:
+        return False
+
+
 _REDIS_URL = env("REDIS_URL", default="")
+_CACHE_USES_REDIS = _redis_ping(_REDIS_URL)
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": _REDIS_URL,
         "TIMEOUT": 300,
         "KEY_PREFIX": "tvg",
-    } if _REDIS_URL else {
+    } if _CACHE_USES_REDIS else {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "tierra-verde-grow",
         "TIMEOUT": 300,

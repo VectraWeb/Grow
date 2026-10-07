@@ -38,17 +38,43 @@ from apps.users.views import (
 # Health check para warm-up (UptimeRobot, Render, etc.)
 @cache_control(no_cache=True, no_store=True)
 def health_check(request):
-    """Endpoint de warm-up para evitar cold starts en Render Free Tier."""
+    """Endpoint de warm-up para evitar cold starts en Render Free Tier.
+
+    Además expone diagnóstico de caché y hasher para verificar desde afuera
+    que el deploy tiene los cambios de performance (fallback a LocMem si Redis
+    está caído, Argon2 rápido, etc).
+    """
+    import time as _time
     from django.db import connection
+    from django.conf import settings
+    from django.core.cache import cache
+
     try:
         connection.ensure_connection()
         db_ok = True
     except Exception:
         db_ok = False
+
+    # Roundtrip real de caché: set + get de una clave diminuta
+    t0 = _time.monotonic()
+    try:
+        cache.set("__health__", 1, 10)
+        cache_ok = cache.get("__health__") == 1
+        cache_ms = round((_time.monotonic() - t0) * 1000)
+    except Exception:
+        cache_ok = False
+        cache_ms = None
+
     return JsonResponse({
         "status": "ok" if db_ok else "degraded",
         "service": "tierra-verde-grow-api",
         "db": "connected" if db_ok else "error",
+        "cache": {
+            "backend": settings.CACHES["default"]["BACKEND"].rsplit(".", 1)[-1],
+            "roundtrip_ok": cache_ok,
+            "roundtrip_ms": cache_ms,
+        },
+        "hasher": settings.PASSWORD_HASHERS[0].rsplit(".", 1)[-1],
     }, status=200 if db_ok else 503)
 
 
