@@ -11,6 +11,10 @@ from apps.inventory.serializers import (
     KitSerializer, StockMovementSerializer
 )
 from apps.inventory.services.intelligence import StockIntelligenceService
+from apps.inventory.catalog_cache import (
+    get_cached_public_list,
+    set_cached_public_list,
+)
 
 class DashboardViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
@@ -148,6 +152,19 @@ class ProductViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ProductListSerializer
         return ProductSerializer
+
+    def list(self, request, *args, **kwargs):
+        # Catálogo público cacheado 5 min (clave versionada por query params).
+        # El panel admin (autenticado) siempre lee fresco de la DB.
+        if request.user.is_authenticated:
+            return super().list(request, *args, **kwargs)
+        key, cached = get_cached_public_list(request, "products")
+        if cached is not None:
+            return Response(cached)
+        response = super().list(request, *args, **kwargs)
+        if response.status_code == 200:
+            set_cached_public_list(key, response.data)
+        return response
 
     def create(self, request, *args, **kwargs):
         from rest_framework.response import Response
@@ -321,6 +338,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
+
+    def list(self, request, *args, **kwargs):
+        # Chips de categorías del home: mismo criterio que productos.
+        if request.user.is_authenticated:
+            return super().list(request, *args, **kwargs)
+        key, cached = get_cached_public_list(request, "categories")
+        if cached is not None:
+            return Response(cached)
+        response = super().list(request, *args, **kwargs)
+        if response.status_code == 200:
+            set_cached_public_list(key, response.data)
+        return response
 
 class KitViewSet(viewsets.ModelViewSet):
     queryset = Kit.objects.all()

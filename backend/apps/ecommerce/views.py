@@ -9,6 +9,7 @@ from apps.ecommerce.models import Banner, Promotion, Cart, CartItem, ProductRati
 from apps.ecommerce.serializers import BannerSerializer, PromotionSerializer, CartSerializer, CartItemSerializer, ProductRatingSerializer
 from apps.inventory.models import Product
 from apps.inventory.serializers import ProductListSerializer
+from apps.inventory.catalog_cache import get_cached_public_list, set_cached_public_list
 from apps.sales.models import Sale, SaleItem, Customer
 
 class BannerViewSet(viewsets.ModelViewSet):
@@ -29,6 +30,18 @@ class BannerViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
+
+    def list(self, request, *args, **kwargs):
+        # Banners del home: mismo criterio que productos (staff ve todos).
+        if request.user.is_authenticated:
+            return super().list(request, *args, **kwargs)
+        key, cached = get_cached_public_list(request, "banners")
+        if cached is not None:
+            return Response(cached)
+        response = super().list(request, *args, **kwargs)
+        if response.status_code == 200:
+            set_cached_public_list(key, response.data)
+        return response
 
 class PromotionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Promotion.objects.filter(is_active=True)

@@ -1,6 +1,7 @@
 # Modelos del inventario: productos, categorías, stock y precios minorista/mayorista
 # Gestiona SKU, inventario en tiempo real e información de distribución
 from django.db import models
+from apps.inventory.catalog_cache import bump_catalog_version
 from django.utils.text import slugify
 from PIL import Image
 import io
@@ -22,6 +23,11 @@ class Category(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+        bump_catalog_version()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        bump_catalog_version()
 
     def __str__(self):
         return self.name
@@ -102,9 +108,14 @@ class Product(models.Model):
                 pass
 
         super().save(*args, **kwargs)
+        bump_catalog_version()
 
     def __str__(self):
         return f"{self.name} - SKU: {self.sku}"
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        bump_catalog_version()
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='additional_images', on_delete=models.CASCADE)

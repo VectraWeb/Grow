@@ -1,6 +1,7 @@
 # Modelo personalizado de usuario con autenticación por email y roles de usuario
 # Soporta ADMIN, EMPLOYEE y CUSTOMER con información empresarial adicional
 from django.db import models
+from apps.inventory.catalog_cache import bump_catalog_version
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class UserManager(BaseUserManager):
@@ -62,6 +63,10 @@ class StoreConfig(models.Model):
     mp_access_token = models.CharField(max_length=255, null=True, blank=True)
     mp_public_key = models.CharField(max_length=255, null=True, blank=True)
     mp_refresh_token = models.CharField(max_length=255, null=True, blank=True)
-    
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        bump_catalog_version()
+
     def __str__(self):
         return self.name

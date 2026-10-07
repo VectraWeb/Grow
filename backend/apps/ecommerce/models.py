@@ -1,6 +1,7 @@
 # Modelos del e-commerce: carrito, promociones, banners y productos del catálogo
 # Gestiona la experiencia de compra online, sesiones y descuentos
 from django.db import models
+from apps.inventory.catalog_cache import bump_catalog_version
 from apps.inventory.models import Product, Category
 
 class Banner(models.Model):
@@ -14,6 +15,14 @@ class Banner(models.Model):
 
     def __str__(self):
         return f"{self.title} - Pos: {self.position}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        bump_catalog_version()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        bump_catalog_version()
 
 class Promotion(models.Model):
     name = models.CharField(max_length=100)

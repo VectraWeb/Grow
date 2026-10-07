@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from apps.users.models import User, StoreConfig
+from apps.inventory.catalog_cache import get_cached_public_list, set_cached_public_list
 from apps.sales.models import Customer
 from rest_framework import serializers
 from django.core.mail import send_mail
@@ -233,8 +234,12 @@ class StoreSettingsView(APIView):
 
 class StoreInfoView(APIView):
     permission_classes = [] # Allow public access for checkout and home page
-    
+
     def get(self, request):
+        # Info de la tienda (WhatsApp, dirección, redes): cambia poco, cache 5 min.
+        key, cached = get_cached_public_list(request, "storeinfo")
+        if cached is not None:
+            return Response(cached)
         config = StoreConfig.objects.first()
         has_mp = False
         mp_pub_key = getattr(settings, 'MP_PUBLIC_KEY', '')
@@ -244,9 +249,11 @@ class StoreInfoView(APIView):
             
         if not config:
             has_mp = bool(getattr(settings, 'MP_ACCESS_TOKEN', ''))
-            return Response({'has_mp': has_mp, 'name': 'Tierra Verde Grow', 'mp_public_key': mp_pub_key})
-            
-        return Response({
+            data = {'has_mp': has_mp, 'name': 'Tierra Verde Grow', 'mp_public_key': mp_pub_key}
+            set_cached_public_list(key, data)
+            return Response(data)
+
+        data = {
             'name': config.name,
             'store_address': config.store_address or '',
             'bank_titular': config.bank_titular or '',
@@ -258,4 +265,6 @@ class StoreInfoView(APIView):
             'facebook_url': config.facebook_url or '',
             'has_mp': has_mp,
             'mp_public_key': mp_pub_key
-        })
+        }
+        set_cached_public_list(key, data)
+        return Response(data)

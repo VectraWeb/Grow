@@ -244,6 +244,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     this.cartService.loadCart();
 
+    // Snapshot instantáneo + refresh silencioso en segundo plano.
+    let silentRefresh = this.restoreCatalogSnapshot();
+
     // Subscribe to route params and load products
     this.route.queryParams.subscribe((params) => {
       if (params['category']) {
@@ -252,7 +255,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (params['search']) {
         this.searchQuery = params['search'];
       }
-      this.loadAllProducts();
+      this.loadAllProducts(silentRefresh);
+      silentRefresh = false;
     });
 
     // Subscribe to navigation changes
@@ -456,8 +460,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     ];
   }
 
-  private loadAllProducts(): void {
-    this.isLoading = true;
+  private loadAllProducts(silent = false): void {
+    // silent: actualización en segundo plano (hay snapshot pintado, sin skeleton).
+    if (!silent) {
+      this.isLoading = true;
+    }
     this.api.get<Product[]>("/products/", { is_ecommerce: "true", is_active: "true" }).subscribe({
       next: (products) => {
         let rawProducts = (products as any).results || products;
@@ -484,8 +491,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.applyFilters();
         this.updateCartCount();
+        this.saveCatalogSnapshot();
       },
       error: () => {
+        // En refresh silencioso se conserva lo ya pintado (snapshot o datos previos).
+        if (silent && this.allProductsData.length > 0) {
+          return;
+        }
         this.allProductsData = this.getFallbackProducts().map((p: Product) => {
           if (p.category_name) {
             p.search_slug = p.category_name
@@ -502,6 +514,40 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.updateCartCount();
       }
     });
+  }
+
+  private catalogSnapshotKey = "tvg_catalog_v1";
+  private catalogSnapshotTtlMs = 5 * 60 * 1000; // 5 min: misma frescura que el cache del backend
+
+  private restoreCatalogSnapshot(): boolean {
+    // Pinta el catálogo al instante desde localStorage y devuelve true para
+    // que la recarga de red sea silenciosa (stale-while-revalidate).
+    try {
+      const raw = localStorage.getItem(this.catalogSnapshotKey);
+      if (!raw) return false;
+      const snap = JSON.parse(raw);
+      if (!snap || !Array.isArray(snap.data) || snap.data.length === 0) return false;
+      if (Date.now() - snap.ts > this.catalogSnapshotTtlMs) return false;
+      this.allProductsData = snap.data;
+      this.filteredProducts = this.allProductsData;
+      this.isLoading = false;
+      this.applyFilters();
+      this.updateCartCount();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private saveCatalogSnapshot(): void {
+    try {
+      localStorage.setItem(
+        this.catalogSnapshotKey,
+        JSON.stringify({ ts: Date.now(), data: this.allProductsData }),
+      );
+    } catch {
+      // Almacenamiento lleno o no disponible: la app sigue funcionando sin snapshot.
+    }
   }
 
   filterByCategory(category: string): void {
