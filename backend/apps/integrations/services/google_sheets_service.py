@@ -8,6 +8,7 @@ from django.db import transaction, models
 from django.utils.text import slugify
 
 from apps.inventory.models import Product, Category
+from apps.inventory.catalog_cache import bump_catalog_version
 from apps.users.models import StoreConfig
 from apps.integrations.models import IntegrationConfig
 
@@ -483,6 +484,11 @@ class GoogleSheetsSyncService:
             # (p.ej. una fila completa y otra a medio completar), gana la primera.
             # Sin esto, ambas filas se re-graban en cada sync y nunca converge.
             seen_skus = set()
+            # Actualizaciones en lote: 1 bulk_update al final en vez de un
+            # save() por producto (cada save = 2 queries contra Neon + recompress
+            # de imagen; con 220 productos superaba el timeout del worker y el
+            # sync moria con 502 en produccion).
+            dirty_products = []
 
             for r_idx, row in enumerate(data_rows):
                 try:
@@ -587,7 +593,7 @@ class GoogleSheetsSyncService:
                         if target_category:
                             product.category = target_category
                         product.is_active = True
-                        product.save()
+                        dirty_products.append(product)
                         updated_count += 1
                     else:
                         # Create new product
@@ -611,6 +617,17 @@ class GoogleSheetsSyncService:
 
                 except Exception as row_err:
                     errors.append(f"Fila {r_idx + 1}: {str(row_err)}")
+
+            # Aplica todas las actualizaciones en lote (1-3 queries en total)
+            if dirty_products:
+                Product.objects.bulk_update(
+                    dirty_products,
+                    ['name', 'sku', 'price_retail', 'price_wholesale', 'cost_price',
+                     'stock_current', 'stock_min', 'description', 'brand', 'category',
+                     'is_active'],
+                    batch_size=200,
+                )
+                bump_catalog_version()
 
             # Update or create IntegrationConfig record
             config, _ = IntegrationConfig.objects.get_or_create(
