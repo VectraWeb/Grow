@@ -154,11 +154,13 @@ class ProductViewSet(viewsets.ModelViewSet):
         return ProductSerializer
 
     def list(self, request, *args, **kwargs):
-        # Catálogo público cacheado 5 min (clave versionada por query params).
-        # El panel admin (autenticado) siempre lee fresco de la DB.
-        if request.user.is_authenticated:
-            return super().list(request, *args, **kwargs)
-        key, cached = get_cached_public_list(request, "products")
+        # Catálogo cacheado 5 min (clave versionada por query params + versión).
+        # Seguro también para admin: toda escritura (API, sync, admin de Django)
+        # incrementa la versión del catálogo y la clave vieja queda huérfana,
+        # así que nunca se sirve datos viejos. Prefijo distinto para staff porque
+        # su queryset difiere (ven también los inactivos/sin stock).
+        prefix = "products:staff" if request.user.is_authenticated else "products"
+        key, cached = get_cached_public_list(request, prefix)
         if cached is not None:
             return Response(cached)
         response = super().list(request, *args, **kwargs)
@@ -340,9 +342,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
 
     def list(self, request, *args, **kwargs):
-        # Chips de categorías del home: mismo criterio que productos.
-        if request.user.is_authenticated:
-            return super().list(request, *args, **kwargs)
+        # Chips de categorías: mismo criterio que productos. El queryset es igual
+        # para todos, así que todos comparten la clave (invalidada por versión).
         key, cached = get_cached_public_list(request, "categories")
         if cached is not None:
             return Response(cached)
