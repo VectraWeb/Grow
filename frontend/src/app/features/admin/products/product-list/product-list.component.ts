@@ -99,35 +99,6 @@ import { environment } from "src/environments/environment";
         justify-content: center !important;
         flex-wrap: nowrap !important;
       }
-      :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions app-marketplace-publish {
-        flex-shrink: 0 !important;
-      }
-      :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions app-marketplace-publish .dropdown {
-        position: static !important;
-      }
-      :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions app-marketplace-publish .action-btn {
-        padding: 0.15rem !important;
-        min-width: 1.5rem !important;
-        width: 1.5rem !important;
-        height: 1.5rem !important;
-        font-size: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 0 !important;
-      }
-      :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions app-marketplace-publish .action-btn > span,
-      :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions app-marketplace-publish .action-btn > lucide-icon + span {
-        display: none !important;
-      }
-      :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions app-marketplace-publish .dropdown-menu {
-        position: fixed !important;
-        left: 5vw !important;
-        right: 5vw !important;
-        width: auto !important;
-        min-width: auto !important;
-        max-width: 90vw !important;
-      }
       :host ::ng-deep .p-datatable .p-datatable-tbody td .mobile-actions .action-icon {
         width: 1.5rem !important;
         height: 1.5rem !important;
