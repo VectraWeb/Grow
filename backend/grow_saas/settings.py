@@ -264,6 +264,10 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_WORKER_CONCURRENCY = env.int("CELERY_CONCURRENCY", default=2)
 CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=False)
 
+# Webhook de sync automático de Sheets (Apps Script / cron): token compartido.
+# Sin esto, el endpoint /api/integrations/google-sheets/webhook/ responde 503.
+SHEETS_WEBHOOK_TOKEN = env("SHEETS_WEBHOOK_TOKEN", default="")
+
 # Tareas periódicas (Celery Beat) — guard para entornos sin celery instalado
 try:
     from celery.schedules import crontab

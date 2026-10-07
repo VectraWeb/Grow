@@ -25,6 +25,7 @@ class GoogleSheetsSyncService:
         'price_wholesale': ['precio_mayorista', 'mayorista', 'precio_wholesale', 'precio_distribuidor', 'gremio', 'precio_gremio'],
         'cost_price': ['costo_unit', 'costo_unitario', 'costo', 'precio_costo', 'cost_price', 'compra', 'precio_compra'],
         'stock_current': ['stock_actual', 'stock', 'cantidad', 'cant', 'stock_current', 'unidades', 'disponible', 'existencia', 'existencias', 'inventario'],
+        'stock_min': ['stock_minimo', 'stock_min', 'stock minimo', 'minimo', 'existencia_minima'],
         'category': ['categoria', 'rubro', 'familia', 'tipo', 'seccion', 'linea', 'departamento'],
         'description': ['descripcion', 'detalle', 'observaciones', 'notas', 'info', 'especificaciones'],
         'brand': ['marca', 'brand', 'fabricante', 'laboratorio'],
@@ -478,11 +479,16 @@ class GoogleSheetsSyncService:
                     desc_val = row[col_map['description']].strip() if 'description' in col_map and col_map['description'] < len(row) else ''
                     cost_val = row[col_map['cost_price']].strip() if 'cost_price' in col_map and col_map['cost_price'] < len(row) else '0'
                     wholesale_val = row[col_map['price_wholesale']].strip() if 'price_wholesale' in col_map and col_map['price_wholesale'] < len(row) else '0'
+                    stock_min_val = row[col_map['stock_min']].strip() if 'stock_min' in col_map and col_map['stock_min'] < len(row) else ''
 
                     price_dec = cls.parse_clean_decimal(price_val)
                     stock_int = cls.parse_clean_int(stock_val)
                     cost_dec = cls.parse_clean_decimal(cost_val)
                     wholesale_dec = cls.parse_clean_decimal(wholesale_val, default=price_dec)
+                    # Sin columna o celda vacía -> no se toca (queda default 5 o valor actual)
+                    stock_min_int = cls.parse_clean_int(stock_min_val, default=-1) if stock_min_val else None
+                    if stock_min_int is not None and stock_min_int < 0:
+                        stock_min_int = None
 
                     # Category handling
                     target_category = default_cat
@@ -533,6 +539,7 @@ class GoogleSheetsSyncService:
                             or (bool(desc_val) and product.description != desc_val)
                             or (bool(brand_val) and (product.brand or '') != brand_val)
                             or (target_category and product.category_id != target_category.id)
+                            or (stock_min_int is not None and product.stock_min != stock_min_int)
                             or not product.is_active
                         )
                         if not needs_update:
@@ -548,6 +555,8 @@ class GoogleSheetsSyncService:
                         if cost_dec > 0:
                             product.cost_price = cost_dec
                         product.stock_current = stock_int
+                        if stock_min_int is not None:
+                            product.stock_min = stock_min_int
                         if desc_val:
                             product.description = desc_val
                         if brand_val:
@@ -568,6 +577,7 @@ class GoogleSheetsSyncService:
                             price_wholesale=wholesale_dec or price_dec,
                             cost_price=cost_dec,
                             stock_current=stock_int,
+                            stock_min=stock_min_int if stock_min_int is not None else 5,
                             brand=brand_val or "Tierra Verde Grow",
                             is_active=True,
                             is_ecommerce=True

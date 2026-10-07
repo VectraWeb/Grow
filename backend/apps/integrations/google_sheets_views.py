@@ -1,4 +1,8 @@
+import hmac
 import os
+import time
+from django.conf import settings
+from django.core.cache import cache
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -104,6 +108,71 @@ class GoogleSheetsSyncView(APIView):
                 pass
 
         # Fallback síncrono (si Celery no disponible o async=false)
+        try:
+            result = GoogleSheetsSyncService.sync('url', url, update_store_info=update_store_info)
+            return Response(result)
+        except GoogleSheetsAccessError as e:
+            return Response({
+                'error': str(e),
+                'error_type': 'RESTRICTED_ACCESS'
+            }, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response({'error': f"Error al sincronizar: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleSheetsWebhookView(APIView):
+    """Webhook para sincronización AUTOMÁTICA del catálogo.
+
+    Pensado para un trigger por tiempo de Google Apps Script o cron-job.org:
+    cada N minutos hace POST aquí y el backend sincroniza solo, sin apretar
+    botones. Se autentica con token compartido (header X-Webhook-Token),
+    no con JWT de usuario.
+    """
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self, request):
+        expected = (getattr(settings, 'SHEETS_WEBHOOK_TOKEN', '') or '').strip()
+        if not expected:
+            return Response(
+                {'error': 'Webhook no configurado: falta SHEETS_WEBHOOK_TOKEN en el servidor.'},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+        given = request.headers.get('X-Webhook-Token', '')
+        if not given or not hmac.compare_digest(given, expected):
+            return Response({'error': 'Token inválido.'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Anti-solapamiento: mínimo 2 minutos entre corridas automáticas
+        try:
+            last_run = cache.get('sheets:webhook:last')
+        except Exception:
+            last_run = None
+        now = time.time()
+        if last_run and (now - float(last_run)) < 120:
+            return Response({
+                'status': 'skipped',
+                'message': 'Ya hubo una sincronización hace menos de 2 minutos.',
+            })
+        try:
+            cache.set('sheets:webhook:last', now, 300)
+        except Exception:
+            pass
+
+        data = request.data if isinstance(request.data, dict) else {}
+        url = (data.get('url') or '').strip()
+        if not url:
+            cfg = IntegrationConfig.objects.filter(integration_type='GOOGLE_SHEETS').first()
+            if cfg and cfg.metadata and cfg.metadata.get('sheet_url'):
+                url = cfg.metadata['sheet_url']
+        if not url:
+            return Response(
+                {'error': 'No hay URL de hoja configurada.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        update_store_info = data.get('update_store_info', True)
+        if isinstance(update_store_info, str):
+            update_store_info = update_store_info.lower() in ('true', '1')
+
         try:
             result = GoogleSheetsSyncService.sync('url', url, update_store_info=update_store_info)
             return Response(result)

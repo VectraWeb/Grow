@@ -13,7 +13,7 @@ from apps.integrations.marketplace_views import (
 )
 from apps.integrations.google_sheets_views import (
     GoogleSheetsConfigView, GoogleSheetsPreviewView,
-    GoogleSheetsSyncView, GoogleSheetsUploadView
+    GoogleSheetsSyncView, GoogleSheetsUploadView, GoogleSheetsWebhookView
 )
 
 urlpatterns = [
@@ -46,4 +46,5 @@ urlpatterns = [
     path('google-sheets/preview/', GoogleSheetsPreviewView.as_view(), name='google_sheets_preview'),
     path('google-sheets/sync/', GoogleSheetsSyncView.as_view(), name='google_sheets_sync'),
     path('google-sheets/upload/', GoogleSheetsUploadView.as_view(), name='google_sheets_upload'),
+    path('google-sheets/webhook/', GoogleSheetsWebhookView.as_view(), name='google_sheets_webhook'),
 ]
