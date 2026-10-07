@@ -437,48 +437,6 @@ import { CheckboxModule } from "primeng/checkbox";
               </div>
             </div>
           </div>
-
-          <!-- Mercado Libre Section -->
-          <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <h2 class="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-              Mercado Libre
-            </h2>
-
-            <div class="flex items-center gap-3">
-              <input type="checkbox" formControlName="meli_sync" id="meli_sync" class="w-4 h-4 accent-amber-500">
-              <label for="meli_sync" class="text-sm font-bold text-slate-700">Sincronizar con Mercado Libre</label>
-            </div>
-
-            <div class="flex flex-col gap-3">
-              <label class="font-bold text-slate-500 text-sm ml-1 uppercase tracking-tighter">Categoría de ML (ID)</label>
-              <div class="flex gap-2">
-                <input pInputText formControlName="meli_category_id" placeholder="Ej: MCO1743" class="flex-1 p-3 rounded-xl bg-white border-slate-200 text-slate-900 text-sm outline-none" />
-                <button type="button" (click)="searchMeliCategory()" class="px-4 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-sm font-bold hover:bg-amber-100 transition-colors flex items-center gap-1.5" [disabled]="meliSearching">
-                  <lucide-icon [name]="Search" size="14"></lucide-icon>
-                  {{ meliSearching ? 'Buscando...' : 'Buscar' }}
-                </button>
-              </div>
-              <input pInputText [(ngModel)]="meliCategorySearch" [ngModelOptions]="{standalone: true}" placeholder="Buscar categoría por nombre..." (keyup.enter)="searchMeliCategory()" class="w-full p-3 rounded-xl bg-white border-slate-200 text-slate-900 text-sm outline-none" />
-              <div *ngIf="meliCategories.length > 0" class="max-h-48 overflow-y-auto border border-slate-200 rounded-xl divide-y divide-slate-100">
-                <button type="button" *ngFor="let cat of meliCategories" (click)="selectMeliCategory(cat)" class="w-full text-left px-4 py-3 hover:bg-amber-50 transition-colors text-sm">
-                  <span class="font-bold text-slate-800">{{ cat.id }}</span>
-                  <span class="text-slate-500 ml-2">{{ cat.name }}</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div class="flex flex-col gap-3">
-                <label class="font-bold text-slate-500 text-sm ml-1 uppercase tracking-tighter">Condición</label>
-                <p-dropdown [options]="meliConditions" formControlName="meli_condition" optionLabel="label" optionValue="value" styleClass="custom-ferre-dropdown"></p-dropdown>
-              </div>
-              <div class="flex flex-col gap-3">
-                <label class="font-bold text-slate-500 text-sm ml-1 uppercase tracking-tighter">Tipo de publicación</label>
-                <p-dropdown [options]="meliListingTypes" formControlName="meli_listing_type" optionLabel="label" optionValue="value" styleClass="custom-ferre-dropdown"></p-dropdown>
-              </div>
-            </div>
-          </div>
         </div>
       </form>
     </div>
@@ -505,25 +463,10 @@ export class ProductFormComponent implements OnInit {
   productId: number | null = null;
   categories: any[] = [];
   isSaving = false;
-  meliCategories: any[] = [];
-  meliCategorySearch = '';
-  meliSearching = false;
 
   selectedFiles: File[] = [];
   previewUrls: (string | ArrayBuffer)[] = [];
   existingImageUrls: string[] = [];
-
-  meliConditions = [
-    { label: 'Nuevo', value: 'new' },
-    { label: 'Usado', value: 'used' },
-    { label: 'No especificado', value: 'not_specified' },
-  ];
-  meliListingTypes = [
-    { label: 'Premium', value: 'gold_special' },
-    { label: 'Clásica', value: 'gold_pro' },
-    { label: 'Plata', value: 'silver' },
-    { label: 'Bronce', value: 'bronze' },
-  ];
 
   constructor() {
     this.form = this.fb.group({
@@ -541,10 +484,6 @@ export class ProductFormComponent implements OnInit {
       material: [""],
       weight: [""],
       dimensions: [""],
-      meli_category_id: [""],
-      meli_condition: ["new"],
-      meli_listing_type: ["gold_special"],
-      meli_sync: [false],
     });
   }
 
@@ -617,10 +556,6 @@ export class ProductFormComponent implements OnInit {
           material: product.material || "",
           weight: product.weight || "",
           dimensions: product.dimensions || "",
-          meli_category_id: product.meli_category_id || "",
-          meli_condition: product.meli_condition || "new",
-          meli_listing_type: product.meli_listing_type || "gold_special",
-          meli_sync: product.meli_sync || false,
         });
         this.form.get('price_retail')?.updateValueAndValidity();
         setTimeout(() => this.loadFormattedPrice());
@@ -688,31 +623,6 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
-  searchMeliCategory() {
-    const q = this.meliCategorySearch.trim();
-    if (!q) return;
-    this.meliSearching = true;
-    this.api.get<any>(`/integrations/meli/search-category/?q=${encodeURIComponent(q)}`).subscribe({
-      next: (res) => {
-        this.meliCategories = (Array.isArray(res) ? res : []).map((item: any) => ({
-          id: item.category_id,
-          name: item.category_path || item.category_name || item.category_id,
-        }));
-        this.meliSearching = false;
-      },
-      error: () => {
-        this.meliSearching = false;
-        this.meliCategories = [];
-      }
-    });
-  }
-
-  selectMeliCategory(cat: any) {
-    this.form.patchValue({ meli_category_id: cat.id });
-    this.meliCategories = [];
-    this.meliCategorySearch = '';
-  }
-
   onSubmit() {
     if (this.form.invalid) return;
 
@@ -737,11 +647,6 @@ export class ProductFormComponent implements OnInit {
     formData.append("material", formValue.material || "");
     formData.append("weight", formValue.weight || "");
     formData.append("dimensions", formValue.dimensions || "");
-
-    formData.append("meli_category_id", formValue.meli_category_id || "");
-    formData.append("meli_condition", formValue.meli_condition || "new");
-    formData.append("meli_listing_type", formValue.meli_listing_type || "gold_special");
-    formData.append("meli_sync", formValue.meli_sync ? "true" : "false");
 
     if (this.selectedFiles.length > 0) {
       formData.append("image", this.selectedFiles[0]);
