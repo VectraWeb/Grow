@@ -47,7 +47,10 @@ class BudgetViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=400)
 
 class SaleViewSet(viewsets.ModelViewSet):
-    queryset = Sale.objects.all().order_by('-created_at')
+    # select_related + prefetch: el serializer anida customer e items con
+    # product.name — sin esto son ~2 queries por item (N+1) y la lista de
+    # órdenes tardaba ~1.7s contra Neon.
+    queryset = Sale.objects.select_related('customer').prefetch_related('items__product').order_by('-created_at')
     serializer_class = SaleSerializer
     permission_classes = [permissions.IsAuthenticated]
 

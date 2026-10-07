@@ -32,10 +32,11 @@ class BannerViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def list(self, request, *args, **kwargs):
-        # Banners del home: mismo criterio que productos (staff ve todos).
-        if request.user.is_authenticated:
-            return super().list(request, *args, **kwargs)
-        key, cached = get_cached_public_list(request, "banners")
+        # Banners del home: mismo criterio que productos (staff ve todos,
+        # público solo activos -> prefijo distinto). Cacheado y versionado:
+        # cualquier escritura de banner invalida la clave al instante.
+        prefix = "banners:staff" if request.user.is_authenticated else "banners"
+        key, cached = get_cached_public_list(request, prefix)
         if cached is not None:
             return Response(cached)
         response = super().list(request, *args, **kwargs)

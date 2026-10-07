@@ -119,6 +119,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Argon2 primero: más seguro que PBKDF2 y MUCHO más rápido en la CPU limitada
+# de Render (login ~2.5s con PBKDF2 1M iteraciones vs <0.5s con Argon2).
+# PBKDF2 queda como fallback para verificar hashes viejos; el backend de
+# autenticación los re-hashea en el primer login exitoso.
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.ScryptPasswordHasher',
+]
+
 AUTH_USER_MODEL = 'users.User'
 
 LANGUAGE_CODE = 'es-ar'
@@ -240,8 +251,11 @@ ADMIN_URL = 'admin-secure-grow/'
 ADMIN_SITE_HEADER = "VectraWeb Admin Panel"
 
 AUTHENTICATION_BACKENDS = [
+    # Axes solo monitorea/lockout y devuelve None si el intento está permitido;
+    # el backend de abajo autentica y re-hashea la contraseña al hasher vigente
+    # en el primer login exitoso (migración PBKDF2 -> Argon2).
     'axes.backends.AxesStandaloneBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'apps.users.backends.RehashingModelBackend',
 ]
 
 AXES_FAILURE_LIMIT = 10
