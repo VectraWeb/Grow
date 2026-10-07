@@ -188,7 +188,7 @@ class GoogleSheetsSyncService:
         if gid and gid != '0':
             export_csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
             try:
-                resp = requests.get(export_csv_url, headers=headers, timeout=15, allow_redirects=True)
+                resp = requests.get(export_csv_url, headers=headers, timeout=8, allow_redirects=True)
                 if resp.status_code == 200 and '<html' not in resp.text.lower()[:300]:
                     rows = cls.parse_raw_rows_from_csv(resp.text)
                     h_idx, col_map, _, _ = cls.detect_structure(rows)
@@ -197,13 +197,15 @@ class GoogleSheetsSyncService:
             except Exception:
                 pass
 
-        # Fallback / Primary for multi-sheet workbooks: Download XLSX workbook
+        # Fallback / Primary for multi-sheet workbooks: Download XLSX workbook.
+        # Timeouts cortos: si Google no responde rápido, fallar con mensaje claro
+        # en vez de colgar el worker de gunicorn (timeout 120s) y devolver vacío.
         export_xlsx_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
         try:
-            response = requests.get(export_xlsx_url, headers=headers, timeout=25, allow_redirects=True)
+            response = requests.get(export_xlsx_url, headers=headers, timeout=12, allow_redirects=True)
             if response.status_code != 200:
                 drive_url = f"https://drive.google.com/uc?export=download&id={sheet_id}"
-                response = requests.get(drive_url, headers=headers, timeout=25, allow_redirects=True)
+                response = requests.get(drive_url, headers=headers, timeout=8, allow_redirects=True)
         except Exception as e:
             raise GoogleSheetsAccessError(f"Error de conexión al intentar acceder a Google Sheets: {str(e)}")
 
@@ -218,6 +220,11 @@ class GoogleSheetsSyncService:
                 "4. Vuelve a hacer clic en Sincronizar."
             )
 
+        if response.status_code == 404:
+            raise GoogleSheetsAccessError(
+                "Google no encuentra la hoja con ese enlace (error 404). Revisá que la URL sea "
+                "la correcta y que esté compartida como 'Cualquier persona con el enlace' (Lector)."
+            )
         if response.status_code != 200 or len(response.content) < 500:
             raise GoogleSheetsAccessError(f"Error {response.status_code} al consultar Google Sheets.")
 
