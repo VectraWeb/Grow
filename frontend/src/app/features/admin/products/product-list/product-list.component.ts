@@ -18,7 +18,6 @@ import {
 import { RouterModule, Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { environment } from "src/environments/environment";
-import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-publish.component";
 
 @Component({
   selector: "app-product-list",
@@ -32,7 +31,6 @@ import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-
     LucideAngularModule,
     RouterModule,
     FormsModule,
-    MarketplacePublishComponent,
   ],
   styles: [`
     @media (max-width: 768px) {
@@ -384,7 +382,6 @@ import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-
               </td>
               <td class="px-1 py-2 text-center">
                 <div class="flex items-center justify-center gap-1">
-                  <app-marketplace-publish [productId]="product.id"></app-marketplace-publish>
                   <a
                     [routerLink]="['/admin/products', product.id, 'edit']"
                     class="action-icon bg-slate-100 hover:bg-slate-200 text-slate-500"
