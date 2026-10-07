@@ -347,6 +347,7 @@ import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-
                     *ngIf="product.image"
                     [src]="product.image"
                     [alt]="product.name"
+                    (error)="product.image = ''"
                     class="w-full h-full object-cover"
                   />
                   <lucide-icon

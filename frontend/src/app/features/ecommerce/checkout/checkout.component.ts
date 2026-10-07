@@ -266,7 +266,7 @@ import {
               <div class="space-y-3 mb-4 max-h-[300px] overflow-y-auto pr-1">
                 <div *ngFor="let item of items" class="flex gap-3">
                   <div class="w-11 h-11 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
-                    <img *ngIf="item.image" [src]="item.image" class="w-full h-full object-contain" />
+                    <img *ngIf="item.image" [src]="item.image" (error)="item.image = ''" class="w-full h-full object-contain" />
                   </div>
                   <div class="flex-1 min-w-0">
                     <p class="text-xs font-semibold text-slate-700 truncate">{{ item.product_name }}</p>
