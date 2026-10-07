@@ -358,7 +358,11 @@ import { MarketplacePublishComponent } from "../marketplace-publish/marketplace-
                 </div>
               </td>
               <td class="px-2 py-2">
-                <span class="font-bold text-slate-900 text-xs group-hover:text-ferre-400 transition-colors whitespace-nowrap overflow-hidden text-ellipsis block max-w-[120px]">{{ product.name }}</span>
+                <a
+                  [routerLink]="['/admin/products', product.id, 'edit']"
+                  title="Editar producto"
+                  class="font-bold text-slate-900 text-xs hover:text-ferre-400 transition-colors whitespace-nowrap overflow-hidden text-ellipsis block max-w-[120px] cursor-pointer"
+                >{{ product.name }}</a>
               </td>
               <td class="hide-mobile px-6 py-4 text-slate-500 font-mono text-xs uppercase tracking-tighter">
                 {{ product.sku }}
