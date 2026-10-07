@@ -573,13 +573,8 @@ class MercadoPagoWebhookView(APIView):
                     if new_status:
                         # Prevent double processing
                         if sale.payment_status != 'PAID' and new_status == 'PAID':
-                            # Reduce stock
-                            items = SaleItem.objects.filter(sale=sale)
-                            for item in items:
-                                if item.product:
-                                    item.product.stock_current = max(0, item.product.stock_current - item.quantity)
-                                    item.product.save()
-                            
+                            # El descuento de stock lo hace Sale.save() al detectar
+                            # la transición a PAID (así no se descuenta dos veces).
                             # Optional: Email notification
                             from django.core.mail import send_mail
                             from django.conf import settings

@@ -1,14 +1,20 @@
 import hmac
 import os
 import time
+from datetime import datetime
+
 from django.conf import settings
 from django.core.cache import cache
+from django.db import transaction
+from django.db.models import Q, F
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from apps.integrations.models import IntegrationConfig
+from apps.inventory.models import Product
 from apps.integrations.services.google_sheets_service import (
     GoogleSheetsSyncService,
     GoogleSheetsAccessError
@@ -219,3 +225,91 @@ class GoogleSheetsUploadView(APIView):
 
         except Exception as e:
             return Response({'error': f"Error al procesar el archivo: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleSheetsStockPushView(APIView):
+    """Stock que cambió en la web y todavía no está reflejado en el Google Sheet.
+
+    Lo consume el Apps Script en cada tick, ANTES del sync normal:
+      GET  → {"pendientes": [{"sku", "name", "stock", "stock_updated_at"}]}
+      POST → {"confirmaciones": [{"sku", "stock_updated_at"}]} → {"confirmados": n}
+
+    El confirmar marca la versión que llegó al Sheet: si mientras tanto entró
+    otra venta, esa fila sigue quedando pendiente para el próximo tick.
+    Autenticación: header X-Webhook-Token (mismo token que el webhook de sync).
+    """
+    authentication_classes = []
+    permission_classes = []
+
+    def _chequear_token(self, request):
+        esperado = (getattr(settings, 'SHEETS_WEBHOOK_TOKEN', '') or '').strip()
+        if not esperado:
+            return Response(
+                {'error': 'Falta SHEETS_WEBHOOK_TOKEN en el servidor.'},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+        dado = request.headers.get('X-Webhook-Token', '')
+        if not dado or not hmac.compare_digest(dado, esperado):
+            return Response({'error': 'Token inválido.'}, status=status.HTTP_403_FORBIDDEN)
+        return None
+
+    @staticmethod
+    def _pendientes():
+        return (
+            Product.objects.filter(stock_updated_at__isnull=False)
+            .filter(
+                Q(stock_pushed_at__isnull=True)
+                | Q(stock_pushed_at__lt=F('stock_updated_at'))
+            )
+            .order_by('sku')
+        )
+
+    def get(self, request):
+        error = self._chequear_token(request)
+        if error:
+            return error
+        datos = [
+            {
+                'sku': p.sku,
+                'name': p.name,
+                'stock': p.stock_current,
+                'stock_updated_at': p.stock_updated_at.isoformat(),
+            }
+            for p in self._pendientes()
+        ]
+        return Response({'pendientes': datos})
+
+    def post(self, request):
+        error = self._chequear_token(request)
+        if error:
+            return error
+        data = request.data if isinstance(request.data, dict) else {}
+        confirmaciones = data.get('confirmaciones') or []
+        por_sku = {}
+        for c in confirmaciones:
+            if isinstance(c, dict) and c.get('sku'):
+                por_sku[str(c['sku'])] = c.get('stock_updated_at')
+        if not por_sku:
+            return Response({'confirmados': 0})
+
+        confirmados = 0
+        with transaction.atomic():
+            for prod in Product.objects.filter(sku__in=list(por_sku)):
+                try:
+                    dt = datetime.fromisoformat(
+                        str(por_sku[prod.sku]).replace('Z', '+00:00')
+                    )
+                except (ValueError, TypeError):
+                    continue
+                if dt.tzinfo is None:
+                    dt = timezone.make_aware(dt)
+                # Nunca avanzar más allá del último cambio real de stock
+                if prod.stock_updated_at and dt > prod.stock_updated_at:
+                    dt = prod.stock_updated_at
+                if prod.stock_pushed_at and dt <= prod.stock_pushed_at:
+                    continue
+                # queryset.update: no llama Product.save() → no re-dispara el
+                # hook de stock ni invalida la caché del catálogo.
+                Product.objects.filter(pk=prod.pk).update(stock_pushed_at=dt)
+                confirmados += 1
+        return Response({'confirmados': confirmados})

@@ -556,6 +556,17 @@ class GoogleSheetsSyncService:
                         product = products_by_name.get(name_val.strip().lower())
 
                     if product:
+                        # Stock pendiente de subir al Sheet: hasta que el Apps
+                        # Script lo confirme, la web es la dueña del stock y el
+                        # sync no lo revierte (evita deshacer ventas web).
+                        if (
+                            product.stock_updated_at
+                            and (
+                                product.stock_pushed_at is None
+                                or product.stock_pushed_at < product.stock_updated_at
+                            )
+                        ):
+                            stock_int = product.stock_current
                         # Solo guardar si algo cambió: evita re-escribir (imagen,
                         # historial y caché) las filas idénticas del sync diario.
                         needs_update = (

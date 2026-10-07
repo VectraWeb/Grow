@@ -60,6 +60,29 @@ class Sale(models.Model):
     
     history = HistoricalRecords()
 
+    def save(self, *args, **kwargs):
+        """Descuenta el stock cuando la venta pasa a PAID (confirmación de pago).
+
+        - POS / presupuesto: descuentan al crear (insert) en SaleSerializer.create.
+        - Web Mercado Pago: al aprobarse el pago (webhook de MP).
+        - Web transferencia: al marcar 'Pagado' desde el panel.
+
+        La transición se compara contra el valor en BD para nunca descontar dos
+        veces (p. ej. re-guardar una venta ya pagada).
+        """
+        if self.pk and self.payment_status == 'PAID':
+            anterior = Sale.objects.filter(pk=self.pk).values_list(
+                'payment_status', flat=True
+            ).first()
+            if anterior and anterior != 'PAID':
+                for item in self.items.select_related('product'):
+                    if not item.product_id:
+                        continue
+                    prod = item.product
+                    prod.stock_current = max(0, prod.stock_current - item.quantity)
+                    prod.save()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Sale #{self.id} - {self.customer.name if self.customer else 'Public'}"
 

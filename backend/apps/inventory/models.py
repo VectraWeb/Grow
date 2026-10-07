@@ -1,6 +1,7 @@
 # Modelos del inventario: productos, categorías, stock y precios minorista/mayorista
 # Gestiona SKU, inventario en tiempo real e información de distribución
 from django.db import models
+from django.utils import timezone
 from apps.inventory.catalog_cache import bump_catalog_version
 from django.utils.text import slugify
 from PIL import Image
@@ -46,6 +47,16 @@ class Product(models.Model):
     # Stock
     stock_current = models.IntegerField(default=0)
     stock_min = models.IntegerField(default=5)
+    # Trazabilidad stock web → Google Sheet (el Apps Script sube los pendientes
+    # antes de cada sync; ver GoogleSheetsStockPushView)
+    stock_updated_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='Último cambio de stock hecho en la web',
+    )
+    stock_pushed_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text='Última versión de stock confirmada como subida al Google Sheet',
+    )
     
     # Flags
     is_active = models.BooleanField(default=True)
@@ -87,6 +98,29 @@ class Product(models.Model):
     
     history = HistoricalRecords()
 
+    class Meta:
+        # Índices creados por 0010_add_catalog_performance_indexes: se declaran
+        # acá para que el estado de Django coincida con la BD (sino makemigrations
+        # quiere borrarlos cada vez).
+        indexes = [
+            models.Index(
+                fields=['is_active', 'is_ecommerce', 'stock_current'],
+                name='product_catalog_idx',
+            ),
+            models.Index(
+                fields=['featured', 'is_active', 'is_ecommerce'],
+                name='product_featured_idx',
+            ),
+            models.Index(
+                fields=['category', 'is_active', 'is_ecommerce', 'stock_current'],
+                name='product_category_catalog_idx',
+            ),
+            models.Index(
+                fields=['meli_sync', 'is_active'],
+                name='product_meli_sync_idx',
+            ),
+        ]
+
     def save(self, *args, **kwargs):
         if self.image:
             try:
@@ -117,6 +151,23 @@ class Product(models.Model):
                         self.image = ContentFile(output.read(), name=name)
             except Exception:
                 pass
+
+        # Stock cambiado en la web → marcar para subirlo al Google Sheet.
+        # El sync sheet→web escribe con bulk_update (no pasa por save()) → no
+        # marca nada, así que solo los cambios hechos desde la web quedan pendientes.
+        if self.pk:
+            en_bd = Product.objects.filter(pk=self.pk).values_list(
+                'stock_current', flat=True
+            ).first()
+            if en_bd is not None and en_bd != self.stock_current:
+                self.stock_updated_at = timezone.now()
+                if (
+                    kwargs.get('update_fields') is not None
+                    and 'stock_updated_at' not in kwargs['update_fields']
+                ):
+                    kwargs['update_fields'] = list(kwargs['update_fields']) + [
+                        'stock_updated_at'
+                    ]
 
         super().save(*args, **kwargs)
         bump_catalog_version()
