@@ -90,20 +90,31 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if self.image:
             try:
-                img = Image.open(self.image)
-                if img.height > 1200 or img.width > 1200:
-                    output_size = (1200, 1200)
-                    img.thumbnail(output_size)
-                    
-                    if img.mode in ("RGBA", "P"):
-                        img = img.convert("RGB")
-                    
-                    output = io.BytesIO()
-                    img.save(output, format='WebP', quality=85)
-                    output.seek(0)
-                    
-                    name = self.image.name.split('.')[0] + '.webp'
-                    self.image = ContentFile(output.read(), name=name)
+                # Solo reprocesar cuando la imagen es nueva o cambió: evita
+                # re-comprimir y re-grabar el archivo en cada guardado
+                # (p.ej. sync diario de precios/stock que no toca la foto).
+                reprocesar = True
+                if self.pk:
+                    try:
+                        anterior = Product.objects.only('image').get(pk=self.pk)
+                        reprocesar = not anterior.image or anterior.image.name != self.image.name
+                    except Product.DoesNotExist:
+                        pass
+                if reprocesar:
+                    img = Image.open(self.image)
+                    if img.height > 1200 or img.width > 1200:
+                        output_size = (1200, 1200)
+                        img.thumbnail(output_size)
+
+                        if img.mode in ("RGBA", "P"):
+                            img = img.convert("RGB")
+
+                        output = io.BytesIO()
+                        img.save(output, format='WebP', quality=85)
+                        output.seek(0)
+
+                        name = self.image.name.split('.')[0] + '.webp'
+                        self.image = ContentFile(output.read(), name=name)
             except Exception:
                 pass
 

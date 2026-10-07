@@ -427,6 +427,16 @@ class GoogleSheetsSyncService:
             default_cat = Category.objects.create(name='General')
             categories_cache['general'] = default_cat
 
+        # Precargar productos en memoria (1 query): evita ~2 queries por fila
+        # (~450 queries en un catálogo de 220 productos contra Neon).
+        products_by_sku = {}
+        products_by_name = {}
+        for existing in Product.objects.select_related('category').all():
+            if existing.sku:
+                products_by_sku[existing.sku] = existing
+            if existing.name:
+                products_by_name[existing.name.strip().lower()] = existing
+
         with transaction.atomic():
             # Update store info if found
             if update_store_info and store_info:
@@ -504,14 +514,29 @@ class GoogleSheetsSyncService:
                     if not sku_val:
                         sku_val = f"TVG-{slugify(name_val)[:30].upper()}"
 
-                    # Product search: first by SKU, then by exact name
-                    product = None
-                    if sku_val:
-                        product = Product.objects.filter(sku=sku_val).first()
+                    # Product search en memoria: primero por SKU, luego por nombre
+                    # (misma semántica que antes: SKU exacto, nombre insensible a mayúsculas)
+                    product = products_by_sku.get(sku_val) if sku_val else None
                     if not product and name_val:
-                        product = Product.objects.filter(name__iexact=name_val).first()
+                        product = products_by_name.get(name_val.strip().lower())
 
                     if product:
+                        # Solo guardar si algo cambió: evita re-escribir (imagen,
+                        # historial y caché) las filas idénticas del sync diario.
+                        needs_update = (
+                            product.name != name_val
+                            or (bool(sku_val) and product.sku != sku_val)
+                            or (price_dec > 0 and product.price_retail != price_dec)
+                            or (wholesale_dec > 0 and product.price_wholesale != wholesale_dec)
+                            or (cost_dec > 0 and product.cost_price != cost_dec)
+                            or product.stock_current != stock_int
+                            or (bool(desc_val) and product.description != desc_val)
+                            or (bool(brand_val) and (product.brand or '') != brand_val)
+                            or (target_category and product.category_id != target_category.id)
+                            or not product.is_active
+                        )
+                        if not needs_update:
+                            continue
                         # Update product
                         product.name = name_val
                         if sku_val:
@@ -534,7 +559,7 @@ class GoogleSheetsSyncService:
                         updated_count += 1
                     else:
                         # Create new product
-                        Product.objects.create(
+                        new_product = Product.objects.create(
                             category=target_category,
                             name=name_val,
                             sku=sku_val,
@@ -547,6 +572,8 @@ class GoogleSheetsSyncService:
                             is_active=True,
                             is_ecommerce=True
                         )
+                        products_by_sku[new_product.sku] = new_product
+                        products_by_name[new_product.name.strip().lower()] = new_product
                         created_count += 1
 
                 except Exception as row_err:
