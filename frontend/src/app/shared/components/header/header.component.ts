@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule, Router } from "@angular/router";
 import { CartService } from "../../../core/services/cart.service";
 import { NavigationService } from "../../../core/services/navigation.service";
-import { ApiService } from "../../../core/services/api.service";
+import { CategoriesService } from "../../../core/services/categories.service";
 import {
   LucideAngularModule,
   ShoppingCart,
@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
   private cartService = inject(CartService);
   private navigationService = inject(NavigationService);
   private router = inject(Router);
-  private api = inject(ApiService);
+  private categoriesService = inject(CategoriesService);
 
   @Input() searchable = true;
   @Output() search = new EventEmitter<string>();
@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit {
   activeDropdown: string | null = null;
   mobileMenuOpen = false;
   categories: any[] = [];
+  categoriesLoading = true;
 
   ngOnInit(): void {
     this.cartService.cart$.subscribe(() => {
@@ -50,11 +51,17 @@ export class HeaderComponent implements OnInit {
     });
     this.cartService.loadCart();
     
-    // Fetch categories dynamically (already ordered by display_order in backend API)
-    this.api.get<any>("/categories/").subscribe({
-      next: (res) => {
-        const data = res.results || res;
-        this.categories = data;
+    // Una sola fuente de categorías (servicio con caché compartida).
+    // categoriesLoading distingue "cargando" de "vacío" para no mostrar
+    // "Cargando..." eternamente cuando no hay categorías.
+    this.categoriesService.loadCategories().subscribe({
+      next: (data: any) => {
+        this.categories = (data as any).results || data || [];
+        this.categoriesLoading = false;
+      },
+      error: () => {
+        this.categories = [];
+        this.categoriesLoading = false;
       }
     });
 

@@ -38,8 +38,11 @@
               <span class="w-1.5 h-1.5 rounded-full bg-ferre-400"></span>
               {{ cat.name }}
             </button>
-            <div *ngIf="categories.length === 0" class="px-4 py-2.5 text-sm text-slate-400">
+            <div *ngIf="categoriesLoading" class="px-4 py-2.5 text-sm text-slate-400">
               Cargando categorías...
+            </div>
+            <div *ngIf="!categoriesLoading && categories.length === 0" class="px-4 py-2.5 text-sm text-slate-400">
+              Sin categorías por el momento
             </div>
           </div>
         </div>

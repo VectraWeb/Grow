@@ -25,9 +25,10 @@ export class ApiService {
     Object.keys(params).forEach((key) => {
       httpParams = httpParams.append(key, params[key]);
     });
+    // GET sin headers no-cache: permite caché de navegador y evita
+    // revalidación forzada en cada navegación (categorías/productos).
     return this.http.get<T>(`${this.baseUrl}${path}`, {
       params: httpParams,
-      headers: this.noCacheHeaders(),
     });
   }
 
