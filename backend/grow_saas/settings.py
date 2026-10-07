@@ -166,7 +166,9 @@ TWO_FACTOR_PATCH_ADMIN = False
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # JWT con usuario cacheado 60s: evita la consulta a Neon por request
+        # (~0.3-0.4s) que marcaba el piso de todos los endpoints del panel.
+        'apps.users.authentication.CachedJWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
