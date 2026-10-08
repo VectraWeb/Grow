@@ -100,6 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     | "precio-asc"
     | "precio-desc"
     | "vendido"
+    | "calificacion"
     | "nuevo"
     | "todos" = "relevancia";
 
@@ -619,6 +620,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         return sorted.sort(
           (a, b) => (b.reviews_count || 0) - (a.reviews_count || 0),
         );
+      case "calificacion":
+        return sorted.sort(
+          (a, b) =>
+            (b.rating || 0) - (a.rating || 0) ||
+            (b.reviews_count || 0) - (a.reviews_count || 0),
+        );
       case "nuevo":
         return sorted.sort((a, b) => b.id - a.id);
       case "relevancia":
@@ -633,6 +640,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       | "precio-asc"
       | "precio-desc"
       | "vendido"
+      | "calificacion"
       | "nuevo"
       | "todos",
   ): void {

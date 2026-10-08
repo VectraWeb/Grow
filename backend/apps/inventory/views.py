@@ -1,4 +1,4 @@
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, Count, F, Avg
 from django.utils import timezone
 from datetime import timedelta
 from rest_framework import viewsets, permissions, status
@@ -269,7 +269,15 @@ class ProductViewSet(viewsets.ModelViewSet):
         elif not self.request.user.is_authenticated:
             # Unauthenticated public store visitors only see in-stock products
             queryset = queryset.filter(stock_current__gt=0, is_active=True)
-            
+
+        if self.action == 'list':
+            # Promedio de estrellas + cantidad de reseñas para las tarjetas
+            # del catálogo (1 sola query con JOIN, sin N+1).
+            queryset = queryset.annotate(
+                rating=Avg('ratings__rating'),
+                reviews_count=Count('ratings', distinct=True),
+            )
+
         return queryset
 
     @action(detail=False, methods=['get'])

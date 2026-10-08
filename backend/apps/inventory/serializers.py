@@ -48,10 +48,21 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductListSerializer(serializers.ModelSerializer):
     """ Slim version for lists with category """
     category_name = serializers.CharField(source='category.name', read_only=True)
-    
+    # Promedio de estrellas y cantidad de reseñas (vienen anotados en el
+    # queryset del list; None si el endpoint no los anota).
+    rating = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields = ('id', 'name', 'sku', 'price_retail', 'stock_current', 'image', 'category_name', 'discount_percentage', 'meli_item_id', 'meli_category_id')
+        fields = ('id', 'name', 'sku', 'price_retail', 'stock_current', 'image', 'category_name', 'discount_percentage', 'rating', 'reviews_count', 'meli_item_id', 'meli_category_id')
+
+    def get_rating(self, obj):
+        avg = getattr(obj, 'rating', None)
+        return round(float(avg), 1) if avg is not None else None
+
+    def get_reviews_count(self, obj):
+        return getattr(obj, 'reviews_count', None) or 0
 
 class KitItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
