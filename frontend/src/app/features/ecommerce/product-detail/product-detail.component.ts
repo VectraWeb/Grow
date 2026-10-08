@@ -224,18 +224,20 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           this.loadUserRating(productId);
           this.loadProductRatings(productId);
 
-          // Load related products by category
+          // Load related products by category (misma categoria, con stock
+          // primero; incluye sin stock para que la seccion no quede vacia)
           if (response.category) {
             this.api
               .get<any>(`/products/`, {
                 category: response.category,
                 is_ecommerce: "true",
-                in_stock: "true",
+                in_stock: "all",
               })
               .subscribe({
                 next: (res) => {
                   const list = (res.results || res)
-                    .filter((x: any) => x.id !== this.product!.id && (x.stock_current ?? 0) > 0)
+                    .filter((x: any) => x.id !== this.product!.id)
+                    .sort((a: any, b: any) => (b.stock_current ?? 0) - (a.stock_current ?? 0))
                     .slice(0, 8);
                   this.related = list.map((r: any) => ({
                     ...r,

@@ -260,6 +260,12 @@ class ProductViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(stock_current__gt=0)
             elif in_stock.lower() == 'false':
                 queryset = queryset.filter(stock_current__lte=0)
+            elif in_stock.lower() == 'all':
+                # Todo con o sin stock (p. ej. "relacionados" de la tienda:
+                # muestra la misma categoria aunque este momentaneamente sin stock).
+                # A visitantes anonimos solo se les muestran productos activos.
+                if not self.request.user.is_authenticated:
+                    queryset = queryset.filter(is_active=True)
         elif not self.request.user.is_authenticated:
             # Unauthenticated public store visitors only see in-stock products
             queryset = queryset.filter(stock_current__gt=0, is_active=True)
