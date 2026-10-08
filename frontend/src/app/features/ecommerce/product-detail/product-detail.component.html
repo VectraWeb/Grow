@@ -161,10 +161,10 @@
       </div>
     </div>
 
-    <!-- Seccion inferior: Specs, WhatsApp, Relacionados -->
+    <!-- Seccion inferior: Specs y WhatsApp -->
     <div class="mt-4 md:mt-8 border-t border-slate-200 pt-4 md:pt-6">
       <div class="grid lg:grid-cols-3 gap-4 md:gap-6">
-        <div class="space-y-4 md:space-y-6">
+        <div class="space-y-4 md:space-y-6 lg:col-span-2">
           <!-- Especificaciones -->
           <div>
             <h2 class="text-lg md:text-xl font-extrabold text-slate-900 mb-3 md:mb-4" style="font-family: Sora, sans-serif;">Especificaciones Tecnicas</h2>
@@ -182,8 +182,7 @@
           </div>
         </div>
 
-        <div class="lg:col-span-2 grid sm:grid-cols-2 gap-3 md:gap-4">
-          <div *ngIf="whatsappHref" class="bg-white border border-slate-200 p-3 md:p-4 rounded-xl shadow-sm">
+        <div *ngIf="whatsappHref" class="bg-white border border-slate-200 p-3 md:p-4 rounded-xl shadow-sm h-fit">
             <h3 class="text-sm md:text-base font-bold text-slate-900 mb-1">¿Necesitas ayuda con tu cultivo?</h3>
             <p class="text-slate-500 text-[11px] md:text-xs mb-2 md:mb-3">Contamos con cultivadores expertos para asesorarte en sustratos, carpas y nutrición.</p>
             <a
@@ -198,12 +197,6 @@
               WhatsApp Cultivo
             </a>
           </div>
-
-          <app-material-calculator
-            [categoryName]="product.category_name || ''"
-            [productName]="product.name"
-          ></app-material-calculator>
-        </div>
       </div>
     </div>
 

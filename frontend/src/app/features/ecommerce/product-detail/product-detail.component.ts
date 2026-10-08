@@ -23,7 +23,6 @@ import {
   ZoomOut,
 } from "lucide-angular";
 import { FormsModule } from "@angular/forms";
-import { MaterialCalculatorComponent } from "../../../shared/components/material-calculator/material-calculator.component";
 
 interface ProductDetail {
   id: number;
@@ -51,7 +50,7 @@ import { SeoService } from "../../../core/services/seo.service";
 @Component({
   selector: "app-product-detail",
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, RouterModule, FormsModule, MaterialCalculatorComponent],
+  imports: [CommonModule, LucideAngularModule, RouterModule, FormsModule],
   templateUrl: "./product-detail.component.html",
   styleUrls: ["./product-detail.component.css"],
 })
