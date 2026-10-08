@@ -99,6 +99,8 @@ class Product(models.Model):
     history = HistoricalRecords()
 
     class Meta:
+        # Orden determinista: paginación estable + sin warnings.
+        ordering = ['id']
         # Índices creados por 0010_add_catalog_performance_indexes: se declaran
         # acá para que el estado de Django coincida con la BD (sino makemigrations
         # quiere borrarlos cada vez).

@@ -55,7 +55,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'sku', 'price_retail', 'stock_current', 'image', 'category_name', 'discount_percentage', 'rating', 'reviews_count', 'meli_item_id', 'meli_category_id')
+        fields = ('id', 'name', 'sku', 'price_retail', 'stock_current', 'image', 'category_name', 'discount_percentage', 'rating', 'reviews_count')
 
     def get_rating(self, obj):
         avg = getattr(obj, 'rating', None)
