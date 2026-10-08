@@ -16,17 +16,28 @@
 
       <!-- Imagen -->
       <div class="relative">
-        <div class="aspect-[4/3] bg-white rounded-xl md:rounded-2xl border border-slate-200 p-4 md:p-6 flex items-center justify-center overflow-hidden shadow-sm">
+        <div
+          class="aspect-[4/3] bg-white rounded-xl md:rounded-2xl border border-slate-200 p-4 md:p-6 flex items-center justify-center overflow-hidden shadow-sm relative"
+          [ngClass]="product.image ? 'cursor-zoom-in' : ''"
+          (click)="product.image && openLightbox()"
+        >
           <img
             [src]="getCurrentImage()"
             [alt]="product.name"
             (error)="product.image = ''"
-            class="max-h-full max-w-full object-contain"
+            class="max-h-full max-w-full object-contain pointer-events-none"
           />
           <div *ngIf="!product.image" class="flex flex-col items-center gap-3 text-emerald-400">
             <lucide-icon [name]="Sprout" size="48"></lucide-icon>
             <span class="text-xs md:text-sm font-medium">Sin imagen</span>
           </div>
+          <span
+            *ngIf="product.image"
+            class="absolute bottom-2 right-2 md:bottom-3 md:right-3 w-8 h-8 bg-slate-900/60 backdrop-blur-sm rounded-full flex items-center justify-center pointer-events-none"
+            title="Ampliar imagen"
+          >
+            <lucide-icon [name]="ZoomIn" size="16" class="text-white"></lucide-icon>
+          </span>
         </div>
         <button
           *ngIf="productImages.length > 1"
@@ -234,5 +245,82 @@
     >
       Volver al catalogo
     </button>
+  </div>
+
+  <!-- Visor de imagen con zoom -->
+  <div
+    *ngIf="lightboxOpen"
+    class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-sm flex flex-col"
+    (click)="closeLightbox()"
+  >
+    <!-- Barra superior -->
+    <div class="flex items-center justify-between px-4 py-3" (click)="$event.stopPropagation()">
+      <span class="text-white/80 text-xs md:text-sm font-semibold truncate max-w-[70%]">{{ product?.name }}</span>
+      <div class="flex items-center gap-2">
+        <button
+          (click)="zoomOut()"
+          [disabled]="lightboxZoom <= 1"
+          class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 flex items-center justify-center transition-colors"
+          title="Reducir"
+        >
+          <lucide-icon [name]="ZoomOut" size="18" class="text-white"></lucide-icon>
+        </button>
+        <span class="text-white/80 text-xs font-bold w-12 text-center">{{ (lightboxZoom * 100) | number:'1.0-0' }}%</span>
+        <button
+          (click)="zoomIn()"
+          [disabled]="lightboxZoom >= 4"
+          class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 flex items-center justify-center transition-colors"
+          title="Ampliar"
+        >
+          <lucide-icon [name]="ZoomIn" size="18" class="text-white"></lucide-icon>
+        </button>
+        <button
+          (click)="closeLightbox()"
+          class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors ml-1"
+          title="Cerrar"
+        >
+          <lucide-icon [name]="X" size="20" class="text-white"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Imagen -->
+    <div
+      class="flex-1 flex items-center justify-center overflow-auto p-4 touch-pan-x touch-pan-y"
+      (wheel)="onLightboxWheel($event)"
+    >
+      <img
+        [src]="getCurrentImage()"
+        [alt]="product?.name"
+        (click)="toggleZoom(); $event.stopPropagation()"
+        [style.transform]="'scale(' + lightboxZoom + ')'"
+        [ngClass]="lightboxZoom > 1 ? 'cursor-zoom-out' : 'cursor-zoom-in'"
+        class="max-h-[75vh] max-w-full object-contain transition-transform duration-200 select-none"
+        draggable="false"
+      />
+    </div>
+
+    <!-- Flechas + contador -->
+    <div class="flex items-center justify-center gap-4 pb-5" (click)="$event.stopPropagation()">
+      <button
+        *ngIf="productImages.length > 1"
+        (click)="lightboxPrev($event)"
+        class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+        title="Anterior"
+      >
+        <lucide-icon [name]="ChevronLeft" size="20" class="text-white"></lucide-icon>
+      </button>
+      <span *ngIf="productImages.length > 1" class="text-white/70 text-xs font-bold">
+        {{ currentImageIndex + 1 }} / {{ productImages.length }}
+      </span>
+      <button
+        *ngIf="productImages.length > 1"
+        (click)="lightboxNext($event)"
+        class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+        title="Siguiente"
+      >
+        <lucide-icon [name]="ChevronRight" size="20" class="text-white"></lucide-icon>
+      </button>
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ApiService } from "../../../core/services/api.service";
@@ -18,6 +18,9 @@ import {
   Sprout,
   ChevronLeft,
   ChevronRight,
+  X,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-angular";
 import { FormsModule } from "@angular/forms";
 import { MaterialCalculatorComponent } from "../../../shared/components/material-calculator/material-calculator.component";
@@ -93,9 +96,69 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   Sprout = Sprout;
   ChevronLeft = ChevronLeft;
   ChevronRight = ChevronRight;
+  X = X;
+  ZoomIn = ZoomIn;
+  ZoomOut = ZoomOut;
 
   productImages: string[] = [];
   currentImageIndex: number = 0;
+
+  // Visor de imagen (lightbox con zoom)
+  lightboxOpen = false;
+  lightboxZoom = 1;
+  private readonly ZOOM_MIN = 1;
+  private readonly ZOOM_MAX = 4;
+
+  openLightbox() {
+    if (!this.getCurrentImage()) return;
+    this.lightboxZoom = 1;
+    this.lightboxOpen = true;
+    document.body.style.overflow = "hidden";
+  }
+
+  closeLightbox() {
+    this.lightboxOpen = false;
+    this.lightboxZoom = 1;
+    document.body.style.overflow = "";
+  }
+
+  zoomIn() {
+    this.lightboxZoom = Math.min(this.ZOOM_MAX, +(this.lightboxZoom + 0.5).toFixed(2));
+  }
+
+  zoomOut() {
+    this.lightboxZoom = Math.max(this.ZOOM_MIN, +(this.lightboxZoom - 0.5).toFixed(2));
+  }
+
+  toggleZoom() {
+    this.lightboxZoom = this.lightboxZoom > 1 ? 1 : 2;
+  }
+
+  onLightboxWheel(event: WheelEvent) {
+    event.preventDefault();
+    const paso = event.deltaY < 0 ? 0.25 : -0.25;
+    this.lightboxZoom = Math.min(
+      this.ZOOM_MAX,
+      Math.max(this.ZOOM_MIN, +(this.lightboxZoom + paso).toFixed(2))
+    );
+  }
+
+  lightboxPrev(event?: Event) {
+    event?.stopPropagation();
+    this.prevImage();
+    this.lightboxZoom = 1;
+  }
+
+  lightboxNext(event?: Event) {
+    event?.stopPropagation();
+    this.nextImage();
+    this.lightboxZoom = 1;
+  }
+
+  @HostListener("document:keydown.escape")
+  onEscape() {
+    if (this.lightboxOpen) this.closeLightbox();
+  }
 
   ngOnInit(): void {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -244,6 +307,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Limpiar schema al salir de la página de producto
     this.seo.removeSchema('product-schema');
+    // Por si se sale con el visor abierto
+    document.body.style.overflow = "";
   }
 
   updateQuantity(value: number): void {
