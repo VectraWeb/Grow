@@ -80,32 +80,6 @@
       </div>
     </div>
 
-    <!-- Category Quick Filters Chips -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none" *ngIf="categories.length > 0">
-      <button
-        (click)="filterByCategory('todos')"
-        class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shrink-0 border shadow-xs"
-        [ngClass]="selectedCategory === 'todos' ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'"
-      >
-        🌱 Todos los productos
-      </button>
-      <button
-        *ngFor="let cat of categories"
-        (click)="filterByCategory(cat.name)"
-        class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shrink-0 border shadow-xs"
-        [ngClass]="selectedCategory === cat.name ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'"
-      >
-        {{ cat.name }}
-      </button>
-      <button
-        (click)="filterByCategory('ofertas')"
-        class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shrink-0 border shadow-xs"
-        [ngClass]="selectedCategory === 'ofertas' ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-white text-amber-700 border-amber-200 hover:border-amber-300'"
-      >
-        🔥 Ofertas
-      </button>
-    </div>
-
     <!-- Skeleton loader while loading -->
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5" *ngIf="isLoading">
       <div *ngFor="let s of [1,2,3,4,5,6,7,8]" class="bg-white rounded-2xl border border-slate-200/80 p-3 md:p-4 animate-pulse flex flex-col h-72 md:h-96">
