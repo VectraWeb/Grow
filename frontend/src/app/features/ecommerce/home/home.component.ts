@@ -1,4 +1,4 @@
-// Página de inicio y catálogo del e-commerce: productos, banners y promociones
+// Página de inicio y catálogo del e-commerce: productos y promociones
 // Muestra tienda en línea para compra de clientes
 import { Component, OnInit, OnDestroy, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -22,15 +22,6 @@ interface Product {
   stock_current?: number;
   discount_percentage?: number;
   search_slug?: string;
-}
-
-interface Banner {
-  id: number;
-  title: string;
-  subtitle: string;
-  image: string;
-  link: string;
-  is_active: boolean;
 }
 
 import {
@@ -154,12 +145,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this.googleMapsUrl;
   }
 
-  currentSlide = 0;
-  banners: Banner[] = [];
-  private carouselInterval: any;
-  private touchStartX = 0;
-  private touchEndX = 0;
-
   ShoppingCart = ShoppingCart;
   User = User;
   ArrowRight = ArrowRight;
@@ -212,22 +197,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (data.facebook_url) {
           this.facebookUrl = data.facebook_url;
         }
-      }
-    });
-
-    // Load base banners
-    this.api.get<any>("/ecommerce/banners/").subscribe({
-      next: (res) => {
-        const data = res.results || res;
-        this.banners = (data || []).filter((b: Banner) => b.is_active);
-        if (this.banners.length === 0) {
-          this.initFallbackBanners();
-        } else {
-          this.startCarousel();
-        }
-      },
-      error: () => {
-        this.initFallbackBanners();
       }
     });
 
@@ -292,36 +261,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.closeSearch();
       }
     });
-  }
-
-  private initFallbackBanners(): void {
-    this.banners = [
-      {
-        id: 1,
-        title: "Cultivo Indoor Pro",
-        subtitle: "Luminarias LED Quantum Board y carpas de alta reflectancia",
-        image: "assets/banner_indoor_grow.jpg",
-        link: "",
-        is_active: true,
-      },
-      {
-        id: 2,
-        title: "Nutrición & Sustratos",
-        subtitle: "Fertilizantes orgánicos, bioestimulantes y mezclas profesionales",
-        image: "assets/banner_nutrients.jpg",
-        link: "",
-        is_active: true,
-      },
-      {
-        id: 3,
-        title: "Equipamiento Completo",
-        subtitle: "Turbinas, filtros de carbón, tijeras y accesorios de precisión",
-        image: "assets/banner_complete_kit.jpg",
-        link: "",
-        is_active: true,
-      },
-    ];
-    this.startCarousel();
   }
 
   private getFallbackProducts(): Product[] {
@@ -749,61 +688,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.scrollToCatalog();
   }
 
-  startCarousel(): void {
-    this.carouselInterval = setInterval(() => {
-      this.nextSlide();
-    }, 3500);
-  }
-
-  nextSlide(): void {
-    this.currentSlide = (this.currentSlide + 1) % this.banners.length;
-  }
-
-  setSlide(index: number): void {
-    this.currentSlide = index;
-    // Reset interval on manual change
-    clearInterval(this.carouselInterval);
-    this.startCarousel();
-  }
-
-  // User-triggered next (resets interval)
-  userNextSlide(): void {
-    this.currentSlide = (this.currentSlide + 1) % this.banners.length;
-    clearInterval(this.carouselInterval);
-    this.startCarousel();
-  }
-
-  // User-triggered prev (resets interval)
-  userPrevSlide(): void {
-    this.currentSlide =
-      (this.currentSlide - 1 + this.banners.length) % this.banners.length;
-    clearInterval(this.carouselInterval);
-    this.startCarousel();
-  }
-
-  onTouchStart(event: TouchEvent): void {
-    if (!event.changedTouches || event.changedTouches.length === 0) return;
-    this.touchStartX = event.changedTouches[0].clientX;
-  }
-
-  onTouchEnd(event: TouchEvent): void {
-    if (!event.changedTouches || event.changedTouches.length === 0) return;
-    this.touchEndX = event.changedTouches[0].clientX;
-    const diff = this.touchStartX - this.touchEndX;
-    const threshold = 40; // swipe threshold in px
-    if (diff > threshold) {
-      // swipe left -> next
-      this.userNextSlide();
-    } else if (diff < -threshold) {
-      // swipe right -> prev
-      this.userPrevSlide();
-    }
-  }
-
   ngOnDestroy(): void {
     sessionStorage.setItem('homeScrollY', String(window.scrollY));
-    if (this.carouselInterval) {
-      clearInterval(this.carouselInterval);
-    }
   }
 }
