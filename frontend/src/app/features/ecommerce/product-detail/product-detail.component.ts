@@ -381,6 +381,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     return Math.round(num).toLocaleString('es-AR');
   }
 
+  desplazarRelacionados(track: HTMLElement, dir: number): void {
+    track.scrollBy({ left: dir * track.clientWidth * 0.8, behavior: 'smooth' });
+  }
+
   setRating(stars: number): void {
     this.userRating = Math.max(1, Math.min(5, Math.round(stars)));
     this.saveUserRating();

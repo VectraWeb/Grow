@@ -4,9 +4,18 @@
   display: block;
 }
 
+/* Carrusel de relacionados: scroll sin barra visible */
+.sin-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sin-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* Animations */
-@keyframes fadeIn {
-  from {
+@keyframes fadeIn {  from {
     opacity: 0;
     transform: translateY(20px);
   }
