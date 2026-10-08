@@ -50,6 +50,7 @@ class ProductRating(models.Model):
     """Calificaciones de clientes para productos"""
     product = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE)
     session_id = models.CharField(max_length=100)  # Identificador de sesión anónima
+    name = models.CharField(max_length=100, blank=True, default='')  # Nombre mostrado en la reseña
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 estrellas
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

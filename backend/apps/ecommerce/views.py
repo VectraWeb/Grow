@@ -137,13 +137,14 @@ class ProductRatingViewSet(viewsets.ModelViewSet):
         session_id = request.data.get('session_id')
         rating = request.data.get('rating')
         comment = request.data.get('comment', '')
+        name = (request.data.get('name') or '').strip()[:100]
 
         try:
             product = Product.objects.get(id=product_id)
             rating_obj, created = ProductRating.objects.update_or_create(
                 product=product,
                 session_id=session_id,
-                defaults={'rating': rating, 'comment': comment}
+                defaults={'rating': rating, 'comment': comment, 'name': name}
             )
             return Response(
                 ProductRatingSerializer(rating_obj).data,
@@ -165,7 +166,7 @@ class ProductRatingViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        ratings = self.queryset.filter(product_id=product_id)
+        ratings = self.queryset.filter(product_id=product_id).order_by('-created_at')
         serializer = self.get_serializer(ratings, many=True)
 
         # OPTIMIZACIÓN: Aggregate SQL en vez de calcular en Python

@@ -59,7 +59,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private api = inject(ApiService);
   private cartService = inject(CartService);
-  private ratingService = inject(RatingService);
+  ratingService = inject(RatingService);
   private seo = inject(SeoService);
 
   product: ProductDetail | null = null;
@@ -73,6 +73,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   totalReviews: number = 0;
   isLoading: boolean = true;
   related: any[] = [];
+  reviews: any[] = [];
+
+  // Formulario de reseña
+  mostrarFormularioResena = false;
+  formEstrellas = 5;
+  formEstrellasHover = 0;
+  formNombre = '';
+  formComentario = '';
+  enviandoResena = false;
+  resenaEnviada = false;
+  resenaError = '';
 
   // Shipping logic
   zipCode: string = "";
@@ -278,6 +289,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.averageRating = data.average_rating || 0;
         this.totalReviews = data.total_reviews || 0;
+        this.reviews = data.ratings || [];
 
         // JSON-LD schema: se inyecta DESPUÉS de tener el rating para incluir aggregateRating
         if (this.product) {
@@ -395,6 +407,51 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   onStarLeave(): void {
     this.hoverRating = 0;
+  }
+
+  alternarFormularioResena(): void {
+    this.mostrarFormularioResena = !this.mostrarFormularioResena;
+    this.resenaEnviada = false;
+    this.resenaError = '';
+    if (this.mostrarFormularioResena) {
+      // Precargar mi reseña si ya califiqué (se puede editar)
+      const mia = this.reviews.find(
+        (r: any) => r.session_id === this.ratingService.getSessionId()
+      );
+      this.formEstrellas = mia?.rating || this.userRating || 5;
+      this.formNombre = mia?.name || '';
+      this.formComentario = mia?.comment || '';
+    }
+  }
+
+  enviarResena(): void {
+    if (!this.product || this.enviandoResena) return;
+    const estrellas = Math.max(1, Math.min(5, Math.round(this.formEstrellas)));
+    if (!this.formComentario.trim()) {
+      this.resenaError = 'Contanos qué te pareció el producto.';
+      return;
+    }
+    this.enviandoResena = true;
+    this.resenaError = '';
+    this.ratingService.rateProduct(
+      this.product.id,
+      estrellas,
+      this.formComentario.trim(),
+      this.formNombre.trim()
+    ).subscribe({
+      next: () => {
+        this.enviandoResena = false;
+        this.userRating = estrellas;
+        this.mostrarFormularioResena = false;
+        this.formComentario = '';
+        this.resenaEnviada = true;
+        this.loadProductRatings(this.product!.id);
+      },
+      error: () => {
+        this.enviandoResena = false;
+        this.resenaError = 'No se pudo guardar tu reseña. Intentá de nuevo.';
+      },
+    });
   }
 
   private saveUserRating(): void {

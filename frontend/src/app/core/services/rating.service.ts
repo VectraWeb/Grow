@@ -6,6 +6,7 @@ export interface ProductRating {
   id?: number;
   product: number;
   session_id: string;
+  name?: string;
   rating: number;
   comment?: string;
   created_at?: string;
@@ -46,12 +47,14 @@ export class RatingService {
     productId: number,
     rating: number,
     comment?: string,
+    name?: string,
   ): Observable<ProductRating> {
     return this.api.post(`/ecommerce/ratings/rate_product/`, {
       product_id: productId,
       session_id: this.sessionId,
       rating,
       comment: comment || "",
+      name: name || "",
     });
   }
 
