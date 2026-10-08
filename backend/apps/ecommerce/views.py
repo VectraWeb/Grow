@@ -146,6 +146,14 @@ class ProductRatingViewSet(viewsets.ModelViewSet):
                 session_id=session_id,
                 defaults={'rating': rating, 'comment': comment, 'name': name}
             )
+            # El promedio que muestran las tarjetas del catálogo está cacheado
+            # (clave versionada, 5 min): invalidarlo para que las estrellas se
+            # actualicen al instante después de votar.
+            try:
+                from apps.inventory.catalog_cache import bump_catalog_version
+                bump_catalog_version()
+            except Exception:
+                pass
             return Response(
                 ProductRatingSerializer(rating_obj).data,
                 status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
